@@ -14,6 +14,10 @@ dracoLoader.setDecoderPath('draco/');
 const gltfLoader = new GLTFLoader();
 gltfLoader.setDRACOLoader(dracoLoader);
 
+// Add these new variables
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
 // ANCHOR - Canvas
 const canvas = document.querySelector('canvas.webgl');
 
@@ -32,7 +36,7 @@ scene.add(ambientLight);
 
 
 // Variable to store the loaded model
-const bakedMaterial = new THREE.MeshBasicMaterial({ color: 0xfffff , wireframe: true})
+const bakedMaterial = new THREE.MeshBasicMaterial({ color: 0xfffff , wireframe: false})
 const stringMaterial = new THREE.MeshBasicMaterial({ color: 0x00000 })
 
 const bakedTexture2 = textureLoader.load('baked.jpg')
@@ -54,15 +58,18 @@ gltfLoader.load(
     }
 )
 */
+
 // Load Model
 gltfLoader.load(
-    '072424d.glb',
+    'cubes.glb',
     (gltf) => {
-        gltf.scene.traverse((child) =>
-            {
-                child.material = bakedMaterial2
-            })
-
+        gltf.scene.traverse((child) => {
+            child.material = bakedMaterial;
+            // Add names to the cubes if they don't have them
+            if (child.isMesh && !child.name) {
+                child.name = `Cube_${child.id}`;
+            }
+        });
         model = gltf.scene;
         scene.add(model)
             
@@ -88,12 +95,38 @@ gltfLoader.load(
         // Update controls target
         controls.target.set(center.x, center.y, center.z);
         controls.update();
+        window.addEventListener('click', onMouseClick);
+
     },
     undefined,
     (error) => {
         console.error('An error occurred while loading the model:', error);
     }
 );
+
+// Add this new function for handling mouse clicks
+function onMouseClick(event) {
+    // Calculate mouse position in normalized device coordinates
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    // Update the picking ray with the camera and mouse position
+    raycaster.setFromCamera(mouse, camera);
+
+    // Calculate objects intersecting the picking ray
+    const intersects = raycaster.intersectObject(model, true);
+
+    if (intersects.length > 0) {
+        const clickedObject = intersects[0].object;
+        console.log(`${clickedObject.name} was clicked on`);
+        if(clickedObject.name === 'cube2'){
+            window.location.href = '../home';
+        } else{
+            console.log("failed");
+        }
+    
+    }
+}
 
 
 // ANCHOR - Camera
@@ -133,6 +166,8 @@ window.addEventListener('resize', () => {
 // ANCHOR - Animate
 const clock = new THREE.Clock();
 
+
+// Modify your tick function to include raycasting updates if needed
 const tick = () => {
     const elapsedTime = clock.getElapsedTime();
 
