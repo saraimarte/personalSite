@@ -36,7 +36,7 @@ let model;
 
 // Load Model
 gltfLoader.load(
-    '../../public/072324d.glb',
+    '/072324d.glb',
     (gltf) => {
         // Define specific material for the `string` part
         const stringMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true }); // Black
