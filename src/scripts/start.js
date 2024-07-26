@@ -1,14 +1,14 @@
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 
 // Texture loader
 const textureLoader = new THREE.TextureLoader()
 
 // Draco loader
-const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath('draco/');
+const dracoLoader = new DRACOLoader()
+dracoLoader.setDecoderPath('draco/')
 
 // GLTF loader
 const gltfLoader = new GLTFLoader();
@@ -30,64 +30,51 @@ const sizes = {
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Adjust intensity as needed
 scene.add(ambientLight);
 
-
-// Variable to store the loaded model
-const bakedMaterial = new THREE.MeshBasicMaterial({ color: 0xfffff , wireframe: true})
-const stringMaterial = new THREE.MeshBasicMaterial({ color: 0x00000 })
-
+//Textures
 const bakedTexture2 = textureLoader.load('baked.jpg')
 bakedTexture2.flipY = false
 bakedTexture2.colorSpace = THREE.SRGBColorSpace
 const bakedMaterial2 = new THREE.MeshBasicMaterial({ map: bakedTexture2 })
 
 let model;
-/*
-gltfLoader.load(
-    '072424d.glb',
-    (gltf) =>
-    {
-        gltf.scene.traverse((child) =>
-        {
-            child.material = bakedMaterial2
-        })
-        scene.add(gltf.scene)
-    }
-)
-*/
+
 // Load Model
+// only works if I export without compression in blender
 gltfLoader.load(
-    '072424d.glb',
-    (gltf) => {
-        gltf.scene.traverse((child) =>
+    '072524.glb',
+    (gltf) =>
+        {
+            gltf.scene.traverse((child) =>
             {
                 child.material = bakedMaterial2
             })
 
-        model = gltf.scene;
-        scene.add(model)
-            
-        // Print the child models
-        console.log("Child models:");
-        gltf.scene.traverse((child) => {
-            console.log(child);
-        });
+                
+            model = gltf.scene;
+            scene.add(model)
+                
+            // Print the child models in the console
+            console.log("Child models:");
+            gltf.scene.traverse((child) => {
+                console.log(child);
+            });
 
-        // Calculate bounding box of the model
-        const box = new THREE.Box3().setFromObject(model);
-        const center = box.getCenter(new THREE.Vector3());
-        const size = box.getSize(new THREE.Vector3());
+            // Calculate bounding box of the model
+            const box = new THREE.Box3().setFromObject(model);
+            const center = box.getCenter(new THREE.Vector3());
+            const size = box.getSize(new THREE.Vector3());
 
-        // Position the model and camera
-        model.position.y -= size.y / 1000;
+            // Position the model and camera
+            model.position.y -= size.y / 1000;
 
-        // Set the camera position in front of the model, higher, and further back
-        const cameraDistance = size.z * 4; // Adjust distance as needed
-        camera.position.set(center.x, center.y + size.y * 0.2, center.z + cameraDistance);
-        camera.lookAt(center.x, center.y, center.z);
+            // Set the camera position in front of the model, higher, and further back
+            const cameraDistance = size.z * 4; // Adjust distance as needed
+            camera.position.set(center.x, center.y + size.y * 0.2, center.z + cameraDistance);
+            camera.lookAt(center.x, center.y, center.z);
 
-        // Update controls target
-        controls.target.set(center.x, center.y, center.z);
-        controls.update();
+            // Update controls target
+            controls.target.set(center.x, center.y, center.z);
+            controls.update();
     },
     undefined,
     (error) => {
