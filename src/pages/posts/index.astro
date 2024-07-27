@@ -1,0 +1,41 @@
+---
+import MainLayout from '@layouts/MainLayout.astro';
+import Card from '@components/Card.astro';
+
+import { getCollection } from "astro:content";
+import type { CollectionEntry, CollectionKey } from "astro:content";
+
+const allBlogArticles: CollectionEntry<'blog'>[] = (await getCollection('blog'))
+  .sort((a:CollectionEntry<'blog'>, b:CollectionEntry<'blog'>) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+---
+
+<MainLayout pageTitle = "Blog Directory">
+
+	<div class = "container">
+
+		{allBlogArticles.map(article => (
+
+			<Card article = {article}></Card>
+
+		))}
+
+	</div>
+
+
+</MainLayout>
+
+<style>
+
+.container{
+	height:100%;
+	width:100%;
+	padding:20px;
+	display:flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items:center;
+	gap:1em;
+}
+
+</style>

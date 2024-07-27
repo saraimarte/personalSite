@@ -1,0 +1,57 @@
+---
+import MainLayout from '@layouts/MainLayout.astro';
+import { getCollection } from "astro:content";
+import type { CollectionEntry, CollectionKey } from "astro:content";
+import Tag from '@components/Tag.astro';
+
+import {formatDate} from '../../utils';
+
+export async function getStaticPaths(){
+    const allBlogArticles: CollectionEntry<'bible'>[] = await getCollection('bible');
+
+    return  allBlogArticles.map(entry => ({
+        params:{
+            slug: entry.slug
+        },
+        props:{entry}
+    }));
+}
+
+const { entry } = Astro.props;
+const {Content} = await entry.render();
+
+---
+
+
+<MainLayout>
+
+    <div class = "container">
+        <a href = "/posts">Back</a>
+        <h1>{entry.data.title}</h1>
+        <h1>{formatDate(entry.data.pubDate)}</h1>
+        <Tag tags = {entry.data.tags}></Tag>
+        <h2 class = "date">{entry.data.author}</h2>
+
+        <Content>
+        </Content>
+
+    </div>
+
+</MainLayout>
+
+<style>
+    .container{
+        height:100%;
+        width:100%;
+        padding:20px;
+        background-color:rgb(209, 198, 186);
+        display:flex;
+        flex-direction: column;
+        border:5px solid red;
+    }
+
+    h2{
+        margin:20px 0;
+        font-size:1.8rem;
+    }
+</style>

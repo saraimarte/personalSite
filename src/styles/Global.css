@@ -5,9 +5,9 @@
 }
 
 body{
-    height:100svh;
     display:flex;
     justify-content: center;
     align-items:center;
-
+    height:100%;
+    width:100%;
 }

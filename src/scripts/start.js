@@ -1,136 +1,195 @@
-import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // Texture loader
 const textureLoader = new THREE.TextureLoader()
 
 // Draco loader
-const dracoLoader = new DRACOLoader()
-dracoLoader.setDecoderPath('draco/')
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('draco/');
 
 // GLTF loader
 const gltfLoader = new GLTFLoader();
 gltfLoader.setDRACOLoader(dracoLoader);
 
-// ANCHOR - Canvas
-const canvas = document.querySelector('canvas.webgl');
+// Raycaster and mouse
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
 
-// ANCHOR - Scene
+// Canvas
+const canvas = document.querySelector('canvas.webgl');
+if (!canvas) {
+    console.error("Canvas element not found!");
+}
+
+// Scene
 const scene = new THREE.Scene();
 
-// ANCHOR - Sizes
+// Sizes 
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
 };
 
-// Ambient Light
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Adjust intensity as needed
-scene.add(ambientLight);
+// Textures
+const hoverColor = new THREE.Color(0xE3DAC9);
+const bakedTexture = textureLoader.load('bakedNew.jpg', 
+    () => console.log("Texture loaded successfully"),
+    undefined,
+    (error) => console.error("Error loading texture:", error)
+);
+bakedTexture.flipY = false;
+bakedTexture.colorSpace = THREE.SRGBColorSpace;
+const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture });
 
-//Textures
-const bakedTexture2 = textureLoader.load('baked.jpg')
-bakedTexture2.flipY = false
-bakedTexture2.colorSpace = THREE.SRGBColorSpace
-const bakedMaterial2 = new THREE.MeshBasicMaterial({ map: bakedTexture2 })
-
+// Variables
 let model;
 
 // Load Model
-// only works if I export without compression in blender
 gltfLoader.load(
-    '072524.glb',
-    (gltf) =>
-        {
-            gltf.scene.traverse((child) =>
-            {
-                child.material = bakedMaterial2
-            })
+    '072624.glb',
+    (gltf) => {
+        console.log("Model loaded successfully");
+        model = gltf.scene;
+        scene.add(model);
 
-                
-            model = gltf.scene;
-            scene.add(model)
-                
-            // Print the child models in the console
-            console.log("Child models:");
-            gltf.scene.traverse((child) => {
-                console.log(child);
-            });
+        model.traverse((child) => {
+            console.log(child.name)
+            if (child.isMesh) {
+                child.material = bakedMaterial.clone(); // Clone the material for each mesh
+                child.userData.originalMaterial = child.material; // Store original material
+            }
+        });
 
-            // Calculate bounding box of the model
-            const box = new THREE.Box3().setFromObject(model);
-            const center = box.getCenter(new THREE.Vector3());
-            const size = box.getSize(new THREE.Vector3());
+        // Camera and controls setup
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
 
-            // Position the model and camera
-            model.position.y -= size.y / 1000;
+        const cameraDistance = size.z * 4;
+        camera.position.set(center.x, center.y + size.y * 0.2, center.z + cameraDistance);
+        camera.lookAt(center.x, center.y, center.z);
 
-            // Set the camera position in front of the model, higher, and further back
-            const cameraDistance = size.z * 4; // Adjust distance as needed
-            camera.position.set(center.x, center.y + size.y * 0.2, center.z + cameraDistance);
-            camera.lookAt(center.x, center.y, center.z);
+        controls.target.set(center.x, center.y, center.z);
+        
+        // Set camera limitations
+        const minDistance = size.z * 2; // Minimum zoom distance
+        const maxDistance = size.z * 6; // Maximum zoom distance
+        controls.minDistance = minDistance;
+        controls.maxDistance = maxDistance;
+        
+        // Limit vertical rotation (to prevent going too far down)
+        controls.maxPolarAngle = Math.PI / 2; // Limit to 90 degrees (horizontal)
+        controls.minPolarAngle = Math.PI / 2.2; // Limit to 90 degrees (horizontal)
 
-            // Update controls target
-            controls.target.set(center.x, center.y, center.z);
-            controls.update();
+        controls.update();
+
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('click', onMouseClick);
     },
-    undefined,
+    (xhr) => {
+        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+    },
     (error) => {
         console.error('An error occurred while loading the model:', error);
     }
 );
 
+function onMouseMove(event) {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+}
 
-// ANCHOR - Camera
+function onMouseClick(event) {
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObject(model, true);
+
+    if (intersects.length > 0) {
+        const clickedObject = intersects[0].object;
+        console.log(`${clickedObject.name} was clicked on`);
+        switch(clickedObject.name) {
+            case 'gameboy':
+                window.location.href = '../games';
+                break;
+            case 'camera':
+                window.location.href = '../camera';
+                break;
+            case 'pen':
+                window.location.href = '../posts';
+                break;
+            case 'wrench':
+                window.location.href = '../workshop';
+                break;
+            case 'bible':
+                window.location.href = '../biblePosts';
+                break;
+            case 'toolbox':
+                window.location.href = '../toolbox';
+                break;
+            case 'bowl':
+                window.location.href = '../kitchen';
+                break;
+            case 'telephone':
+                window.location.href = '../interbook';
+                break;
+            case 'lightbulb':
+                window.location.href = 'https://saraistudies.netlify.app/';
+                break;
+            default:
+                console.log('No navigation defined for this object');
+        }
+    }
+}
+
+// Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
 scene.add(camera);
 
 // OrbitControls
 const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true; // Enable smooth controls
+controls.enableDamping = true;
 
-// Set polar angle limits to restrict up and down rotation
-controls.minPolarAngle = Math.PI / 2.1; // Limit the downward angle
-controls.maxPolarAngle = 2 * Math.PI / 3; // Limit the upward angle
-
-// Set azimuth angle limits to allow full 360 degree horizontal rotation
-controls.minAzimuthAngle = -Infinity;
-controls.maxAzimuthAngle = Infinity;
-
-// ANCHOR - Renderer
-const renderer = new THREE.WebGLRenderer({
-    canvas: canvas
-});
+// Renderer
+const renderer = new THREE.WebGLRenderer({ canvas: canvas });
 renderer.setSize(sizes.width, sizes.height);
-renderer.setClearColor(0xF2F3F4, 1); // Set the background color to #FEFEFA
+renderer.setClearColor(0xF2F3F4, 1);
 
 // Handle window resize
 window.addEventListener('resize', () => {
     sizes.width = window.innerWidth;
     sizes.height = window.innerHeight;
-
     camera.aspect = sizes.width / sizes.height;
     camera.updateProjectionMatrix();
-
     renderer.setSize(sizes.width, sizes.height);
 });
 
-// ANCHOR - Animate
-const clock = new THREE.Clock();
-
+// Animate
 const tick = () => {
-    const elapsedTime = clock.getElapsedTime();
-
-    // Update controls
     controls.update();
 
-    // Render
-    renderer.render(scene, camera);
+    if (model) {
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObject(model, true);
 
-    // Call tick again on the next frame
-    window.requestAnimationFrame(tick);
+        model.traverse((child) => {
+            if (child.isMesh) {
+                child.material = child.userData.originalMaterial;
+            }
+        });
+
+        if (intersects.length > 0) {
+            const hoveredObject = intersects[0].object;
+            if (hoveredObject.isMesh && hoveredObject.name != 'model001') {
+                hoveredObject.material = hoveredObject.material.clone();
+                hoveredObject.material.color.set(hoverColor);
+            }
+        }
+    }
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
 };
 
 tick();
