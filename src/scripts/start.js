@@ -171,7 +171,7 @@ function handleInteraction(vector) {
 }
 
 // Camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(80, sizes.width / sizes.height, 0.1, 100);
 scene.add(camera);
 
 // OrbitControls
