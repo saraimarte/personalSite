@@ -4,7 +4,7 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // Texture loader
-const textureLoader = new THREE.TextureLoader()
+const textureLoader = new THREE.TextureLoader();
 
 // Draco loader
 const dracoLoader = new DRACOLoader();
@@ -17,6 +17,7 @@ gltfLoader.setDRACOLoader(dracoLoader);
 // Raycaster and mouse
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
+const touch = new THREE.Vector2();
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
@@ -56,7 +57,7 @@ gltfLoader.load(
         scene.add(model);
 
         model.traverse((child) => {
-            console.log(child.name)
+            console.log(child.name);
             if (child.isMesh) {
                 child.material = bakedMaterial.clone(); // Clone the material for each mesh
                 child.userData.originalMaterial = child.material; // Store original material
@@ -86,8 +87,12 @@ gltfLoader.load(
 
         controls.update();
 
+        // Add event listeners for both mouse and touch events
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('click', onMouseClick);
+        window.addEventListener('touchstart', onTouchStart);
+        window.addEventListener('touchmove', onTouchMove);
+        window.addEventListener('touchend', onTouchEnd);
     },
     (xhr) => {
         console.log((xhr.loaded / xhr.total * 100) + '% loaded');
@@ -103,7 +108,29 @@ function onMouseMove(event) {
 }
 
 function onMouseClick(event) {
-    raycaster.setFromCamera(mouse, camera);
+    handleInteraction(mouse);
+}
+
+function onTouchStart(event) {
+    if (event.touches.length === 1) {
+        touch.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+        touch.y = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
+    }
+}
+
+function onTouchMove(event) {
+    if (event.touches.length === 1) {
+        touch.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+        touch.y = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
+    }
+}
+
+function onTouchEnd(event) {
+    handleInteraction(touch);
+}
+
+function handleInteraction(vector) {
+    raycaster.setFromCamera(vector, camera);
     const intersects = raycaster.intersectObject(model, true);
 
     if (intersects.length > 0) {
