@@ -1,6 +1,6 @@
 ---
 import MainLayout from '@layouts/MainLayout.astro';
-import Card from '@components/Card.astro';
+import BibleCard from '@components/BibleCard.astro';
 
 import { getCollection } from "astro:content";
 import type { CollectionEntry, CollectionKey } from "astro:content";
@@ -10,13 +10,13 @@ const allBlogArticles: CollectionEntry<'bible'>[] = (await getCollection('bible'
 
 ---
 
-<MainLayout pageTitle = "Blog Directory">
+<MainLayout pageTitle = "Bible Blog Directory">
 
 	<div class = "container">
 
 		{allBlogArticles.map(article => (
 
-			<Card article = {article}></Card>
+			<BibleCard article = {article}></BibleCard>
 
 		))}
 
