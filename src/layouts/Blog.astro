@@ -11,7 +11,7 @@ import MainLayout from '../layouts/MainLayout.astro';
     * {
         font-family: "IBM Plex Mono", monospace;
     }
-    p {
+    p{
         margin: 10px 0;
         font-size: 1rem;
     }
@@ -23,6 +23,22 @@ import MainLayout from '../layouts/MainLayout.astro';
         margin: 10px 5px 0;
         font-size: 1.2rem;
     }
+
+
+    @media (max-width:600px) {
+        h1{
+          height:min-content;
+          min-height: 4rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        h1{
+          height:65px;
+
+        }
+    }
+
 </style>
 
 <script>
@@ -92,7 +108,7 @@ import MainLayout from '../layouts/MainLayout.astro';
 
           element.textContent = currentText;
           index++;
-        }, 15); // Adjust speed here (lower number = faster)
+        }, 100); // Adjust speed here (lower number = faster)
       }
 
       function handlePageLoad() {
