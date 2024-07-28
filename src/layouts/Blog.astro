@@ -34,9 +34,14 @@ import MainLayout from '../layouts/MainLayout.astro';
 
 
 <script>
-    let audioContext;
-    let audioBuffer;
-    let sourceNode;
+    let audioContext: AudioContext | undefined;
+    let audioBuffer: AudioBuffer | undefined;
+    let sourceNode: AudioBufferSourceNode | undefined;
+
+document.addEventListener('DOMContentLoaded', () => {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+   
+
     let isDecrypting = false;
   
     async function loadAudio() {
@@ -116,4 +121,5 @@ import MainLayout from '../layouts/MainLayout.astro';
     }
   
     window.addEventListener('pagehide', cleanUp);
+  });
   </script>

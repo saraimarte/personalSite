@@ -47,12 +47,15 @@ interface Props{
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const card = document.querySelector('.card');
-        const clickSound = document.getElementById('click-sound');
+   document.addEventListener('DOMContentLoaded', () => {
+    const card = document.querySelector('.card') as HTMLAnchorElement;
+    const clickSound = document.getElementById('click-sound') as HTMLAudioElement;
 
+    if (card && clickSound) {
         card.addEventListener('click', () => {
             clickSound.play();
         });
-    });
+    }
+});
+
 </script>
