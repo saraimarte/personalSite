@@ -1,34 +1,27 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
-
 ---
 
-
 <MainLayout>
-    <slot>
-    </slot>
+    <slot></slot>
 </MainLayout>
 
 <style is:inline>
-    *{
+    * {
         font-family: "IBM Plex Mono", monospace;
     }
-    p{
+    p {
         margin: 10px 0;
-        font-size:1rem;
-
+        font-size: 1rem;
     }
-
-    h1{
-        margin:10px 5px 0;
-        font-size:1.4rem;
+    h1 {
+        margin: 10px 5px 0;
+        font-size: 1.4rem;
     }
-
-    h2{
-        margin:10px 5px 0;
-        font-size:1.2rem;
+    h2 {
+        margin: 10px 5px 0;
+        font-size: 1.2rem;
     }
- 
 </style>
 
 <script>
@@ -36,45 +29,11 @@ import MainLayout from '../layouts/MainLayout.astro';
    let audioBuffer: AudioBuffer | undefined;
    let sourceNode: AudioBufferSourceNode | undefined;
 
+   document.addEventListener('DOMContentLoaded', () => {
+      audioContext = new AudioContext(); // Initialize AudioContext directly
 
-document.addEventListener('DOMContentLoaded', () => {
-  audioContext = new AudioContext();
-   
-    let isDecrypting = false;
+      let isDecrypting = false;
 
-    async function loadAudio() {
-      const audioUrl = 'https://audio.jukehost.co.uk/EqW6fci0a87uV7WFDGz3mTC3u0CDBONk';
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const response = await fetch(audioUrl);
-      const arrayBuffer = await response.arrayBuffer();
-      audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-    }
-  
-    function playAudio() {
-      if (audioContext && audioBuffer) {
-        sourceNode = audioContext.createBufferSource();
-        sourceNode.buffer = audioBuffer;
-        sourceNode.connect(audioContext.destination);
-        sourceNode.loop = true;
-        sourceNode.start();
-      }
-    }
-  
-    function stopAudio() {
-      if (sourceNode) {
-        sourceNode.stop();
-      }
-    }
-  
-    function getRandomChar() {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
-      return chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-  
-    async function decryptText(element, originalText) {
-      if (isDecrypting) return;
-      isDecrypting = true;
-  
       async function loadAudio() {
         const audioUrl = 'https://audio.jukehost.co.uk/EqW6fci0a87uV7WFDGz3mTC3u0CDBONk';
         const response = await fetch(audioUrl);
@@ -82,45 +41,72 @@ document.addEventListener('DOMContentLoaded', () => {
         audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
       }
 
-      playAudio();
-  
-      let index = 0;
-      const interval = setInterval(() => {
-        if (index >= originalText.length) {
-          clearInterval(interval);
-          stopAudio();
-          isDecrypting = false;
-          return;
+      function playAudio() {
+        if (audioContext && audioBuffer) {
+          sourceNode = audioContext.createBufferSource();
+          sourceNode.buffer = audioBuffer;
+          sourceNode.connect(audioContext.destination);
+          sourceNode.loop = true;
+          sourceNode.start();
         }
-  
-        currentText = currentText.split('').map((char, i) => {
-          if (i < index) return originalText[i];
-          if (i === index) return originalText[i];
-          return getRandomChar();
-        }).join('');
-  
-        element.textContent = currentText;
-        index++;
-      }, 15); // Adjust speed here (lower number = faster)
-    }
-  
-    function handlePageLoad() {
-      const h1 = document.querySelector('h1');
-      if (h1) {
-        const originalText = h1.textContent;
-        decryptText(h1, originalText);
       }
-    }
-  
-    // Use 'DOMContentLoaded' event instead of 'pageshow'
-    window.addEventListener('DOMContentLoaded', handlePageLoad);
-  
-    // Clean up function to stop audio and reset when leaving the page
-    function cleanUp() {
-      stopAudio();
-      isDecrypting = false;
-    }
-  
-    window.addEventListener('pagehide', cleanUp);
-  });
-  </script>
+
+      function stopAudio() {
+        if (sourceNode) {
+          sourceNode.stop();
+        }
+      }
+
+      function getRandomChar() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
+        return chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+
+      async function decryptText(element, originalText) {
+        if (isDecrypting) return;
+        isDecrypting = true;
+
+        await loadAudio();
+        let currentText = Array(originalText.length).fill('').map(getRandomChar).join('');
+        element.textContent = currentText;
+
+        playAudio();
+
+        let index = 0;
+        const interval = setInterval(() => {
+          if (index >= originalText.length) {
+            clearInterval(interval);
+            stopAudio();
+            isDecrypting = false;
+            return;
+          }
+
+          currentText = currentText.split('').map((_, i) => {
+            if (i < index) return originalText[i];
+            if (i === index) return originalText[i];
+            return getRandomChar();
+          }).join('');
+
+          element.textContent = currentText;
+          index++;
+        }, 15); // Adjust speed here (lower number = faster)
+      }
+
+      function handlePageLoad() {
+        const h1 = document.querySelector('h1');
+        if (h1) {
+          const originalText = h1.textContent || '';
+          decryptText(h1, originalText);
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', handlePageLoad);
+
+      function cleanUp() {
+        stopAudio();
+        isDecrypting = false;
+      }
+
+      window.addEventListener('pagehide', cleanUp);
+   });
+</script>
