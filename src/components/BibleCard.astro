@@ -12,14 +12,14 @@ interface Props{
 <a href = {`/biblePosts/` + article.slug} class = "card">
     <h1 class = "title"> {article.data.title}</h1>
     <h2 class = "date">{formatDate(article.data.pubDate)}</h2>
-    <h2 class = "author">{article.data.author}</h2>
     <Tag tags = {article.data.tags}></Tag>
 </a>
+<audio id="click-sound" src="https://audio.jukehost.co.uk/lEvEFHUvNTZxQ6PTEagKi9B60t48m25K"></audio>
 
 <style>
     .card{
         text-decoration:none;
-        color:black;
+        color:#91A3B0;
         background-color: darksalmon;
         box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
         padding:20px;
@@ -27,8 +27,17 @@ interface Props{
         display: flex;
         flex-direction: column;
         gap:1em;
-        font-family: "Goudy Bookletter 1911", serif;
-        font-weight: 400;
-        font-style: normal;
+        font-family: "IBM Plex Mono", monospace;
+
     }
 </style>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const card = document.querySelector('.card');
+        const clickSound = document.getElementById('click-sound');
+
+        card.addEventListener('click', () => {
+            clickSound.play();
+        });
+    });
+</script>

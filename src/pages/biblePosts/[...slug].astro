@@ -3,6 +3,7 @@ import MainLayout from '@layouts/MainLayout.astro';
 import { getCollection } from "astro:content";
 import type { CollectionEntry, CollectionKey } from "astro:content";
 import Tag from '@components/Tag.astro';
+import BackBtn from '@components/BackBtn.astro';
 
 import {formatDate} from '../../utils';
 
@@ -26,7 +27,7 @@ const {Content} = await entry.render();
 <MainLayout>
 
     <div class = "container">
-        <a href = "/posts">Back</a>
+        <BackBtn link = "/biblePosts"></BackBtn>
         <h1>{entry.data.title}</h1>
         <h1>{formatDate(entry.data.pubDate)}</h1>
         <Tag tags = {entry.data.tags}></Tag>
@@ -47,11 +48,15 @@ const {Content} = await entry.render();
         background-color:rgb(209, 198, 186);
         display:flex;
         flex-direction: column;
-        border:5px solid red;
     }
 
     h2{
         margin:20px 0;
         font-size:1.8rem;
+    }
+    p{
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-style: normal;
     }
 </style>

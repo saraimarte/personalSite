@@ -1,41 +1,92 @@
 ---
 import MainLayout from '@layouts/MainLayout.astro';
 import Card from '@components/Card.astro';
-
-import { getCollection } from "astro:content";
-import type { CollectionEntry, CollectionKey } from "astro:content";
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 
 const allBlogArticles: CollectionEntry<'blog'>[] = (await getCollection('blog'))
-  .sort((a:CollectionEntry<'blog'>, b:CollectionEntry<'blog'>) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
+const allTags = Array.from(
+  new Set(allBlogArticles.flatMap(article => article.data.tags))
+).sort(); // Sorting tags alphabetically
+
+const url = new URL(Astro.request.url);
+const selectedTag = url.searchParams.get('tag');
+const filteredArticles = selectedTag
+  ? allBlogArticles.filter(article => article.data.tags.includes(selectedTag))
+  : allBlogArticles;
 ---
 
-<MainLayout pageTitle = "Blog Directory">
+<MainLayout pageTitle="Blog Directory">
+	
+	<div class = "container1">
 
-	<div class = "container">
-
-		{allBlogArticles.map(article => (
-
-			<Card article = {article}></Card>
-
-		))}
+		<div class="filters">
+			<span>Filter by tag:</span>
+			<ul>
+			  <li><a href="/posts">All</a></li>
+			  {allTags.map(tag => (
+				<li>
+				  <a href={`/posts/tag/${tag}`}>{tag}</a>
+				</li>
+			  ))}
+			</ul>
+		  </div>
+		  
+		  <div class="container">
+			{filteredArticles.length > 0 ? (
+			  filteredArticles.map(article => (
+				<Card article={article} />
+			  ))
+			) : (
+			  <p>No articles found for the selected tag.</p>
+			)}
+		  </div>
 
 	</div>
 
-
+ 
 </MainLayout>
 
 <style>
-
-.container{
-	height:100%;
-	width:100%;
-	padding:20px;
-	display:flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items:center;
-	gap:1em;
+.filters {
+  padding: 20px;
 }
 
+.filters ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.filters li {
+  display: inline;
+  margin-right: 10px;
+}
+
+.filters a {
+  text-decoration: none;
+  color: blue;
+}
+
+.filters a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+
+.container1{
+	height:100%;
+	width:100%;
+
+}
 </style>

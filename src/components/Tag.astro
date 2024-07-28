@@ -1,16 +1,15 @@
 ---
 const {tags} = Astro.props;
 
+ 
 interface Props{
     tags:String[];
 }
 ---
 
-
-
 <div class = "tags">
     {tags.map(tag => (
-        <div class = "tag">{tag} </div>
+        <a href = {'/posts/tag/' + tag}class = "tag">{tag} </a>
     ))}
 </div>
   
@@ -19,17 +18,21 @@ interface Props{
   
     .tags{
         display: flex;
-        gap:1em;
+        gap:0.5em;
     }
     
     .tag{
-        padding:10px;
+        text-decoration:none;
+        padding:5px;
         background-color: blue;
         color:white;
         font-weight:bold;
         border-radius:20px;
-        width:20%;
+        width:min-content;
         text-align:center;
-        font-size:12px;
+        font-size:0.8rem;
+        padding:5px 10px;
+        margin: 10px 0;
+
     }
 </style>

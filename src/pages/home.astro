@@ -2,5 +2,39 @@
 import MainLayout from '@layouts/MainLayout.astro';
 ---
 <MainLayout pageTitle = "Home">
-	HELLO
+	<div class = "container">
+		<div class = "layer1">
+			<div class = "layer2"></div>
+		</div>
+		
+	</div>
 </MainLayout>
+
+
+<style>
+	.container{
+		height:700px;
+		width:700px;
+	}
+	
+	.layer1, .layer2{
+		height:100%;
+		width:100%;
+	}
+	
+.layer1 {
+	background: hsl(40, 35%, 76%);
+}
+
+.layer2 {
+	box-shadow: inset 0 0 40px 10px hsla(0, 0%, 0%, 0.8);
+	background: 
+		url(https://garden.bradwoods.io/images/noise.webp), 
+		linear-gradient(
+			to bottm right, 
+			hsla(0, 0%, 0%, 0) 40%, 
+			hsla(0, 0%, 0%, 1)
+		);
+	mix-blend-mode: overlay;
+}
+</style>

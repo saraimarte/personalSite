@@ -1,0 +1,33 @@
+---
+const { link } = Astro.props;
+---
+
+<a class="backBtn" href={link}>Back</a>
+<audio id="click-sound" src="https://audio.jukehost.co.uk/lEvEFHUvNTZxQ6PTEagKi9B60t48m25K"></audio>
+
+<style>
+    .backBtn {
+        text-decoration: none;
+        border: 1px solid blue;
+        width: 3rem;
+        text-align: center;
+        padding: 0.3em;
+        color: #4D5E6A;
+        font-size: 1rem;
+    }
+    .backBtn:hover {
+        background-color: blue;
+        color: white;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const backButton = document.querySelector('.backBtn');
+        const clickSound = document.getElementById('click-sound');
+
+        backButton.addEventListener('click', () => {
+            clickSound.play();
+        });
+    });
+</script>

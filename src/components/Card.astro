@@ -10,26 +10,49 @@ interface Props{
 ---
 
 <a href = {`/posts/` + article.slug} class = "card">
-    <h1 class = "title"> {article.data.title}</h1>
-    <h2 class = "date">{formatDate(article.data.pubDate)}</h2>
-    <h2 class = "author">{article.data.author}</h2>
-    <Tag tags = {article.data.tags}></Tag>
+        <p class = "date">{formatDate(article.data.pubDate)}</p>
+        <p class = "title"> {article.data.title}</p>    
 </a>
+<audio id="click-sound" src="https://audio.jukehost.co.uk/lEvEFHUvNTZxQ6PTEagKi9B60t48m25K"></audio>
 
 <style>
+   
     .card{
-        text-decoration:none;
-        color:black;
-        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-        padding:20px;
-        width:80%;
-        display: flex;
-        flex-direction: column;
+        display:flex;
+        height:1rem;
+        width:100%;
+        justify-content:start;
+        align-items:center;
+        color:#778D9C;
         gap:1em;
-        font-family: "Goudy Bookletter 1911", serif;
-        font-weight: 400;
-        font-style: normal;
+        border: 1px solid blue;
+        font-size: 1rem;
+        text-decoration:none;
+        padding:25px;
+        font-family: "IBM Plex Mono", monospace;
+    }
+    .card:hover{
+        background-color:blue;
+        color:white;
+    }
+   
+    @media (max-width: 768px) {
+        .card{
+            flex-wrap:wrap;
+            height:min-content;
+            padding:10px;
+            font-size: 0.8rem;
+        }
     }
 </style>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const card = document.querySelector('.card');
+        const clickSound = document.getElementById('click-sound');
 
+        card.addEventListener('click', () => {
+            clickSound.play();
+        });
+    });
+</script>

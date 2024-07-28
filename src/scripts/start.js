@@ -35,6 +35,7 @@ const sizes = {
 };
 
 // Textures
+
 const hoverColor = new THREE.Color(0xE3DAC9);
 const bakedTexture = textureLoader.load('bakedNew.jpg', 
     () => console.log("Texture loaded successfully"),
