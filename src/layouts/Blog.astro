@@ -34,12 +34,13 @@ import MainLayout from '../layouts/MainLayout.astro';
 
 
 <script>
-    let audioContext: AudioContext | undefined;
-    let audioBuffer: AudioBuffer | undefined;
-    let sourceNode: AudioBufferSourceNode | undefined;
+   let audioContext: AudioContext | undefined;
+  let audioBuffer: AudioBuffer | undefined;
+  let sourceNode: AudioBufferSourceNode | undefined;
+
 
 document.addEventListener('DOMContentLoaded', () => {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  audioContext = new AudioContext();
    
 
     let isDecrypting = false;
