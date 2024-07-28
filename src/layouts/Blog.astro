@@ -18,7 +18,10 @@ import MainLayout from '../layouts/MainLayout.astro';
     h1 {
         margin: 10px 5px 0;
         font-size: 1.4rem;
+        overflow:hidden;
+        width:90%;
     }
+
     h2 {
         margin: 10px 5px 0;
         font-size: 1.2rem;
@@ -108,7 +111,7 @@ import MainLayout from '../layouts/MainLayout.astro';
 
           element.textContent = currentText;
           index++;
-        }, 100); // Adjust speed here (lower number = faster)
+        }, 15); // Adjust speed here (lower number = faster)
       }
 
       function handlePageLoad() {

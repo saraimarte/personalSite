@@ -28,7 +28,10 @@ interface Props{
         flex-direction: column;
         gap:1em;
         font-family: "IBM Plex Mono", monospace;
-
+        overflow: hidden;
+        text-overflow: ellipsis; /* Add ellipsis (...) when text overflows */
+        white-space: nowrap; /* Prevent text wrapping */
+        
     }
 </style>
 <script>
