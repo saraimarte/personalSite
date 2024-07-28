@@ -31,20 +31,17 @@ import MainLayout from '../layouts/MainLayout.astro';
  
 </style>
 
-
-
 <script>
    let audioContext: AudioContext | undefined;
-  let audioBuffer: AudioBuffer | undefined;
-  let sourceNode: AudioBufferSourceNode | undefined;
+   let audioBuffer: AudioBuffer | undefined;
+   let sourceNode: AudioBufferSourceNode | undefined;
 
 
 document.addEventListener('DOMContentLoaded', () => {
   audioContext = new AudioContext();
    
-
     let isDecrypting = false;
-  
+
     async function loadAudio() {
       const audioUrl = 'https://audio.jukehost.co.uk/EqW6fci0a87uV7WFDGz3mTC3u0CDBONk';
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -78,10 +75,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isDecrypting) return;
       isDecrypting = true;
   
-      await loadAudio();
-      let currentText = Array(originalText.length).fill('').map(getRandomChar).join('');
-      element.textContent = currentText;
-  
+      async function loadAudio() {
+        const audioUrl = 'https://audio.jukehost.co.uk/EqW6fci0a87uV7WFDGz3mTC3u0CDBONk';
+        const response = await fetch(audioUrl);
+        const arrayBuffer = await response.arrayBuffer();
+        audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+      }
+
       playAudio();
   
       let index = 0;
