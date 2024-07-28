@@ -1,5 +1,6 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+
 ---
 
 <MainLayout>
@@ -38,7 +39,9 @@ import MainLayout from '../layouts/MainLayout.astro';
         const audioUrl = 'https://audio.jukehost.co.uk/EqW6fci0a87uV7WFDGz3mTC3u0CDBONk';
         const response = await fetch(audioUrl);
         const arrayBuffer = await response.arrayBuffer();
-        audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        if (audioContext) {
+          audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        }
       }
 
       function playAudio() {
