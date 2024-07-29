@@ -45,95 +45,89 @@ import MainLayout from '../layouts/MainLayout.astro';
 </style>
 
 <script>
-   let audioContext: AudioContext | undefined;
-   let audioBuffer: AudioBuffer | undefined;
-   let sourceNode: AudioBufferSourceNode | undefined;
+  let audioContext: AudioContext | undefined;
+  let audioBuffer: AudioBuffer | undefined;
+  let sourceNode: AudioBufferSourceNode | undefined;
 
-   document.addEventListener('DOMContentLoaded', () => {
-    audioContext = new AudioContext();
+  async function initializeAudio() {
+      audioContext = new AudioContext();
+      const audioUrl = 'https://audio.jukehost.co.uk/EqW6fci0a87uV7WFDGz3mTC3u0CDBONk';
+      const response = await fetch(audioUrl);
+      const arrayBuffer = await response.arrayBuffer();
+      audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+  }
 
-    let isDecrypting = false;
+  function playAudio() {
+      if (audioContext && audioBuffer) {
+          sourceNode = audioContext.createBufferSource();
+          sourceNode.buffer = audioBuffer;
+          sourceNode.connect(audioContext.destination);
+          sourceNode.loop = true;
+          sourceNode.start();
+      }
+  }
 
-    async function loadAudio() {
-        const audioUrl = 'https://audio.jukehost.co.uk/EqW6fci0a87uV7WFDGz3mTC3u0CDBONk';
-        const response = await fetch(audioUrl);
-        const arrayBuffer = await response.arrayBuffer();
-        if (audioContext) {
-            audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-        }
-    }
+  function stopAudio() {
+      if (sourceNode) {
+          sourceNode.stop();
+          sourceNode = undefined; // Clear reference
+      }
+  }
 
-    function playAudio() {
-        if (audioContext && audioBuffer) {
-            sourceNode = audioContext.createBufferSource();
-            sourceNode.buffer = audioBuffer;
-            sourceNode.connect(audioContext.destination);
-            sourceNode.loop = true;
-            sourceNode.start();
-        }
-    }
+  function getRandomChar() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
+      return chars.charAt(Math.floor(Math.random() * chars.length));
+  }
 
-    function stopAudio() {
-        if (sourceNode) {
-            sourceNode.stop();
-        }
-    }
+  async function decryptText(element, originalText) {
+      if (audioContext === undefined || audioBuffer === undefined) {
+          await initializeAudio();
+      }
 
-    function getRandomChar() {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
-        return chars.charAt(Math.floor(Math.random() * chars.length));
-    }
+      let isDecrypting = false;
+      if (isDecrypting) return;
+      isDecrypting = true;
 
-    async function decryptText(element, originalText) {
-        if (isDecrypting) return;
-        isDecrypting = true;
+      let currentText = Array(originalText.length).fill('').map(getRandomChar).join('');
+      element.textContent = currentText;
 
-        await loadAudio();
-        let currentText = Array(originalText.length).fill('').map(getRandomChar).join('');
-        element.textContent = currentText;
+      playAudio();
 
-        // Wait for user interaction to start the audio
-        document.addEventListener('click', function startAudio() {
-            playAudio();
-            document.removeEventListener('click', startAudio);
-        }, { once: true });
+      let index = 0;
+      const interval = setInterval(() => {
+          if (index >= originalText.length) {
+              clearInterval(interval);
+              stopAudio();
+              isDecrypting = false;
+              return;
+          }
 
-        let index = 0;
-        const interval = setInterval(() => {
-            if (index >= originalText.length) {
-                clearInterval(interval);
-                stopAudio();
-                isDecrypting = false;
-                return;
-            }
+          currentText = currentText.split('').map((_, i) => {
+              if (i < index) return originalText[i];
+              if (i === index) return originalText[i];
+              return getRandomChar();
+          }).join('');
 
-            currentText = currentText.split('').map((_, i) => {
-                if (i < index) return originalText[i];
-                if (i === index) return originalText[i];
-                return getRandomChar();
-            }).join('');
+          element.textContent = currentText;
+          index++;
+      }, 15);
+  }
 
-            element.textContent = currentText;
-            index++;
-        }, 15);
-    }
+  function handlePageLoad() {
+      const h1 = document.querySelector('h1');
+      if (h1) {
+          const originalText = h1.textContent || '';
+          decryptText(h1, originalText);
+      }
+  }
 
-    function handlePageLoad() {
-        const h1 = document.querySelector('h1');
-        if (h1) {
-            const originalText = h1.textContent || '';
-            decryptText(h1, originalText);
-        }
-    }
+  document.addEventListener('DOMContentLoaded', () => {
+      handlePageLoad();
+  });
 
-    window.addEventListener('DOMContentLoaded', handlePageLoad);
+  function cleanUp() {
+      stopAudio();
+  }
 
-    function cleanUp() {
-        stopAudio();
-        isDecrypting = false;
-    }
-
-    window.addEventListener('pagehide', cleanUp);
-});
-
+  window.addEventListener('pagehide', cleanUp);
 </script>
