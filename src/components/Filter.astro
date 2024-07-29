@@ -2,7 +2,6 @@
 import Card from '@components/Card.astro';
 const { allTags, filteredArticles, selectedTag } = Astro.props;
 ---
-
 <div class="container">
   <div class="filters">
     <span>Filter by tag:</span>
@@ -10,8 +9,8 @@ const { allTags, filteredArticles, selectedTag } = Astro.props;
       <li>
         <a href="/posts" class={selectedTag ? '' : 'bold'}>All</a>
       </li>
-      {allTags.map(tag => (
-        <li key={tag}>
+      {allTags.map((tag: string) => (
+        <li>
           <a href={`/posts/tag/${tag}`} class={tag === selectedTag ? 'bold' : ''}>
             {tag}
           </a>
