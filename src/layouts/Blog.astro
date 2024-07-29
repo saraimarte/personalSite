@@ -49,85 +49,81 @@ import MainLayout from '../layouts/MainLayout.astro';
   let audioBuffer: AudioBuffer | undefined;
   let sourceNode: AudioBufferSourceNode | undefined;
 
-  async function initializeAudio() {
-      audioContext = new AudioContext();
-      const audioUrl = 'https://audio.jukehost.co.uk/EqW6fci0a87uV7WFDGz3mTC3u0CDBONk';
-      const response = await fetch(audioUrl);
-      const arrayBuffer = await response.arrayBuffer();
-      audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-  }
+   // Load and decode audio
+   async function loadAudio() {
+     const audioUrl = 'https://audio.jukehost.co.uk/EqW6fci0a87uV7WFDGz3mTC3u0CDBONk';
+     const response = await fetch(audioUrl);
+     const arrayBuffer = await response.arrayBuffer();
+     if (!audioContext) {
+       audioContext = new (window.AudioContext || window.webkitAudioContext)();
+     }
+     audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+   }
 
-  function playAudio() {
-      if (audioContext && audioBuffer) {
-          sourceNode = audioContext.createBufferSource();
-          sourceNode.buffer = audioBuffer;
-          sourceNode.connect(audioContext.destination);
-          sourceNode.loop = true;
-          sourceNode.start();
-      }
-  }
+   // Play audio
+   function playAudio() {
+     if (audioContext && audioBuffer) {
+       sourceNode = audioContext.createBufferSource();
+       sourceNode.buffer = audioBuffer;
+       sourceNode.connect(audioContext.destination);
+       sourceNode.loop = true;
+       sourceNode.start();
+     }
+   }
 
-  function stopAudio() {
-      if (sourceNode) {
-          sourceNode.stop();
-          sourceNode = undefined; // Clear reference
-      }
-  }
+   // Stop audio
+   function stopAudio() {
+     if (sourceNode) {
+       sourceNode.stop();
+       sourceNode.disconnect();
+     }
+   }
 
-  function getRandomChar() {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
-      return chars.charAt(Math.floor(Math.random() * chars.length));
-  }
+   function getRandomChar() {
+     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
+     return chars.charAt(Math.floor(Math.random() * chars.length));
+   }
 
-  async function decryptText(element, originalText) {
-      if (audioContext === undefined || audioBuffer === undefined) {
-          await initializeAudio();
-      }
+   async function decryptText(element, originalText) {
+     if (audioContext && audioBuffer) {
+       playAudio();
+     }
 
-      let isDecrypting = false;
-      if (isDecrypting) return;
-      isDecrypting = true;
+     let currentText = Array(originalText.length).fill('').map(getRandomChar).join('');
+     element.textContent = currentText;
 
-      let currentText = Array(originalText.length).fill('').map(getRandomChar).join('');
-      element.textContent = currentText;
+     let index = 0;
+     const interval = setInterval(() => {
+       if (index >= originalText.length) {
+         clearInterval(interval);
+         stopAudio();
+         return;
+       }
 
-      playAudio();
+       currentText = currentText.split('').map((_, i) => {
+         if (i < index) return originalText[i];
+         if (i === index) return originalText[i];
+         return getRandomChar();
+       }).join('');
 
-      let index = 0;
-      const interval = setInterval(() => {
-          if (index >= originalText.length) {
-              clearInterval(interval);
-              stopAudio();
-              isDecrypting = false;
-              return;
-          }
+       element.textContent = currentText;
+       index++;
+     }, 15); // Adjust speed here (lower number = faster)
+   }
 
-          currentText = currentText.split('').map((_, i) => {
-              if (i < index) return originalText[i];
-              if (i === index) return originalText[i];
-              return getRandomChar();
-          }).join('');
+   function handlePageLoad() {
+     const h1 = document.querySelector('h1');
+     if (h1) {
+       const originalText = h1.textContent || '';
+       decryptText(h1, originalText);
+     }
+   }
 
-          element.textContent = currentText;
-          index++;
-      }, 15);
-  }
+   window.addEventListener('DOMContentLoaded', () => {
+     loadAudio().then(handlePageLoad);
+   });
 
-  function handlePageLoad() {
-      const h1 = document.querySelector('h1');
-      if (h1) {
-          const originalText = h1.textContent || '';
-          decryptText(h1, originalText);
-      }
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-      handlePageLoad();
-  });
-
-  function cleanUp() {
-      stopAudio();
-  }
-
-  window.addEventListener('pagehide', cleanUp);
+   window.addEventListener('pagehide', () => {
+     stopAudio();
+   });
 </script>
