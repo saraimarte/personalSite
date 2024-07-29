@@ -1,0 +1,59 @@
+---
+import Card from '@components/Card.astro';
+const { allTags, filteredArticles, selectedTag } = Astro.props;
+---
+
+<div class="container">
+  <div class="filters">
+    <span>Filter by tag:</span>
+    <ul>
+      <li>
+        <a href="/posts" class={selectedTag ? '' : 'bold'}>All</a>
+      </li>
+      {allTags.map(tag => (
+        <li key={tag}>
+          <a href={`/posts/tag/${tag}`} class={tag === selectedTag ? 'bold' : ''}>
+            {tag}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<style>
+.filters {
+  padding: 20px 0;
+}
+
+.filters ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.filters li {
+  display: inline;
+  margin-right: 10px;
+}
+
+.filters a {
+  text-decoration: none;
+  color: blue;
+}
+
+.filters a:hover {
+  text-decoration: underline;
+}
+
+.filters a.bold {
+  font-weight: bold;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+</style>

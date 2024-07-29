@@ -1,6 +1,7 @@
 ---
 import MainLayout from '@layouts/MainLayout.astro';
 import Card from '@components/Card.astro';
+import Filter from '@components/Filter.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 
@@ -22,11 +23,23 @@ if (!tag) {
 const allBlogArticles: CollectionEntry<'blog'>[] = (await getCollection('blog'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
+const allTags = Array.from(
+  new Set(allBlogArticles.flatMap(article => article.data.tags))
+).sort(); // Sorting tags alphabetically
+
+
 const tagArticles = allBlogArticles.filter(post => post.data.tags.includes(tag));
 ---
 
 <MainLayout pageTitle={`Posts tagged with "${tag}"`}>
+    
     <div class="container">
+        <Filter 
+		allTags={allTags}
+		selectedTag={tag}
+	     />
+	
+
         {tagArticles.length > 0 ? (
             tagArticles.map(article => (
                 <Card article={article} />
@@ -38,14 +51,30 @@ const tagArticles = allBlogArticles.filter(post => post.data.tags.includes(tag))
 </MainLayout>
 
 <style>
-.container {
-    height: 100%;
-    width: 100%;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1em;
-}
+
+    .singleTag{
+        background-color:blue;
+        color:white;
+        border-radius:20px;
+        text-decoration:none;
+        font-weight:bold;
+        border-radius:20px;
+        width:min-content;
+        text-align:center;
+        font-size:0.8rem;
+        padding:5px 10px;
+    }
+    .singleTag:hover{
+        background-color: #0000B6;
+    }
+    .container {
+        height: 100%;
+        width: 100%;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1em;
+    }
 </style>
