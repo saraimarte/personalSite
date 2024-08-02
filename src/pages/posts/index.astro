@@ -23,7 +23,7 @@ const allArticles = await getCollection('blog', ({ data }) => {
 });
 
 const allPhases = Array.from(
-  new Set(allBlogPosts.map(article => article.data.phase).sort((a,b)=> 1 - 2))
+  new Set(allBlogPosts.map(article => article.data.phase).sort((a,b)=> 1))
 );
 
 const allArticleTags = Array.from(

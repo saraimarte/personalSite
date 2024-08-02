@@ -1,7 +1,6 @@
 ---
 import MainLayout from '@layouts/MainLayout.astro';
 import Card from '@components/Card.astro';
-import Filter from '@components/Filter.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 
@@ -20,9 +19,6 @@ if (!tag) {
 
 const allBlogArticles: CollectionEntry<'blog'>[] = (await getCollection('blog'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-const allTags = Array.from(new Set(allBlogArticles.flatMap(article => article.data.tags || []))).sort();
-const allPhases = Array.from(new Set(allBlogArticles.flatMap(article => article.data.phase || []))).sort();
 
 const tagArticles = allBlogArticles
   .filter(post => post.data.tags.includes(tag))
