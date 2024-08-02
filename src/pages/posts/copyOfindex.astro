@@ -1,0 +1,47 @@
+---
+import MainLayout from '@layouts/MainLayout.astro';
+import Filter from '@components/Filter.astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import Card from '@components/Card.astro';
+
+const allBlogArticles: CollectionEntry<'blog'>[] = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const allTags = Array.from(
+  new Set(allBlogArticles.flatMap(article => article.data.tags))
+).sort();
+
+const url = new URL(Astro.request.url);
+const selectedTag = url.searchParams.get('tag');
+const selectedPhase = url.searchParams.get('phase');
+
+const filteredArticles = allBlogArticles.filter(article => 
+  (!selectedPhase || article.data.phase === selectedPhase) &&
+  (!selectedTag || article.data.tags.includes(selectedTag))
+);
+
+---
+
+
+<MainLayout pageTitle="Blog Directory">
+  <div class="container">
+    <Filter 
+      allTags={allTags}
+      selectedTag={selectedTag}
+      currentPhase={selectedPhase}
+    />
+  
+    <div class="filteredPosts">
+      {filteredArticles.length > 0 ? (
+        filteredArticles.map(article => (
+          <Card article={article} />
+        ))
+      ) : (
+        <p>No articles found for the selected criteria.</p>
+      )}
+    </div>
+  </div>
+
+
+</MainLayout>

@@ -6,6 +6,7 @@ const blogCollection = defineCollection({
     pubDate: z.date(),
     author: z.string(),
     tags: z.array(z.string()),
+    phase: z.string()
   }),
 });
 
@@ -17,6 +18,7 @@ const bibleCollection = defineCollection({
     pubDate: z.date(),
     author: z.string(),
     tags: z.array(z.string()),
+    phase: z.string()
   }),
 });
 

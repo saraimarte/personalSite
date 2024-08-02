@@ -1,69 +1,386 @@
 ---
-// Import necessary components and functions
 import MainLayout from '@layouts/MainLayout.astro';
-import Filter from '@components/Filter.astro';
-import { getCollection } from 'astro:content';
-import Card from '@components/Card.astro';
-
 import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import {formatDate} from '../../utils';
 
-const allBlogArticles: CollectionEntry<'blog'>[] = (await getCollection('blog'))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const allBlogPosts: CollectionEntry<'blog'>[] = (await getCollection('blog'));
 
-const allTags = Array.from(
-  new Set(allBlogArticles.flatMap(article => article.data.tags))
-).sort(); // Sorting tags alphabetically
+export async function getStaticPaths(){
+    const allBlogPosts: CollectionEntry<'blog'>[] = await getCollection('blog');
+    const tags = new Set(allBlogPosts.flatMap(article => article.data.tags));
 
-const url = new URL(Astro.request.url);
-const selectedTag = url.searchParams.get('tag');
-const filteredArticles = selectedTag
-  ? allBlogArticles.filter(article => article.data.tags.includes(selectedTag))
-  : allBlogArticles;
+    return  allBlogPosts.map(entry => ({
+        params:{
+            slug: entry.slug,
+            tags: entry.data.tags
+        }
+    }));
+}
+
+const allArticles = await getCollection('blog', ({ data }) => {
+  return data.phase === 'article';
+});
+
+const allPhases = Array.from(
+  new Set(allBlogPosts.map(article => article.data.phase).sort((a,b)=> 1 - 2))
+);
+
+const allArticleTags = Array.from(
+    new Set(
+        allBlogPosts
+            .filter(post => post.data.phase === "article") // Filter posts by phase
+            .flatMap(post => post.data.tags) // Extract tags from filtered posts
+    )
+);
+
+const allThoughtTags = Array.from(
+    new Set(
+        allBlogPosts
+            .filter(post => post.data.phase === "thought") // Filter posts by phase
+            .flatMap(post => post.data.tags) // Extract tags from filtered posts
+    )
+);
+
+const allRabbitHoleTags = Array.from(
+    new Set(
+        allBlogPosts
+            .filter(post => post.data.phase === "rabbitHole") // Filter posts by phase
+            .flatMap(post => post.data.tags) // Extract tags from filtered posts
+    )
+);
+
+const {tags} = Astro.params;
+
 ---
 
+
 <MainLayout pageTitle="Blog Directory">
-	<div class = "container">
-		<Filter 
-		allTags={allTags}
-		selectedTag={selectedTag}
-	  />
-	
-	  <div class = "filteredPosts">
-	
-		{filteredArticles.length > 0 ? (
-		  filteredArticles.map(article => (
-			<Card article={article} />
-		  ))
-		) : (
-		  <p>No articles found for the selected tag.</p>
-		)}
-		</div>
-	  </div>
-	</div>
+  <div class="container">
+   
+    <div class = "phaseContainer">
+      <p>Filter by phase:</p>
+      <div class = "phases">
+        {allPhases.map((phase:String) => (
+            <a class = "phase" id = {`${phase}`} href = "">{phase}</a>
+        ))}
+    </div>
+    </div>
+   
+    <div class = "tagContainer">
+      <p>Filter by tag:</p>
+      <div id = "allArticleTags" class = "visible tags">
+        {allArticleTags.map((tag:String) => (
+            <a class = "tag" id = {`${tag}`} href = "">{tag}</a>
+        ))}
+    </div>
+
+    <div id = "allThoughtTags" class = "hidden tags">
+        {allThoughtTags.map((tag:String) => (
+            <a class = "tag" id = {`${tag}`} href = "">{tag}</a>
+        ))}
+    </div>
+
+    <div id = "allRabbitHoleTags" class = "hidden tags">
+        {allRabbitHoleTags.map((tag:String) => (
+            <a class = "tag" id = {`${tag}`} href = "">{tag}</a>
+        ))}
+    </div>
+
+    </div>
+
+    <div id = "allPosts" class = "posts">
+        {allArticles.map(article => (
+            <a class = "post card" href = {`/posts/`+ article.slug}>
+              <p class = "date">{formatDate(article.data.pubDate)}</p>
+              {article.data.title}
+            </a>
+        ))}
+    </div>
+  </div>
+
 
 </MainLayout>
 
 <style>
 
-.filteredPosts{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:1em;
-}
-.container {
-  height: 100%;
-  width: 100%;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+  .container{
+    width:90%;
+    padding:20px;
+    height:100%;
+  }
+  .tagContainer{
+    display:flex;
+    margin-bottom:20px;
+  }
 
-.container1{
-	height:100%;
-	width:100%;
+  .phaseContainer, .tagContainer{
+    display:flex;
+    justify-content: start;
+    align-items: center;
+    text-align: center;
+  }
 
-}
+  .tags{
+      display: flex;
+  }
+  .posts{
+      display: flex;
+      flex-direction: column;
+      gap:1em;
+  }
+
+  .visible{
+      display: flex;
+  }
+  .hidden{
+      display:none;
+  }
+
+  .phase, .tag{
+      color:blue;
+      text-decoration: none;
+      padding:5px 10px;
+      border-radius: 20px;
+  }
+  .phases{
+      display: flex;
+
+  }
+  
+  .phase:hover{
+    color: rgb(1, 1, 173);
+    font-weight: bold;
+
+  }
+  .tag:hover{
+      color: rgb(1, 1, 173);
+      font-weight: bold;
+
+  }
+  
+  .post{
+        display:flex;
+        height:1rem;
+        width:100%;
+        justify-content:start;
+        align-items:center;
+        color:#778D9C;
+        gap:1em;
+        border: 1px solid blue;
+        font-size: 1rem;
+        text-decoration:none;
+        padding:25px;
+        font-family: "IBM Plex Mono", monospace;
+        margin-bottom:1rem;
+    }
+    
+    .post:hover{
+        background-color:blue;
+        color:white;
+    }
+   
+    @media (max-width: 768px) {
+        .post{
+            flex-wrap:wrap;
+            height:min-content;
+            padding:10px;
+            font-size: 0.8rem;
+        }
+    }
+    
 </style>
+
+<script define:vars={{tags}}>
+
+function formatDate(date) {
+    const options = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    };
+  
+    return new Date(date).toLocaleDateString(undefined, options);
+  }
+
+function initialize() {
+
+    // Event listener example
+    document.querySelectorAll('.tag').forEach(tagElement => {
+      tagElement.addEventListener('click', onTagClick);
+    });
+
+    document.querySelectorAll('.phase').forEach(phaseElement => {
+      phaseElement.addEventListener('click', onClick2);
+    });
+  }
+
+// Fetch JSON data from the server
+fetch('/api/data.json?')
+    .then(response => response.json())
+    .then(data => {
+      window.blogPosts = data;
+      initialize();
+    });
+
+document.addEventListener('DOMContentLoaded', () => {
+const container = document.getElementById('posts-container');
+if (container) {
+  container.innerHTML = window.blogPosts.map(post => `
+    <div>
+      <h2>${post.title}</h2>
+      <a href="/posts/${post.slug}">Read more</a>
+    </div>
+  `).join('');
+}
+});
+const allPhaseTags = document.getElementsByClassName("phase");
+const allTags = document.getElementsByClassName("tag");
+const articlePhase = document.getElementById("article");
+
+articlePhase.style.color = "rgb(1, 1, 173)"; // Reset to original color
+articlePhase.classList.add("selected"); // Reset to original color
+articlePhase.style.fontWeight = "bold";
+
+
+function updateTags(selectedPhase) {
+  const allArticleTags = document.getElementById("allArticleTags");
+  const allRabbitHoleTags = document.getElementById("allRabbitHoleTags");
+  const allThoughtTags = document.getElementById("allThoughtTags");
+
+  // Hide all tag containers
+  allArticleTags.classList.add("hidden");
+  allRabbitHoleTags.classList.add("hidden");
+  allThoughtTags.classList.add("hidden");
+
+  // Show the tag container for the selected phase
+  if (selectedPhase === "article") {
+      allArticleTags.classList.remove("hidden");
+      allArticleTags.classList.add("visible");
+  } else if (selectedPhase === "thought") {
+      allThoughtTags.classList.remove("hidden");
+      allThoughtTags.classList.add("visible");
+  } else if (selectedPhase === "rabbitHole") {
+      allRabbitHoleTags.classList.remove("hidden");
+      allRabbitHoleTags.classList.add("visible");
+  }
+}
+
+
+
+function filterPostsByPhaseAndTag(phase, tag) {
+    return window.blogPosts.filter(post => {
+      return (tag === undefined || tag === null || post.tags.includes(tag)) &&
+             post.phase === phase;
+    });
+  }
+
+  function onClick2(event) {
+    event.preventDefault();
+
+    const allPhaseElements = document.querySelectorAll('.phase');
+    
+    allPhaseElements.forEach(element => {
+      element.classList.remove("selected");
+      element.style.color = "blue"; // Reset to original color
+      element.style.fontWeight = "";
+
+    });
+
+    const target = event.target;
+    target.classList.add("selected");
+    target.style.color = "rgb(1, 1, 173)";
+    target.style.fontWeight = "bold";
+
+    const selectedPhase = target.id;
+
+    updateTags(selectedPhase);
+
+    const filteredPosts = filterPostsByPhaseAndTag(selectedPhase, null);
+
+    updatePostsDisplay(filteredPosts);
+  }
+
+  function onTagClick(event) {
+    event.preventDefault();
+    const allTagElements = document.querySelectorAll('.tag');
+    // Remove highlight from all phases
+    allTagElements.forEach(element => {
+      element.classList.remove("selected");
+      element.style.color = "blue"; // Reset to original color
+      element.style.fontWeight = "";
+    });
+
+    const target = event.target;
+    target.style.color = "rgb(1, 1, 173)";
+    target.style.fontWeight = "bold";
+
+    const selectedTag = target.id;
+    const phaseSelected = document.querySelector(".selected.phase");
+    const selectedPhase = phaseSelected ? phaseSelected.id : null;
+
+    const filteredPosts = filterPostsByPhaseAndTag(selectedPhase, selectedTag);
+    updatePostsDisplay(filteredPosts);
+  }
+
+  function updatePostsDisplay(posts) {
+    const allPostsDiv = document.getElementById('allPosts');
+    allPostsDiv.innerHTML = '';
+
+    posts.forEach(post => {
+      const link = document.createElement('a');
+      link.textContent = ' ';
+
+      const date = document.createElement('p');
+      date.textContent = formatDate(post.pubDate);
+
+      link.href = `/posts/${post.slug}`;
+      link.classList.add('post', 'card'); 
+      date.classList.add("date");
+
+      link.textContent = post.title;
+
+      allPostsDiv.appendChild(link);
+      link.appendChild(date);
+      link.style.display = "flex";
+      link.style.flexDirection = "column";
+      link.style.minHeight = "4rem";
+      link.style.width = "100%";
+      link.style.justifyContent = "start";
+      link.style.alignItems = "start";
+      link.style.color = "#778D9C";
+      link.style.gap = "1em";
+      link.style.height = "1rem";
+      link.style.textDecoration = "none";
+      link.style.padding = "10px";
+      link.style.fontFamily = "IBM Plex Mono, monospace";
+      link.style.border = "1px solid blue";
+      link.style.fontSize = "0.8em";
+      document.querySelectorAll('.card').forEach(link => {
+        link.addEventListener('mouseover', () => {
+            link.style.backgroundColor = 'blue';
+            link.style.color = "white";
+        });
+
+        link.addEventListener('mouseout', () => {
+            link.style.backgroundColor = ''; // Resets to original background color
+            link.style.color = '#778D9C';
+          });
+    });
+
+    });
+  }
+
+for(var i = 0; i < allPhaseTags.length; i++){
+
+  allPhaseTags[i].addEventListener("click", onClick2);
+
+}
+
+for(var i = 0; i < allTags.length; i++){
+
+  allTags[i].addEventListener("click", onTagClick);
+}
+
+
+</script>

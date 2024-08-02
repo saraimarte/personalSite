@@ -4,6 +4,7 @@ title: "The best laptops for developers in 2024"
 pubDate: 2021-01-20
 author: 'John Doe'
 tags: ['tech', 'hardware']
+phase: 'thought'
 slug: the-best-laptops-for-developers-in-2024
 ---
 

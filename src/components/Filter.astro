@@ -1,17 +1,27 @@
 ---
-import Card from '@components/Card.astro';
-const { allTags, filteredArticles, selectedTag } = Astro.props;
+const { allTags, selectedTag, currentPhase } = Astro.props;
+const phases = ['thought', 'rabbit hole', 'article'];
 ---
 <div class="container">
   <div class="filters">
+    <span>Filter by phase:</span>
+    <ul>
+      {phases.map((phase) => (
+        <li>
+          <a href={`/posts/phase/${phase}`} class={phase === currentPhase ? 'bold' : ''}>
+            {phase}
+          </a>
+        </li>
+      ))}
+    </ul>
     <span>Filter by tag:</span>
     <ul>
       <li>
-        <a href="/posts" class={selectedTag ? '' : 'bold'}>All</a>
+        <a href={`/posts/phase/${currentPhase}`} class={!selectedTag ? 'bold' : ''}>All</a>
       </li>
       {allTags.map((tag: string) => (
         <li>
-          <a href={`/posts/tag/${tag}`} class={tag === selectedTag ? 'bold' : ''}>
+          <a href={`/posts/phase/${currentPhase}?tag=${encodeURIComponent(tag)}`} class={tag === selectedTag ? 'bold' : ''}>
             {tag}
           </a>
         </li>
