@@ -26,17 +26,10 @@ const allPhases = Array.from(new Set(allBlogArticles.flatMap(article => article.
 
 const tagArticles = allBlogArticles
   .filter(post => post.data.tags.includes(tag))
-  .filter(post => !Astro.request.url.searchParams.get('phase') || post.data.phase === Astro.request.url.searchParams.get('phase'));
-
 ---
 <MainLayout pageTitle={`Posts tagged with "${tag}"`}>
   <div class="container">
-    <Filter 
-      allTags={allTags}
-      selectedTag={tag}
-      allPhases={allPhases}
-      selectedPhase={Astro.request.url.searchParams.get('phase') || ''}
-    />
+   
     <div class="filteredPosts">
       {tagArticles.length > 0 ? (
         tagArticles.map(article => (
