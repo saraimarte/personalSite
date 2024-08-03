@@ -151,7 +151,7 @@ function handleInteraction(vector) {
                 window.location.href = '../workshop';
                 break;
             case 'bible':
-                window.location.href = '../biblePosts';
+                window.location.href = '../posts';
                 break;
             case 'toolbox':
                 window.location.href = '../toolbox';
