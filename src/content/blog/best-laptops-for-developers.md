@@ -1,9 +1,9 @@
 ---
 layout: '@layouts/Blog.astro'
-title: "The best laptops for developers in 2024"
+title: "thought tech"
 pubDate: 2021-01-20
 author: 'John Doe'
-tags: ['tech', 'hardware']
+tags: ['tech']
 phase: 'thought'
 slug: the-best-laptops-for-developers-in-2024
 ---

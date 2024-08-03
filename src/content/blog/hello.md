@@ -1,11 +1,11 @@
 ---
 layout: '@layouts/Blog.astro'
-title: "article photography canon tech"
+title: "article photography tech"
 pubDate: 2024-01-15
 author: 'David Mitchell'
-tags: ['photography', 'canon', 'tech']
+tags: ['photography', 'tech']
 phase: 'article'
-slug: capturing-lifes-moments-with-canon-excellence
+slug: capturing-lifes-moments-with-canon-excellence6
 ---
 
 For photographers and enthusiasts alike, Canon has been a symbol of excellence in the world of photography for decades. In 2024, Canon continues to lead the way in innovation, enabling us to capture life's most precious moments with unparalleled quality and precision. Let's explore the world of photography and how Canon's excellence plays a pivotal role.

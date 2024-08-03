@@ -22,6 +22,14 @@ const allArticles = await getCollection('blog', ({ data }) => {
   return data.phase === 'article';
 });
 
+const allThoughts = await getCollection('blog', ({ data }) => {
+  return data.phase === 'thought';
+});
+
+const allRabbitHoles = await getCollection('blog', ({ data }) => {
+  return data.phase === 'rabbitHole';
+});
+
 const allPhases = Array.from(
   new Set(allBlogPosts.map(article => article.data.phase).sort((a,b)=> 1))
 );
@@ -68,28 +76,35 @@ const {tags} = Astro.params;
     </div>
    
     <div class = "tagContainer">
-      <p>Filter by tag:</p>
-      <div id = "allArticleTags" class = "visible tags">
-        {allArticleTags.map((tag:String) => (
-            <a class = "tag" id = {`${tag}`} href = "">{tag}</a>
-        ))}
+      <p>Filter by tag: </p> 
+    
+      <div class = "boxy">
+        <a id = "all">all</a>
+
+        <div id = "allArticleTags" class = "visible tags">
+          {allArticleTags.map((tag:String) => (
+              <a class = "tag" id = {`${tag}`} href = "">{tag}</a>
+          ))}
+        </div>
+    
+        <div id = "allThoughtTags" class = "hidden tags">
+            {allThoughtTags.map((tag:String) => (
+                <a class = "tag" id = {`${tag}`} href = "">{tag}</a>
+            ))}
+        </div>
+    
+        <div id = "allRabbitHoleTags" class = "hidden tags">
+            {allRabbitHoleTags.map((tag:String) => (
+                <a class = "tag" id = {`${tag}`} href = "">{tag}</a>
+            ))}
+        </div>
+
+      </div>
+   
+
     </div>
 
-    <div id = "allThoughtTags" class = "hidden tags">
-        {allThoughtTags.map((tag:String) => (
-            <a class = "tag" id = {`${tag}`} href = "">{tag}</a>
-        ))}
-    </div>
-
-    <div id = "allRabbitHoleTags" class = "hidden tags">
-        {allRabbitHoleTags.map((tag:String) => (
-            <a class = "tag" id = {`${tag}`} href = "">{tag}</a>
-        ))}
-    </div>
-
-    </div>
-
-    <div id = "allPosts" class = "posts">
+    <div id = "allPosts" class = "posts visible">
         {allArticles.map(article => (
             <a class = "post card" href = {`/posts/`+ article.slug}>
               <p class = "date">{formatDate(article.data.pubDate)}</p>
@@ -97,12 +112,63 @@ const {tags} = Astro.params;
             </a>
         ))}
     </div>
+
+
+    <div id = "allThoughts" class = "posts hidden">
+      {allThoughts.map(article => (
+          <a class = "post card" href = {`/posts/`+ article.slug}>
+            <p class = "date">{formatDate(article.data.pubDate)}</p>
+            {article.data.title}
+          </a>
+      ))}
+  </div>
+
+  
+  <div id = "allRabbitHoles" class = "posts hidden">
+    {allRabbitHoles.map(article => (
+        <a class = "post card" href = {`/posts/`+ article.slug}>
+          <p class = "date">{formatDate(article.data.pubDate)}</p>
+          {article.data.title}
+        </a>
+    ))}
+</div>
+
+ 
+<div id = "allArticles" class = "posts hidden">
+  {allArticles.map(article => (
+      <a class = "post card" href = {`/posts/`+ article.slug}>
+        <p class = "date">{formatDate(article.data.pubDate)}</p>
+        {article.data.title}
+      </a>
+  ))}
+</div>
+
+
+
   </div>
 
 
 </MainLayout>
 
 <style>
+
+  .boxy{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #all{
+    color:blue;
+    margin-left:5px;
+    font-weight: bold;
+    user-select:none;
+  }
+
+  #all:hover{
+    font-weight: bold;
+    color: rgb(1, 1, 173);
+  }
 
   .container{
     width:90%;
@@ -115,6 +181,7 @@ const {tags} = Astro.params;
   }
 
   .phaseContainer, .tagContainer{
+    flex-wrap:wrap;
     display:flex;
     justify-content: start;
     align-items: center;
@@ -172,7 +239,6 @@ const {tags} = Astro.params;
         text-decoration:none;
         padding:25px;
         font-family: "IBM Plex Mono", monospace;
-        margin-bottom:1rem;
     }
     
     .post:hover{
@@ -237,6 +303,47 @@ if (container) {
 const allPhaseTags = document.getElementsByClassName("phase");
 const allTags = document.getElementsByClassName("tag");
 const articlePhase = document.getElementById("article");
+const allTag = document.getElementById("all");
+const allArticles = document.getElementById('allArticles');
+
+function allTagClicked(){
+  const allTag = document.getElementById("all");
+  allTag.style.fontWeight = "bold";
+  const allPostsDiv = document.getElementById('allPosts');
+  const allRabbitHoles = document.getElementById("allRabbitHoles");
+  const allThoughts = document.getElementById("allThoughts");
+  const phaseSelected = document.querySelector(".selected.phase");
+  const selectedPhase = phaseSelected ? phaseSelected.id : null;
+
+  if(selectedPhase === "thought" || selectedPhase === "rabbitHole"){
+    allPostsDiv.classList.add("hidden");
+    allRabbitHoles.classList.add("hidden");
+    allThoughts.classList.add("hidden");
+    allArticles.classList.add("hidden");
+
+  }
+  
+  if(selectedPhase === "thought"){
+    allThoughts.classList.remove("hidden");
+    allThoughts.classList.add("visible");
+  }else if (selectedPhase === "article"){
+    allPostsDiv.classList.add("hidden");
+    allArticles.classList.remove("hidden");
+    allArticles.classList.add("visible");
+  }else if (selectedPhase === "rabbitHole"){
+    allRabbitHoles.classList.remove("hidden");
+    allRabbitHoles.classList.add("visible");
+  }
+}
+
+allTag.addEventListener("click", allTagClicked);
+allTag.addEventListener('mouseover', () => {
+    allTag.style.fontWeight = "bold";
+  });
+
+  allTag.addEventListener('mouseout', () => {
+      allTag.style.fontWeight = "200";
+  });
 
 articlePhase.style.color = "rgb(1, 1, 173)"; // Reset to original color
 articlePhase.classList.add("selected"); // Reset to original color
@@ -265,8 +372,6 @@ function updateTags(selectedPhase) {
       allRabbitHoleTags.classList.add("visible");
   }
 }
-
-
 
 function filterPostsByPhaseAndTag(phase, tag) {
     return window.blogPosts.filter(post => {
@@ -302,6 +407,9 @@ function filterPostsByPhaseAndTag(phase, tag) {
   }
 
   function onTagClick(event) {
+    const allTag = document.getElementById("all");
+    allTag.style.fontWeight = "200";
+
     event.preventDefault();
     const allTagElements = document.querySelectorAll('.tag');
     // Remove highlight from all phases
@@ -325,6 +433,16 @@ function filterPostsByPhaseAndTag(phase, tag) {
 
   function updatePostsDisplay(posts) {
     const allPostsDiv = document.getElementById('allPosts');
+    const allRabbitHoles = document.getElementById("allRabbitHoles");
+    const allThoughts = document.getElementById("allThoughts");
+    const allArticles = document.getElementById("allArticles");
+
+    allPostsDiv.classList.remove("hidden");
+    allPostsDiv.classList.add("visible");
+    allRabbitHoles.classList.add("hidden");
+    allThoughts.classList.add("hidden");
+    allArticles.classList.add("hidden");
+
     allPostsDiv.innerHTML = '';
 
     posts.forEach(post => {
