@@ -309,6 +309,15 @@ const allArticles = document.getElementById('allArticles');
 function allTagClicked(){
   const allTag = document.getElementById("all");
   allTag.style.fontWeight = "bold";
+
+  const allTagElements = document.querySelectorAll('.tag');
+    // Remove highlight from all phases
+  allTagElements.forEach(element => {
+    element.style.color = "blue"; // Reset to original color
+    element.style.fontWeight = "";
+  });
+
+
   const allPostsDiv = document.getElementById('allPosts');
   const allRabbitHoles = document.getElementById("allRabbitHoles");
   const allThoughts = document.getElementById("allThoughts");
@@ -334,6 +343,7 @@ function allTagClicked(){
     allRabbitHoles.classList.remove("hidden");
     allRabbitHoles.classList.add("visible");
   }
+ 
 }
 
 allTag.addEventListener("click", allTagClicked);
@@ -341,9 +351,6 @@ allTag.addEventListener('mouseover', () => {
     allTag.style.fontWeight = "bold";
   });
 
-  allTag.addEventListener('mouseout', () => {
-      allTag.style.fontWeight = "200";
-  });
 
 articlePhase.style.color = "rgb(1, 1, 173)"; // Reset to original color
 articlePhase.classList.add("selected"); // Reset to original color
