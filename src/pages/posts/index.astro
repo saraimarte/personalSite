@@ -3,6 +3,9 @@ import MainLayout from '@layouts/MainLayout.astro';
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
 import {formatDate} from '../../utils';
+import thoughtIcon from '@assets/thought.svg';
+import rabbitHoleIcon from '@assets/rabbitHole.svg';
+import articleIcon from '@assets/article.svg';
 
 const allBlogPosts: CollectionEntry<'blog'>[] = (await getCollection('blog'));
 
@@ -64,17 +67,39 @@ const {tags} = Astro.params;
 
 
 <MainLayout pageTitle="Blog Directory">
+
   <div class="container">
-   
-    <div class = "phaseContainer">
+    <!--Display all phases. Based on what phase it is...the icon will be the icon for that phase...-->
+    <div class="phaseContainer">
       <p>Filter by phase:</p>
-      <div class = "phases">
-        {allPhases.map((phase:String) => (
-            <a class = "phase" id = {`${phase}`} href = "">{phase}</a>
-        ))}
+      <div class="phases">
+        {allPhases.map((phase: string) => {
+          // Determine the appropriate icon for the phase
+          let phaseIconSrc = '';
+    
+          if (phase === 'thought') {
+            phaseIconSrc = thoughtIcon.src;
+          } else if (phase === 'rabbitHole') {
+            phaseIconSrc = rabbitHoleIcon.src;
+          } else if (phase === 'article') {
+            phaseIconSrc = articleIcon.src; // Add an appropriate source for the article phase
+          }
+    
+          return (
+            <a class="phase" href="">
+              <div class="phaseIconContainer">
+                <img id = {phase} class="phaseIcon" src={phaseIconSrc} alt={`${phase} icon`} />
+              </div>
+            </a>
+          );
+        })}
+      </div>
     </div>
-    </div>
-   
+
+    <!--Display all tags. All tags available to be filtered with for each phase are
+    alredy rendered but all are hidden except for the posts that 
+    are phase articles
+    -->
     <div class = "tagContainer">
       <p>Filter by tag: </p> 
     
@@ -104,6 +129,14 @@ const {tags} = Astro.params;
 
     </div>
 
+    
+    <!-- All posts filtered by phase (by Thought, by rabbitholes, by articles)
+     are already rendered but they are all hidden but the article posts.
+     Depending on what phase is clicked, the posts displayed will be
+    those posts that are of that phase. 
+    -->
+
+    <!--This is where allPosts are displayed and where the phase artciles are displayed by default AND where the new filterd posts based on which phase AND tags are selected will be displayed -->
     <div id = "allPosts" class = "posts visible">
         {allArticles.map(article => (
             <a class = "post card" href = {`/posts/`+ article.slug}>
@@ -111,9 +144,7 @@ const {tags} = Astro.params;
               {article.data.title}
             </a>
         ))}
-    </div>
-
-
+    </div> 
     <div id = "allThoughts" class = "posts hidden">
       {allThoughts.map(article => (
           <a class = "post card" href = {`/posts/`+ article.slug}>
@@ -121,37 +152,51 @@ const {tags} = Astro.params;
             {article.data.title}
           </a>
       ))}
-  </div>
-
-  
-  <div id = "allRabbitHoles" class = "posts hidden">
+    </div>
+    <div id = "allRabbitHoles" class = "posts hidden">
     {allRabbitHoles.map(article => (
         <a class = "post card" href = {`/posts/`+ article.slug}>
           <p class = "date">{formatDate(article.data.pubDate)}</p>
           {article.data.title}
         </a>
     ))}
-</div>
-
- 
-<div id = "allArticles" class = "posts hidden">
-  {allArticles.map(article => (
-      <a class = "post card" href = {`/posts/`+ article.slug}>
-        <p class = "date">{formatDate(article.data.pubDate)}</p>
-        {article.data.title}
-      </a>
-  ))}
-</div>
-
-
-
+    </div>
+    <div id = "allArticles" class = "posts hidden">
+      {allArticles.map(article => (
+          <a class = "post card" href = {`/posts/`+ article.slug}>
+            <p class = "date">{formatDate(article.data.pubDate)}</p>
+            {article.data.title}
+          </a>
+      ))}
+    </div>
   </div>
-
 
 </MainLayout>
 
 <style>
+  .container{
+    width:90%;
+    padding:20px;
+    height:100%;
+    font-size:1.2em;
+  }
+  .phase{
+    margin-right:0.5em;
+  }
 
+  .phaseIconContainer{
+    height:100%;
+    width:100%;;
+    user-select:none;
+
+  }
+  .phaseIcon{
+    height:2rem;
+    width:2rem;
+    background-color: blue;
+    padding:4px;
+    border-radius:14px;
+  }
   .boxy{
     display: flex;
     justify-content: center;
@@ -159,7 +204,7 @@ const {tags} = Astro.params;
   }
 
   #all{
-    color:blue;
+    color:#010188;
     margin-left:5px;
     font-weight: bold;
     user-select:none;
@@ -167,14 +212,9 @@ const {tags} = Astro.params;
 
   #all:hover{
     font-weight: bold;
-    color: rgb(1, 1, 173);
+    color: #010188;
   }
 
-  .container{
-    width:90%;
-    padding:20px;
-    height:100%;
-  }
   .tagContainer{
     display:flex;
     margin-bottom:20px;
@@ -190,6 +230,8 @@ const {tags} = Astro.params;
 
   .tags{
       display: flex;
+      user-select:none;
+
   }
   .posts{
       display: flex;
@@ -204,7 +246,7 @@ const {tags} = Astro.params;
       display:none;
   }
 
-  .phase, .tag{
+  .tag{
       color:blue;
       text-decoration: none;
       padding:5px 10px;
@@ -212,18 +254,11 @@ const {tags} = Astro.params;
   }
   .phases{
       display: flex;
-
   }
   
-  .phase:hover{
-    color: rgb(1, 1, 173);
-    font-weight: bold;
-
-  }
   .tag:hover{
-      color: rgb(1, 1, 173);
+      color: #010188;
       font-weight: bold;
-
   }
   
   .post{
@@ -257,8 +292,25 @@ const {tags} = Astro.params;
     
 </style>
 
-<script define:vars={{tags}}>
+<script define:vars={{}}>
 
+const articlePhase = document.getElementById("article");
+const allTag = document.getElementById("all");
+const allArticles = document.getElementById('allArticles');
+
+//By default the all tag should be selected. 
+allTag.addEventListener('mouseover', () => {
+    allTag.style.fontWeight = "bold";
+  });
+
+allTag.addEventListener("click", allTagClicked);
+
+//By default article phase tag should be selected.
+articlePhase.style.background = "#010188";
+articlePhase.classList.add("selected"); 
+
+
+//Function that is used to format the dates like: Jan 20, 2024
 function formatDate(date) {
     const options = {
       year: 'numeric',
@@ -267,21 +319,22 @@ function formatDate(date) {
     };
   
     return new Date(date).toLocaleDateString(undefined, options);
-  }
+}
 
 function initialize() {
 
-    // Event listener example
+    //For every tag I click run the onTagClick function
     document.querySelectorAll('.tag').forEach(tagElement => {
       tagElement.addEventListener('click', onTagClick);
     });
 
-    document.querySelectorAll('.phase').forEach(phaseElement => {
-      phaseElement.addEventListener('click', onClick2);
+    //For every phaseIcon I click run the onPhaseClick function
+    document.querySelectorAll('.phaseIcon').forEach(phaseElement => {
+      phaseElement.addEventListener('click', onPhaseClick);
     });
-  }
+}
 
-// Fetch JSON data from the server
+// Fetch JSON version of all blog posts and make it equal to window.blogPosts
 fetch('/api/data.json?')
     .then(response => response.json())
     .then(data => {
@@ -289,49 +342,36 @@ fetch('/api/data.json?')
       initialize();
     });
 
-document.addEventListener('DOMContentLoaded', () => {
-const container = document.getElementById('posts-container');
-if (container) {
-  container.innerHTML = window.blogPosts.map(post => `
-    <div>
-      <h2>${post.title}</h2>
-      <a href="/posts/${post.slug}">Read more</a>
-    </div>
-  `).join('');
-}
-});
-const allPhaseTags = document.getElementsByClassName("phase");
-const allTags = document.getElementsByClassName("tag");
-const articlePhase = document.getElementById("article");
-const allTag = document.getElementById("all");
-const allArticles = document.getElementById('allArticles');
-
+//When the all tag is clicked...
 function allTagClicked(){
-  const allTag = document.getElementById("all");
-  allTag.style.fontWeight = "bold";
-
+  //Get all tags
   const allTagElements = document.querySelectorAll('.tag');
-    // Remove highlight from all phases
+  //Change all tags back to default styles
   allTagElements.forEach(element => {
-    element.style.color = "blue"; // Reset to original color
-    element.style.fontWeight = "";
+    element.style.color = "blue";  //regular blue color
+    element.style.fontWeight = ""; //not bold
   });
 
-
+  //get the posts divs and all articles based on their tags- these are already ready in the html. They are just hidden except for allPostsDiv which contains article posts. 
   const allPostsDiv = document.getElementById('allPosts');
   const allRabbitHoles = document.getElementById("allRabbitHoles");
   const allThoughts = document.getElementById("allThoughts");
-  const phaseSelected = document.querySelector(".selected.phase");
+  
+  
+  // To filter by phase and tag, I need the phase. 
+  // The phase that was selected should have the class .selected.
+  //Since tags also selcted have that same class we need to specify that it is a selected phaseIcon that we need.
+  const phaseSelected = document.querySelector(".selected.phaseIcon");
   const selectedPhase = phaseSelected ? phaseSelected.id : null;
 
   if(selectedPhase === "thought" || selectedPhase === "rabbitHole"){
-    allPostsDiv.classList.add("hidden");
-    allRabbitHoles.classList.add("hidden");
-    allThoughts.classList.add("hidden");
-    allArticles.classList.add("hidden");
+  allPostsDiv.classList.add("hidden");
+  allRabbitHoles.classList.add("hidden");
+  allThoughts.classList.add("hidden");
+  allArticles.classList.add("hidden");
 
   }
-  
+  //Show the posts of the selected phase and hide the posts of the other phases 
   if(selectedPhase === "thought"){
     allThoughts.classList.remove("hidden");
     allThoughts.classList.add("visible");
@@ -346,17 +386,7 @@ function allTagClicked(){
  
 }
 
-allTag.addEventListener("click", allTagClicked);
-allTag.addEventListener('mouseover', () => {
-    allTag.style.fontWeight = "bold";
-  });
-
-
-articlePhase.style.color = "rgb(1, 1, 173)"; // Reset to original color
-articlePhase.classList.add("selected"); // Reset to original color
-articlePhase.style.fontWeight = "bold";
-
-
+//Shows or hides tags based on the selected phase, ensuring that only relevant tags for the chosen phase are visible.
 function updateTags(selectedPhase) {
   const allArticleTags = document.getElementById("allArticleTags");
   const allRabbitHoleTags = document.getElementById("allRabbitHoleTags");
@@ -367,7 +397,10 @@ function updateTags(selectedPhase) {
   allRabbitHoleTags.classList.add("hidden");
   allThoughtTags.classList.add("hidden");
 
-  // Show the tag container for the selected phase
+  // Show the tag container for the selected phase. 
+  //So if selected phase is thought and all of the thought
+  //posts have tags "tech" "hardware" but don't have "canon" 
+  //then "canon" won't show up as an available tag to filter from
   if (selectedPhase === "article") {
       allArticleTags.classList.remove("hidden");
       allArticleTags.classList.add("visible");
@@ -380,132 +413,157 @@ function updateTags(selectedPhase) {
   }
 }
 
+//Filter the JSON data by phase and tag and return those blog objects 
 function filterPostsByPhaseAndTag(phase, tag) {
     return window.blogPosts.filter(post => {
       return (tag === undefined || tag === null || post.tags.includes(tag)) &&
              post.phase === phase;
     });
-  }
+}
 
-  function onClick2(event) {
-    event.preventDefault();
+//When you click on a phase...
+function onPhaseClick(event) {
+  event.preventDefault();
 
-    const allPhaseElements = document.querySelectorAll('.phase');
-    
-    allPhaseElements.forEach(element => {
-      element.classList.remove("selected");
-      element.style.color = "blue"; // Reset to original color
-      element.style.fontWeight = "";
+  //Get all phase Icons
+  const allPhaseElements = document.querySelectorAll('.phaseIcon');
+  
+  //For each icon, remove the selected class and make the background blue
+  //aka change the styles back to the default styles
+  allPhaseElements.forEach(element => {
+    element.classList.remove("selected");
+    element.style.backgroundColor = "blue";
+  });
 
-    });
+  //Take the phase you clicked on and make it the target
+  const target = event.currentTarget;
+  //Have the program know that the phase has been selected
+  target.classList.add("selected");
+  //Show that it has been selected to the user.
+  target.style.backgroundColor = "#010188";
 
-    const target = event.target;
-    target.classList.add("selected");
-    target.style.color = "rgb(1, 1, 173)";
-    target.style.fontWeight = "bold";
+  //Get the name of the phase selected
+  //The phase name is in it's id
+  const selectedPhase = target.id;
 
-    const selectedPhase = target.id;
+  //Update the tags available to filter from given the phase
+  //This means that tags that are not used for posts that are thoughts, will not show up as an option to filter from
+  updateTags(selectedPhase);
 
-    updateTags(selectedPhase);
+  //Filter the posts by the selected phase 
+  const filteredPosts = filterPostsByPhaseAndTag(selectedPhase, null);
 
-    const filteredPosts = filterPostsByPhaseAndTag(selectedPhase, null);
+  //Display the filtered Posts 
+  //aka show the posts for the phase that was selected
+  updatePostsDisplay(filteredPosts);
+}
 
-    updatePostsDisplay(filteredPosts);
-  }
+//When you click on a tag...
+function onTagClick(event) {
+  //If I click on a tag that's not the all tag then 
+  // the all tag should go back to not being selected
+  //so it should go back to regualr weight of 200
+  const allTag = document.getElementById("all");
+  allTag.style.fontWeight = "200";
 
-  function onTagClick(event) {
-    const allTag = document.getElementById("all");
-    allTag.style.fontWeight = "200";
+  event.preventDefault();
+  //Get all tags
+  const allTagElements = document.querySelectorAll('.tag');
+  //For each tag, remove selected class and change it's styles
+  //back to the default styles. So not bold or dark blue color.
+  allTagElements.forEach(element => {
+    element.classList.remove("selected");
+    element.style.color = "blue"; 
+    element.style.fontWeight = "";
+  });
 
-    event.preventDefault();
-    const allTagElements = document.querySelectorAll('.tag');
-    // Remove highlight from all phases
-    allTagElements.forEach(element => {
-      element.classList.remove("selected");
-      element.style.color = "blue"; // Reset to original color
-      element.style.fontWeight = "";
-    });
+  //Now, take the tag you clicked on and make it the target.
+  const target = event.currentTarget;
+  //Make the tag you clicked on dark blue and bold to show that it has been selected.
+  target.style.color = "#010188";
+  target.style.fontWeight = "bold";
 
-    const target = event.target;
-    target.style.color = "rgb(1, 1, 173)";
-    target.style.fontWeight = "bold";
+  //Get the actual name of the tag you clicked on.
+  //The name is the id of the tag.
+  const selectedTag = target.id;
 
-    const selectedTag = target.id;
-    const phaseSelected = document.querySelector(".selected.phase");
-    const selectedPhase = phaseSelected ? phaseSelected.id : null;
+  //Get the phase that has been selected.
+  //Remember, the default phase selected is article. 
+  //There is always a phase selected when we click on a tag.
+  //The phase selected should have class selected AND phaseIcon 
+  //since tags selected also have the selected class we have to specify
+  const phaseSelected = document.querySelector(".selected.phaseIcon");
+  const selectedPhase = phaseSelected ? phaseSelected.id : null;
+  
+  //Debugging
+  console.log(`Tag: ${selectedTag}`)
+  console.log(`Phase: ${phaseSelected.id}`)
+  console.log("")
 
-    const filteredPosts = filterPostsByPhaseAndTag(selectedPhase, selectedTag);
-    updatePostsDisplay(filteredPosts);
-  }
+  //Filter posts by the phase that has already been selected and the tag that you clicked
+  const filteredPosts = filterPostsByPhaseAndTag(selectedPhase, selectedTag);
+  
+  //Display those filteredPosts. 
+  updatePostsDisplay(filteredPosts);
+}
 
-  function updatePostsDisplay(posts) {
-    const allPostsDiv = document.getElementById('allPosts');
-    const allRabbitHoles = document.getElementById("allRabbitHoles");
-    const allThoughts = document.getElementById("allThoughts");
-    const allArticles = document.getElementById("allArticles");
+//Display the posts that need to be shown
+function updatePostsDisplay(posts) {
+  const allPostsDiv = document.getElementById('allPosts');
+  const allRabbitHoles = document.getElementById("allRabbitHoles");
+  const allThoughts = document.getElementById("allThoughts");
+  const allArticles = document.getElementById("allArticles");
 
-    allPostsDiv.classList.remove("hidden");
-    allPostsDiv.classList.add("visible");
-    allRabbitHoles.classList.add("hidden");
-    allThoughts.classList.add("hidden");
-    allArticles.classList.add("hidden");
+  allPostsDiv.classList.remove("hidden");
+  allPostsDiv.classList.add("visible");
+  allRabbitHoles.classList.add("hidden");
+  allThoughts.classList.add("hidden");
+  allArticles.classList.add("hidden");
 
-    allPostsDiv.innerHTML = '';
+  allPostsDiv.innerHTML = '';
 
-    posts.forEach(post => {
-      const link = document.createElement('a');
-      link.textContent = ' ';
+  posts.forEach(post => {
+    const link = document.createElement('a');
+    link.textContent = ' ';
 
-      const date = document.createElement('p');
-      date.textContent = formatDate(post.pubDate);
+    const date = document.createElement('p');
+    date.textContent = formatDate(post.pubDate);
 
-      link.href = `/posts/${post.slug}`;
-      link.classList.add('post', 'card'); 
-      date.classList.add("date");
+    link.href = `/posts/${post.slug}`;
+    link.classList.add('post', 'card'); 
+    date.classList.add("date");
 
-      link.textContent = post.title;
+    link.textContent = post.title;
 
-      allPostsDiv.appendChild(link);
-      link.appendChild(date);
-      link.style.display = "flex";
-      link.style.flexDirection = "column";
-      link.style.minHeight = "4rem";
-      link.style.width = "100%";
-      link.style.justifyContent = "start";
-      link.style.alignItems = "start";
-      link.style.color = "#778D9C";
-      link.style.gap = "1em";
-      link.style.height = "1rem";
-      link.style.textDecoration = "none";
-      link.style.padding = "10px";
-      link.style.fontFamily = "IBM Plex Mono, monospace";
-      link.style.border = "1px solid blue";
-      link.style.fontSize = "0.8em";
-      document.querySelectorAll('.card').forEach(link => {
-        link.addEventListener('mouseover', () => {
-            link.style.backgroundColor = 'blue';
-            link.style.color = "white";
+    allPostsDiv.appendChild(link);
+    link.appendChild(date);
+    link.style.display = "flex";
+    link.style.flexDirection = "column";
+    link.style.minHeight = "4rem";
+    link.style.width = "100%";
+    link.style.justifyContent = "start";
+    link.style.alignItems = "start";
+    link.style.color = "#778D9C";
+    link.style.gap = "1em";
+    link.style.height = "1rem";
+    link.style.textDecoration = "none";
+    link.style.padding = "10px";
+    link.style.fontFamily = "IBM Plex Mono, monospace";
+    link.style.border = "1px solid blue";
+    link.style.fontSize = "0.8em";
+    document.querySelectorAll('.card').forEach(link => {
+      link.addEventListener('mouseover', () => {
+          link.style.backgroundColor = 'blue';
+          link.style.color = "white";
+      });
+
+      link.addEventListener('mouseout', () => {
+          link.style.backgroundColor = ''; 
+          link.style.color = '#778D9C';
         });
+  });
 
-        link.addEventListener('mouseout', () => {
-            link.style.backgroundColor = ''; // Resets to original background color
-            link.style.color = '#778D9C';
-          });
-    });
-
-    });
-  }
-
-for(var i = 0; i < allPhaseTags.length; i++){
-
-  allPhaseTags[i].addEventListener("click", onClick2);
-
+  });
 }
-
-for(var i = 0; i < allTags.length; i++){
-
-  allTags[i].addEventListener("click", onTagClick);
-}
-
 
 </script>
