@@ -43,32 +43,31 @@ class Card extends HTMLElement {
     console.log('Rendering with:', { date: this._date, title: this._title, slug: this._slug });
     const headerHTML = `
       <style>
-        .card {
-          display: flex;
-          height: auto;
-          width: 100%;
-          justify-content: start;
-          align-items: center;
-          color: #778D9C;
-          gap: 1em;
-          border: 1px solid blue;
-          font-size: 1rem;
-          text-decoration: none;
-          padding: 25px;
-          font-family: "IBM Plex Mono", monospace;
+        .card{
+        display:flex;
+        min-height:3em;
+        justify-content:start;
+        align-items:center;
+        color:#778D9C;
+        padding-left:10px;
+        gap:1em;
+        border: 1px solid blue;
+        font-size:0.8em;
+        text-decoration:none;
+        font-family: "IBM Plex Mono", monospace;
+    }
+    
+    .card:hover{
+        background-color:blue;
+        color:white;
+    }
+   
+    @media (max-width: 768px) {
+        .card{
+            flex-wrap:wrap;
+            font-size:0.8em;
         }
-        .card:hover {
-          background-color: blue;
-          color: white;
-        }
-        @media (max-width: 768px) {
-          .card {
-            flex-wrap: wrap;
-            height: auto;
-            padding: 10px;
-            font-size: 0.8rem;
-          }
-        }
+    }
       </style>
       <a class="post card" href="/posts/${this._slug || '#'}">
         <p class="date">${this._date || 'No date'}</p>

@@ -1,6 +1,6 @@
 ---
 layout: '@layouts/Blog.astro'
-title: "thought tech"
+title: "article 2"
 pubDate: 2021-01-20
 author: 'John Doe'
 tags: ['tech']

@@ -1,6 +1,6 @@
 ---
 layout: '@layouts/Blog.astro'
-title: "article photography tech"
+title: "article 5"
 pubDate: 2024-01-15
 author: 'David Mitchell'
 tags: ['photography', 'tech']

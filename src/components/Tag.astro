@@ -9,7 +9,7 @@ interface Props{
 
 <div class = "tags">
     {tags.map(tag => (
-        <a href = {'/posts/tag/' + tag}class = "tag">{tag} </a>
+        <p class = "tag">{tag} </p>
     ))}
 </div>
   
@@ -35,7 +35,4 @@ interface Props{
 
     }
 
-    .tag:hover{
-        background-color: #0000B6;
-    }
 </style>
