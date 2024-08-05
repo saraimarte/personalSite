@@ -64,10 +64,10 @@ const allRabbitHoleTags = Array.from(
 const {tags} = Astro.params;
 
 ---
-
+<script src="../../scripts/card-component.ts"></script>
 
 <MainLayout pageTitle="Blog Directory">
-
+  
   <div class="container">
     <!--Display all phases. Based on what phase it is...the icon will be the icon for that phase...-->
     <div class="phaseContainer">
@@ -139,34 +139,25 @@ const {tags} = Astro.params;
     <!--This is where allPosts are displayed and where the phase artciles are displayed by default AND where the new filterd posts based on which phase AND tags are selected will be displayed -->
     <div id = "allPosts" class = "posts visible">
         {allArticles.map(article => (
-            <a class = "post card" href = {`/posts/`+ article.slug}>
-              <p class = "date">{formatDate(article.data.pubDate)}</p>
-              {article.data.title}
-            </a>
+              <card-component date = {formatDate(article.data.pubDate)} title = {article.data.title} slug = {article.slug}></card-component>
         ))}
     </div> 
     <div id = "allThoughts" class = "posts hidden">
       {allThoughts.map(article => (
-          <a class = "post card" href = {`/posts/`+ article.slug}>
-            <p class = "date">{formatDate(article.data.pubDate)}</p>
-            {article.data.title}
-          </a>
+              <card-component date = {formatDate(article.data.pubDate)} title = {article.data.title} slug = {article.slug} ></card-component>
+
       ))}
     </div>
     <div id = "allRabbitHoles" class = "posts hidden">
     {allRabbitHoles.map(article => (
-        <a class = "post card" href = {`/posts/`+ article.slug}>
-          <p class = "date">{formatDate(article.data.pubDate)}</p>
-          {article.data.title}
-        </a>
+              <card-component date = {formatDate(article.data.pubDate)} title = {article.data.title} slug = {article.slug} ></card-component>
+
     ))}
     </div>
     <div id = "allArticles" class = "posts hidden">
       {allArticles.map(article => (
-          <a class = "post card" href = {`/posts/`+ article.slug}>
-            <p class = "date">{formatDate(article.data.pubDate)}</p>
-            {article.data.title}
-          </a>
+              <card-component date = {formatDate(article.data.pubDate)} title = {article.data.title} slug = {article.slug}> </card-component>
+
       ))}
     </div>
   </div>
@@ -178,7 +169,7 @@ const {tags} = Astro.params;
     width:90%;
     padding:20px;
     height:100%;
-    font-size:1.2em;
+    font-size:1.3em;
   }
   .phase{
     margin-right:0.5em;
@@ -514,56 +505,50 @@ function updatePostsDisplay(posts) {
   const allThoughts = document.getElementById("allThoughts");
   const allArticles = document.getElementById("allArticles");
 
-  allPostsDiv.classList.remove("hidden");
-  allPostsDiv.classList.add("visible");
-  allRabbitHoles.classList.add("hidden");
-  allThoughts.classList.add("hidden");
-  allArticles.classList.add("hidden");
+  if (allPostsDiv && allRabbitHoles && allThoughts && allArticles) {
+    allPostsDiv.classList.remove("hidden");
+    allPostsDiv.classList.add("visible");
+    allRabbitHoles.classList.add("hidden");
+    allThoughts.classList.add("hidden");
+    allArticles.classList.add("hidden");
 
-  allPostsDiv.innerHTML = '';
+    allPostsDiv.innerHTML = '';
 
-  posts.forEach(post => {
-    const link = document.createElement('a');
-    link.textContent = ' ';
+    posts.forEach(post => {
+      console.log('Processing post:', post);  // Debug log
+      if (post && typeof post === 'object') {
+        const myElement = document.createElement('card-component');
 
-    const date = document.createElement('p');
-    date.textContent = formatDate(post.pubDate);
+        // Correctly access and set attributes
+        if (post.pubDate) { //.pubDate and not .data.pubDate because the data being used is the JSON data which already returns posts.data so when we say posts that's really data. 
+          const formattedDate = formatDate(new Date(post.pubDate));
+          console.log('Setting date attribute:', formattedDate);  // Debug log
+          myElement.setAttribute('date', formattedDate);
+        } else {
+          console.warn('pubDate is missing or invalid:', post.pubDate);
+        }
 
-    link.href = `/posts/${post.slug}`;
-    link.classList.add('post', 'card'); 
-    date.classList.add("date");
+        if (post.title) {
+          console.log('Setting title attribute:', post.title);  // Debug log
+          myElement.setAttribute('title', String(post.title));
+        } else {
+          console.warn('title is missing or invalid:', post.title);
+        }
 
-    link.textContent = post.title;
+        if (post.slug) {
+          console.log('Setting slug attribute:', post.slug);  // Debug log
+          myElement.setAttribute('slug', String(post.slug));
+        } else {
+          console.warn('slug is missing or invalid:', post.slug);
+        }
 
-    allPostsDiv.appendChild(link);
-    link.appendChild(date);
-    link.style.display = "flex";
-    link.style.flexDirection = "column";
-    link.style.minHeight = "4rem";
-    link.style.width = "100%";
-    link.style.justifyContent = "start";
-    link.style.alignItems = "start";
-    link.style.color = "#778D9C";
-    link.style.gap = "1em";
-    link.style.height = "1rem";
-    link.style.textDecoration = "none";
-    link.style.padding = "10px";
-    link.style.fontFamily = "IBM Plex Mono, monospace";
-    link.style.border = "1px solid blue";
-    link.style.fontSize = "0.8em";
-    document.querySelectorAll('.card').forEach(link => {
-      link.addEventListener('mouseover', () => {
-          link.style.backgroundColor = 'blue';
-          link.style.color = "white";
-      });
-
-      link.addEventListener('mouseout', () => {
-          link.style.backgroundColor = ''; 
-          link.style.color = '#778D9C';
-        });
-  });
-
-  });
+        allPostsDiv.appendChild(myElement);
+      } else {
+        console.warn('Invalid post structure:', post);
+      }
+    });
+  }
 }
+
 
 </script>
