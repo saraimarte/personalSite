@@ -1,11 +1,11 @@
 ---
 layout: '@layouts/Blog.astro'
-title: "article 1"
-pubDate: 2021-01-20
-author: 'John Doe'
-tags: ['tech', 'hardware']
-phase: 'thought'
-slug: the-best-laptops-for-developers-in-2025
+title: "Multiple Filters in AstroJS"
+pubDate: 2024-08-05
+author: 'Sarai Marte'
+tags: ['webdev']
+phase: 'article'
+slug: multiple-filters-in-astrojs
 ---
 
 In the ever-evolving landscape of technology, developers require laptops that can keep up with their demands for coding, debugging, and testing. As we step into 2024, the search for the perfect laptop for developers continues. Let's explore some of the top contenders for the title of "Best Laptops for Developers" this year.

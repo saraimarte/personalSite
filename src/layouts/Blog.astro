@@ -1,8 +1,6 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
-
 ---
-
 <MainLayout>
     <slot></slot>
 </MainLayout>
@@ -18,8 +16,8 @@ import MainLayout from '../layouts/MainLayout.astro';
     h1 {
         margin: 10px 5px 0;
         font-size: 1.4rem;
-        overflow:hidden;
-        width:90%;
+        overflow: hidden;
+        width: 90%;
         min-height: 2rem;
     }
 
@@ -28,108 +26,114 @@ import MainLayout from '../layouts/MainLayout.astro';
         font-size: 1.2rem;
     }
 
-
-    @media (max-width:600px) {
-        h1{
-          height:min-content;
-          min-height: 4rem;
+    @media (max-width: 600px) {
+        h1 {
+            height: min-content;
+            min-height: 4rem;
         }
     }
 
     @media (max-width: 768px) {
-        h1{
-          height:65px;
-
+        h1 {
+            height: 65px;
         }
     }
 
 </style>
 
 <script>
-   let audioContext: AudioContext | undefined;
-   let audioBuffer: AudioBuffer | undefined;
-   let sourceNode: AudioBufferSourceNode | undefined;
+    let audioContext: AudioContext | undefined;
+    let audioBuffer: AudioBuffer | undefined;
+    let sourceNode: AudioBufferSourceNode | undefined;
 
-   document.addEventListener('DOMContentLoaded', () => {
-      audioContext = new AudioContext(); // Initialize AudioContext directly
+    document.addEventListener('DOMContentLoaded', () => {
+        audioContext = new AudioContext(); // Initialize AudioContext directly
 
-      let isDecrypting = false;
+        let isDecrypting = false;
 
-      async function loadAudio() {
-        const audioUrl = 'https://audio.jukehost.co.uk/EqW6fci0a87uV7WFDGz3mTC3u0CDBONk';
-        const response = await fetch(audioUrl);
-        const arrayBuffer = await response.arrayBuffer();
-        if (audioContext) {
-          audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        async function loadAudio(): Promise<void> {
+            const audioUrl = 'https://audio.jukehost.co.uk/EqW6fci0a87uV7WFDGz3mTC3u0CDBONk';
+            try {
+                const response = await fetch(audioUrl);
+                const arrayBuffer = await response.arrayBuffer();
+                if (audioContext) {
+                    audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+                }
+            } catch (error) {
+                console.error('Error loading or decoding audio:', error);
+            }
         }
-      }
 
-      function playAudio() {
-        if (audioContext && audioBuffer) {
-          sourceNode = audioContext.createBufferSource();
-          sourceNode.buffer = audioBuffer;
-          sourceNode.connect(audioContext.destination);
-          sourceNode.loop = true;
-          sourceNode.start();
+        function playAudio(): void {
+            if (audioContext && audioBuffer) {
+                sourceNode = audioContext.createBufferSource();
+                sourceNode.buffer = audioBuffer;
+                sourceNode.connect(audioContext.destination);
+                sourceNode.loop = true;
+                sourceNode.start();
+            }
         }
-      }
 
-      function stopAudio() {
-        if (sourceNode) {
-          sourceNode.stop();
+        function stopAudio(): void {
+            if (sourceNode) {
+                sourceNode.stop();
+            }
         }
-      }
 
-      function getRandomChar() {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
-        return chars.charAt(Math.floor(Math.random() * chars.length));
-      }
+        function getRandomChar(): string {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
+            return chars.charAt(Math.floor(Math.random() * chars.length));
+        }
 
-      async function decryptText(element:HTMLLIElement, originalText:String) { //possible error check TODO
-        if (isDecrypting) return;
-        isDecrypting = true;
+        async function decryptText(element: Element, originalText: string): Promise<void> {
+            if (isDecrypting) return;
+            isDecrypting = true;
 
-        await loadAudio();
-        let currentText = Array(originalText.length).fill('').map(getRandomChar).join('');
-        element.textContent = currentText;
+            await loadAudio();
+            let currentText = Array(originalText.length).fill('').map(getRandomChar).join('');
+            if (element instanceof HTMLElement) {
+                element.textContent = currentText;
+            }
 
-        playAudio();
+            playAudio();
 
-        let index = 0;
-        const interval = setInterval(() => {
-          if (index >= originalText.length) {
-            clearInterval(interval);
+            let index = 0;
+            const interval = setInterval(() => {
+                if (index >= originalText.length) {
+                    clearInterval(interval);
+                    stopAudio();
+                    isDecrypting = false;
+                    return;
+                }
+
+                currentText = currentText.split('').map((_, i) => {
+                    if (i < index) return originalText[i];
+                    if (i === index) return originalText[i];
+                    return getRandomChar();
+                }).join('');
+
+                if (element instanceof HTMLElement) {
+                    element.textContent = currentText;
+                }
+                index++;
+            }, 15); // Adjust speed here (lower number = faster)
+        }
+
+        function handlePageLoad(): void {
+            const h1 = document.querySelector('h1');
+            if (h1) {
+                const originalText = h1.textContent || '';
+                decryptText(h1, originalText);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', handlePageLoad);
+
+        function cleanUp(): void {
             stopAudio();
             isDecrypting = false;
-            return;
-          }
-
-          currentText = currentText.split('').map((_, i) => {
-            if (i < index) return originalText[i];
-            if (i === index) return originalText[i];
-            return getRandomChar();
-          }).join('');
-
-          element.textContent = currentText;
-          index++;
-        }, 15); // Adjust speed here (lower number = faster)
-      }
-
-      function handlePageLoad() {
-        const h1 = document.querySelector('h1');
-        if (h1) {
-          const originalText = h1.textContent || '';
-          decryptText(h1, originalText);
         }
-      }
 
-      window.addEventListener('DOMContentLoaded', handlePageLoad);
-
-      function cleanUp() {
-        stopAudio();
-        isDecrypting = false;
-      }
-
-      window.addEventListener('pagehide', cleanUp);
-   });
+        window.addEventListener('pagehide', cleanUp);
+    });
 </script>

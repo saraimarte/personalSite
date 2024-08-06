@@ -1,11 +1,11 @@
 ---
 layout: '@layouts/Blog.astro'
-title: "article 3"
-pubDate: 2024-01-15
+title: "Marketplace for ComfyUI templates?"
+pubDate: 2024-08-05
 author: 'David Mitchell'
-tags: ['photography', 'canon', 'tech']
-phase: 'rabbitHole'
-slug: capturing-lifes-moments-with-canon-excellence5
+tags: ['ideas']
+phase: 'thought'
+slug: marketplace-for-comfyui-templates
 ---
 
 For photographers and enthusiasts alike, Canon has been a symbol of excellence in the world of photography for decades. In 2024, Canon continues to lead the way in innovation, enabling us to capture life's most precious moments with unparalleled quality and precision. Let's explore the world of photography and how Canon's excellence plays a pivotal role.
