@@ -42,7 +42,7 @@ const {Content} = await entry.render();
 <style>
     .container{
         height:100%;
-        width:80%;
+        width:50%;
         margin:auto;
         padding:20px;
         background-color: #F2F3F4;
@@ -52,9 +52,19 @@ const {Content} = await entry.render();
         font-size:1.2rem;
     }
 
+    @media (max-width: 1000px) {
+      .container{
+        width:80%;
+       }
+      }
+
+
     @media (max-width: 600px) {
       .container{
         width:100%;
+        padding:20px;
+        padding-right:25px; /* so that the Card comp looks centered in the content and not too much to the right*/
+
        }
 
 

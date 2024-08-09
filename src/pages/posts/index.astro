@@ -6,6 +6,7 @@ import {formatDate} from '../../utils';
 import thoughtIcon from '@assets/thought.svg';
 import rabbitHoleIcon from '@assets/rabbitHole.svg';
 import articleIcon from '@assets/article.svg';
+import Card from '@components/Card.astro';
 
 const allBlogPosts: CollectionEntry<'blog'>[] = (await getCollection('blog'));
 
@@ -69,6 +70,7 @@ const {tags} = Astro.params;
 <MainLayout pageTitle="Blog Directory">
   
   <div class="container" x-data="{ open: false }">
+
     <h1>Welcome to Sarai's Blog </h1>
     <p class = "intro" x-show="open" x-transition> Mosts posts begin as thoughts. These thoughts lead to rabbit holes and eventually end up as articles. Yet, some thoughts stay thoughts. Here, you can filter all my posts by their phase of life 🌸</p>
     <!--Display all phases. Based on what phase it is...the icon will be the icon for that phase...-->
@@ -251,7 +253,7 @@ const {tags} = Astro.params;
     margin-left:5px;
     font-weight: bold;
     user-select:none;
-    margin-right:0.4em;
+    margin-right:1em;
   }
 
   #all:hover{
@@ -299,6 +301,7 @@ const {tags} = Astro.params;
 
   .tags{
     flex-wrap:wrap;
+  
   }
   .phases{
       display: flex;
@@ -370,6 +373,7 @@ function formatDate(date) {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
+      
     };
   
     return new Date(date).toLocaleDateString(undefined, options);

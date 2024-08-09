@@ -14,3 +14,20 @@ body{
     width:100%;  
     background-color: #F2F3F4;
 }
+
+::selection {
+    color: #F0F8FF;
+    background: #0000CC;
+}
+
+iframe{
+    width: 600px;
+    height: 400px;;
+}
+  
+@media (max-width: 768px) {
+iframe {
+    width: 100%;
+    height: 200px;
+}
+}

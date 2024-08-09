@@ -44,17 +44,17 @@ class Card extends HTMLElement {
     const headerHTML = `
       <style>
         .card{
-        display:flex;
-        min-height:3em;
-        justify-content:start;
-        align-items:center;
-        color:#778D9C;
-        padding-left:10px;
-        gap:1em;
-        border: 1px solid blue;
-        font-size:0.8em;
-        text-decoration:none;
-        font-family: "IBM Plex Mono", monospace;
+          display:flex;
+          min-height:3em;
+          justify-content:start;
+          align-items:center;
+          color:#778D9C;
+          padding-left:10px;
+          gap:1em;
+          border: 1px solid blue;
+          font-size:0.8em;
+          text-decoration:none;
+          font-family: "IBM Plex Mono", monospace;
     }
     
     .card:hover{
@@ -65,6 +65,7 @@ class Card extends HTMLElement {
     @media (max-width: 768px) {
         .card{
             flex-wrap:wrap;
+            gap:0em;
             font-size:0.8em;
         }
     }

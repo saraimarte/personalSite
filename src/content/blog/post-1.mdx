@@ -1,0 +1,70 @@
+---
+layout: '@layouts/Blog.astro'
+title: "Responsive Card Component in AstroJS"
+pubDate: 2024-08-10
+author: 'Sarai Marte'
+tags: ['webdev', 'astrojs']
+phase: 'article'
+slug: multiple-filters-in-astrojs
+---
+
+```
+Components
+```
+
+import Card from '@components/Card.astro';
+import TweetCard from '@components/TweetCard.astro';
+
+```
+Images
+```
+import img from '../../../public/img4.png';
+import img2 from '../../../public/img6.jpg';
+
+This bordered card component supports various media types—images, videos, and tweets—ensuring they fit within the borders while remaining centered and responsive, regardless of content size.
+
+Current Issues: Tweet may be too large (height) on mobile.
+
+Here ares some examples using the component with different media types: 
+
+## 1. Large Width Image
+
+<Card img = {img} alt = "When to do dx or dy in Disk Method?"></Card>
+
+## 2. Large Height Image
+
+<Card img = {img2} alt = "Telescoping Series Solution"></Card>
+
+## 3. Tweet
+
+<Card >
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Chinese open weights model that easily surpasses all previous models, both closed and open, at MATH: <a href="https://t.co/3DEotq76hY">https://t.co/3DEotq76hY</a></p>&mdash; Jeremy Howard (@jeremyphoward) <a href="https://twitter.com/jeremyphoward/status/1821557546102174194?ref_src=twsrc%5Etfw">August 8, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+</Card>
+
+## 4. Youtube Video
+
+<Card >
+
+<iframe src="https://www.youtube.com/embed/tuT9Mp-Cnck?si=e8yspLZ8Tvo__8ty" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+</Card>
+
+Notes:
+
+For the iframe to be responsive I had to add this to the Global CSS file : (uh you cant see it yet bc for some reason the three back ticks are not displaying the code. That's a problem for tomorrow.)
+
+```
+iframe{
+    width: 600px;
+    height: 400px;;
+}
+  
+@media (max-width: 768px) {
+iframe {
+    width: 100%;
+    height: 200px;
+}
+}
+```
