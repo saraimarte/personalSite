@@ -7,6 +7,7 @@ tags: ['webdev', 'astrojs']
 phase: 'article'
 slug: multiple-filters-in-astrojs
 ---
+import { Prism } from '@astrojs/prism';
 
 import Card from '@components/Card.astro';
 import img from '../../../public/img4.png';
@@ -45,18 +46,17 @@ Here ares some examples using the component with different media types:
 
 Notes:
 
-For the iframe to be responsive I had to add this to the Global CSS file : (uh you cant see it yet bc for some reason the three back ticks are not displaying the code. That's a problem for tomorrow.)
+For the iframe to be responsive I had to add this to the Global CSS file:
 
-```
-iframe{
+<Prism lang="css" code={`iframe{
     width: 600px;
     height: 400px;;
 }
   
 @media (max-width: 768px) {
-iframe {
-    width: 100%;
-    height: 200px;
+    iframe {
+        width: 100%;
+        height: 200px;
+    }
 }
-}
-```
+`} />
