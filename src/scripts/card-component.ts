@@ -49,7 +49,7 @@ class Card extends HTMLElement {
           justify-content:start;
           align-items:center;
           color:#778D9C;
-          padding-left:10px;
+          padding-left:20px;
           gap:1em;
           border: 1px solid blue;
           font-size:0.8em;
@@ -65,7 +65,7 @@ class Card extends HTMLElement {
     @media (max-width: 768px) {
         .card{
             flex-wrap:wrap;
-            gap:0em;
+            gap:1em;
             font-size:0.8em;
         }
     }

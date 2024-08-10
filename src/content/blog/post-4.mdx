@@ -1,0 +1,73 @@
+---
+layout: '@layouts/Blog.astro'
+title: "Syntax Highlighting with AstroJS and Prisma"
+pubDate: 2024-08-10
+author: 'Sarai Marte'
+tags: ['webdev', 'astrojs']
+phase: 'article'
+slug: syntax-highlighting-with-astroJS-and-prisma
+---
+import { Prism } from '@astrojs/prism';
+
+I needed a way to style my code blocks in my mdx files. 
+
+I learned about <a href = "https://prismjs.com/">Prisma</a> and that it's built into Astro.
+
+Here is how I set it up in this website. 
+
+**1.** This is how your astro.config.mjs should look like:
+
+<Prism lang="javascript" code={`import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
+
+export default defineConfig({
+  integrations: [mdx()],
+  markdown: {
+   syntaxHighlight: "prism",
+  },
+});
+`} />
+
+
+**2.** Go to the <a href = "https://github.com/PrismJS/prism-themes/tree/master">Prism Themes Collection</a>, pick one that you like, download it and place it in your public folder. I chose the prism-holi-theme. I edited it a bit to be more mobile friendly.
+
+**3.** Place the following code in your `<head></head>` tag (make sure you replace 'prism-holi-theme' with the name of *your* theme.)
+
+<Prism lang="html" code={`<link rel = "stylesheet" href = "../../public/prism-holi-theme.css"/>`} />
+
+
+**4.** In any mdx file, paste the following code after the frontmatter.
+
+<Prism lang="javascript" code={`import { Prism } from '@astrojs/prism';`} />
+
+````markdown
+<Prism lang="javascript" code={`const jsCode = "this is javascript code!"`} />
+````
+
+and then you should see the following code snippet on your page...
+
+<Prism lang="javascript" code={`const jsCode = "this is javascript code!"`} />
+
+**Tip:** To render the following line on this page:
+
+````markdown
+<Prism lang="javascript" code={`const jsCode = "this is javascript code!"`} />
+````
+
+instead of doing this, 
+
+````markdown
+<Prism lang="javascript" code={`
+
+<Prism lang="javascript" code={`const jsCode = "this is javascript code!"`} />
+
+`} />
+````
+
+which gives you an error, you would surround it by markdown ticks like so, 
+
+`````markdown
+````markdown
+<Prism lang="javascript" code={`const jsCode = "this is javascript code!"`} />
+````
+`````
