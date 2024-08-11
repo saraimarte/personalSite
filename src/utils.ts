@@ -1,12 +1,14 @@
-// Format the date to a string
 function formatDate(date: Date): string {
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    };
-  
-    return new Date(date).toLocaleDateString(undefined, options);
-  }
+  // Convert to UTC to avoid time zone issues
+  const utcDate = new Date(date.toISOString().split('T')[0]);
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  };
+
+  return utcDate.toLocaleDateString(undefined, options);
+}
 
 export { formatDate };
