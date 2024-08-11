@@ -16,7 +16,7 @@ export const GET: APIRoute = async (): Promise<Response> => {
   const blogData = sortedBlogArticles.map(article => ({
     ...article.data, // Spread the post data
     slug: article.slug, // Add the slug
-    pubDate: formatDate(new Date(article.data.pubDate)) // Format pubDate
+    pubDate: formatDate(new Date(article.data.pubDate)) // Format pubDate so date is not a day behind
   }));
 
   return new Response(JSON.stringify(blogData), {
