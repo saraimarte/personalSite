@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Ayush Saini
  * Holi Theme for prism.js
  * @author Ayush Saini <@AyushCodes on Twitter>
+ * Few Changes made by Sarai Marte
  */
 
 code[class*='language-'],
@@ -14,7 +15,7 @@ pre[class*='language-'] {
 	font-size: 0.9rem; /*changed to be smaller*/
 	line-height: 1.5;
 	letter-spacing: .2px;
-	white-space: pre;
+	white-space: pre-wrap; /*changed from pre to pre-wrap. this is what makes it mobile responsive.*/
 	word-spacing: normal;
 	word-break: normal;
 	word-wrap: normal;
@@ -41,16 +42,17 @@ code[class*='language-'] ::selection {
 	color: inherit;
 	background: #1d3b54;
 	text-shadow: none;
+
 }
 
 pre[class*='language-'] {
 	border: 1px solid #2a4555;
 	border-radius: 5px;
-	padding: 1em 1em;
+	padding: 1.5em 1em;
 	margin: 1em 0;
-	height:max-content;
-	scrollbar-color: gray transparent; /*added for chrome*/
-	scrollbar-width:thin; /*added for chrome*/
+	height:max-content; /*removed overflow auto to get rid of scrolling. I want all my code to show fully so the height of each code block should be the height of it's content.*/
+	
+
 }
 
 :not(pre) > code[class*='language-'] {
@@ -119,15 +121,3 @@ pre[class*='language-'] {
 .token.variable {
 	color: #d6e7ff;
 }
-
-/*added by moi- sarai*/
-@media (max-width: 768px) {
-
-    pre[class*='language-'] {
-		min-height: 70px;
-		height: max-content;
-		overflow-x: auto; /* Allow horizontal scrolling */
-		overflow-y: auto; /* Allow vertical scrolling */
-
-	}
-  }

@@ -1,6 +1,6 @@
 ---
 layout: '@layouts/Blog.astro'
-title: "Responsive Card Component in AstroJS"
+title: "Responsive Bordered Card Component in AstroJS"
 pubDate: 2024-08-09
 author: 'Sarai Marte'
 tags: ['webdev', 'astrojs']
@@ -8,8 +8,10 @@ phase: 'article'
 slug: multiple-filters-in-astrojs
 ---
 import { Prism } from '@astrojs/prism';
+import DropDown from '@components/DropDown.astro';
 
 import Card from '@components/Card.astro';
+
 import img from '../../../public/img4.png';
 import img2 from '../../../public/img6.jpg';
 
@@ -20,15 +22,15 @@ Current Issues: Tweet may be too large (height) on mobile.
 
 Here ares some examples using the component with different media types: 
 
-## 1. Large Width Image
+# 1. Large Width Image
 
 <Card img = {img} alt = "When to do dx or dy in Disk Method?"></Card>
 
-## 2. Large Height Image
+# 2. Large Height Image
 
 <Card img = {img2} alt = "Telescoping Series Solution"></Card>
 
-## 3. Tweet
+# 3. Tweet
 
 <Card >
 
@@ -36,7 +38,7 @@ Here ares some examples using the component with different media types:
 
 </Card>
 
-## 4. Youtube Video
+# 4. Youtube Video
 
 <Card >
 
@@ -44,9 +46,95 @@ Here ares some examples using the component with different media types:
 
 </Card>
 
-Notes:
+<DropDown title = "Full Code">
 
-For the iframe to be responsive I had to add this to the Global CSS file:
+For Card.astro: 
+
+<Prism lang="jsx" code={`
+---
+const { img, alt } = Astro.props;
+---
+<div class="card">
+  <div class="content">
+    {img && <img src={img.src} alt={alt} />} <!-- Optional img and alt -->
+    <slot></slot>
+  </div>
+</div>
+
+<style>
+
+  /*bordered part of the component (conic stuff) by Temani Afif https://stackoverflow.com/a/61913549*/
+  .card {
+    margin: 20px 10px; /*10px margin left and right so that it fits the width of the content*/
+    --b: 2px;   /* thickness of the border */
+    --c: blue;   /* color of the border */
+    --w: 20px;  /* width of border */
+    
+    display: inline-block;
+    max-width: 100%;
+    padding: var(--w);
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      conic-gradient(from 90deg  at top    var(--b) left  var(--b),#0000 90deg,var(--c) 0) 0    0    / var(--w) var(--w) border-box no-repeat,
+      conic-gradient(from 180deg at top    var(--b) right var(--b),#0000 90deg,var(--c) 0) 100% 0    / var(--w) var(--w) border-box no-repeat,
+      conic-gradient(from 0deg   at bottom var(--b) left  var(--b),#0000 90deg,var(--c) 0) 0    100% / var(--w) var(--w) border-box no-repeat,
+      conic-gradient(from -90deg at bottom var(--b) right var(--b),#0000 90deg,var(--c) 0) 100% 100% / var(--w) var(--w) border-box no-repeat;
+    }
+
+  .content {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    z-index:1; /* so that tweets are clickable*/
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    max-height: 500px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  :global(.twitter-tweet) {
+    max-width: 100% !important;
+    width: 100% !important;
+    
+  }
+
+  @media (max-width: 768px) {
+    .card {
+        width: 100%;
+        padding: 10px;
+    }
+
+    :global(.twitter-tweet) {
+        max-width: auto  !important;
+        height:auto  !important;
+    }
+    
+  }
+</style>
+
+`}/>
+
+Note:
+
+For the YouTube iframe to be responsive I had to add this to the Global CSS file:
 
 <Prism lang="css" code={`iframe{
     width: 600px;
@@ -60,3 +148,8 @@ For the iframe to be responsive I had to add this to the Global CSS file:
     }
 }
 `} />
+
+
+
+</DropDown>
+

@@ -1,6 +1,6 @@
 ---
 layout: '@layouts/Blog.astro'
-title: "Syntax Highlighting with AstroJS and Prisma"
+title: "Syntax Highlighting with Prisma in AstroJS"
 pubDate: 2024-08-10
 author: 'Sarai Marte'
 tags: ['webdev', 'astrojs']
@@ -8,12 +8,17 @@ phase: 'article'
 slug: syntax-highlighting-with-astroJS-and-prisma
 ---
 import { Prism } from '@astrojs/prism';
+import DropDown from '@components/DropDown.astro';
+
+import Card from '@components/Card.astro';
+import img1 from '../../../public/postImages/img12.png';
+import img2 from '../../../public/postImages/img2.png';
 
 I needed a way to style my code blocks in my mdx files. 
 
-I learned about <a href = "https://prismjs.com/">Prisma</a> and that it's built into Astro.
+I learned about <a href = "https://prismjs.com/">Prisma</a> and that it is built into Astro.
 
-Here is how I set it up in this website. 
+# Setup 
 
 **1.** This is how your astro.config.mjs should look like:
 
@@ -28,8 +33,7 @@ export default defineConfig({
 });
 `} />
 
-
-**2.** Go to the <a href = "https://github.com/PrismJS/prism-themes/tree/master">Prism Themes Collection</a>, pick one that you like, download it and place it in your public folder. I chose the prism-holi-theme. I edited it a bit to be more mobile friendly.
+**2.** Go to the <a href = "https://github.com/PrismJS/prism-themes/tree/master">Prism Themes Collection</a>, pick one that you like, download it and place it in your public folder. I chose the prism-holi-theme.
 
 **3.** Place the following code in your `<head></head>` tag (make sure you replace 'prism-holi-theme' with the name of *your* theme.)
 
@@ -47,7 +51,9 @@ and then you should see the following code snippet on your page...
 
 <Prism lang="javascript" code={`const jsCode = "this is javascript code!"`} />
 
-**Tip:** To render the following line on this page:
+<DropDown title = "Tip">
+
+To render the following line on this page:
 
 ````markdown
 <Prism lang="javascript" code={`const jsCode = "this is javascript code!"`} />
@@ -58,15 +64,161 @@ instead of doing this,
 ````markdown
 <Prism lang="javascript" code={`
 
-<Prism lang="javascript" code={`const jsCode = "this is javascript code!"`} />
+  <Prism lang="javascript" code={`const jsCode = "this is javascript code!"`}/>
 
 `} />
 ````
 
-which gives you an error, you would surround it by markdown ticks like so, 
+which gives you an error, you would surround it by markdown ticks like so: 
 
 `````markdown
 ````markdown
 <Prism lang="javascript" code={`const jsCode = "this is javascript code!"`} />
 ````
 `````
+
+</DropDown>
+
+# How to Make the Code Blocks Mobile Friendly
+
+Regardless of making the code blocks mobile friendly, I made some changes to the theme StyleSheet.
+
+**1.** Made the font-size smaller.
+
+**2.** Deleted the overflow:auto and replaced it with height:max-content so all the code will be visible and there would be no need for scrolling.  
+
+After doing this, you will notice that on mobile, the code is overflowing: 
+
+<Card img = {img1} alt = "overflow problem"/>
+
+to fix that I made one more change in the theme file: I changed white-space from pre to pre-wrap and voila- no more overflow:
+
+<Card img = {img2} alt = "overflow solution"/>
+
+<DropDown title = "Full Theme Code">
+
+<Prism lang="css" code={`
+  /**
+  * MIT License
+  * Copyright (c) 2021 Ayush Saini
+  * Holi Theme for prism.js
+  * @author Ayush Saini <@AyushCodes on Twitter>
+  */
+
+  code[class*='language-'],
+  pre[class*='language-'] {
+    color: #d6e7ff;
+    background: #030314;
+    text-shadow: none;
+    font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+    font-size: 0.9rem; /*changed to be smaller*/
+    line-height: 1.5;
+    letter-spacing: .2px;
+    white-space: pre-wrap; /*changed from pre to pre-wrap. this is what makes it mobile responsive.*/
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    text-align: left;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  pre[class*='language-']::-moz-selection,
+  pre[class*='language-'] ::-moz-selection,
+  code[class*='language-']::-moz-selection,
+  code[class*='language-'] ::-moz-selection,
+  pre[class*='language-']::selection,
+  pre[class*='language-'] ::selection,
+  code[class*='language-']::selection,
+  code[class*='language-'] ::selection {
+    color: inherit;
+    background: #1d3b54;
+    text-shadow: none;
+
+  }
+
+  pre[class*='language-'] {
+    border: 1px solid #2a4555;
+    border-radius: 5px;
+    padding: 1.5em 1em;
+    margin: 1em 0;
+    height:max-content; /*removed overflow auto to get rid of scrolling. I want all my code to show fully so the height of each code block should be the height of it's content.*/
+    
+
+  }
+
+  :not(pre) > code[class*='language-'] {
+    color: #f0f6f6;
+    background: #2a4555;
+    padding: 0.2em 0.3em;
+    border-radius: 0.2em;
+    box-decoration-break: clone;
+  }
+
+  .token.comment,
+  .token.prolog,
+  .token.doctype,
+  .token.cdata {
+    color: #446e69;
+  }
+
+  .token.punctuation {
+    color: #d6b007;
+  }
+
+  .token.property,
+  .token.tag,
+  .token.boolean,
+  .token.number,
+  .token.constant,
+  .token.symbol,
+  .token.deleted {
+    color: #d6e7ff;
+  }
+
+  .token.selector,
+  .token.attr-name,
+  .token.builtin,
+  .token.inserted {
+    color: #e60067;
+  }
+
+  .token.string,
+  .token.char {
+    color: #49c6ec;
+  }
+
+  .token.operator,
+  .token.entity,
+  .token.url,
+  .language-css .token.string,
+  .style .token.string {
+    color: #ec8e01;
+    background: transparent;
+  }
+
+  .token.atrule,
+  .token.attr-value,
+  .token.keyword {
+    color: #0fe468;
+  }
+
+  .token.function,
+  .token.class-name {
+    color: #78f3e9;
+  }
+
+  .token.regex,
+  .token.important,
+  .token.variable {
+    color: #d6e7ff;
+  }
+  `} />
+</DropDown>

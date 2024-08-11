@@ -28,8 +28,8 @@ const {Content} = await entry.render();
 
     <div class = "container">
         <BackBtn link = "/posts"></BackBtn>
-        <h1>{entry.data.title}</h1>
-        <h2>{formatDate(entry.data.pubDate)}</h2>
+        <h1 class = "title">{entry.data.title}</h1>
+        <h2 class = "date">{formatDate(entry.data.pubDate)}</h2>
         <Tag tags = {entry.data.tags}></Tag>
 
         <Content>
@@ -65,5 +65,31 @@ const {Content} = await entry.render();
         padding-right:25px; /* so that the Card comp looks centered in the content and not too much to the right*/
        }
       }
+
+    .title {
+        margin: 10px 5px 0;
+        font-size: 1.4rem;
+        overflow: hidden;
+        width: 90%;
+        min-height: 2rem;
+    }
+
+    .date {
+        margin: 10px 5px;
+        font-size: 1.2rem;
+    }
+    @media (max-width: 600px) {
+        .title {
+            height: min-content;
+            min-height: 4rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .title {
+            height: 65px;
+        }
+    }
+
 
 </style>
