@@ -2,177 +2,143 @@
 import MainLayout from '@layouts/MainLayout.astro';
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
-import {formatDate} from '../../utils';
+import { formatDate } from '../../utils';
 import thoughtIcon from '@assets/thought.svg';
 import rabbitHoleIcon from '@assets/rabbitHole.svg';
 import articleIcon from '@assets/article.svg';
 import Card from '@components/Card.astro';
 
-const allBlogPosts: CollectionEntry<'blog'>[] = (await getCollection('blog'));
+// Fetch all blog posts
+const allBlogPosts: CollectionEntry<'blog'>[] = (await getCollection('blog')).sort((a, b) => {
+  // Assuming pubDate is a Date object or a string in ISO format
+  return new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime();
+});
 
-export async function getStaticPaths(){
-    const allBlogPosts: CollectionEntry<'blog'>[] = await getCollection('blog');
-    const tags = new Set(allBlogPosts.flatMap(article => article.data.tags));
+export async function getStaticPaths() {
+  const allBlogPosts: CollectionEntry<'blog'>[] = await getCollection('blog');
+  const tags = new Set(allBlogPosts.flatMap(article => article.data.tags));
 
-    return  allBlogPosts.map(entry => ({
-        params:{
-            slug: entry.slug,
-            tags: entry.data.tags
-        }
-    }));
+  return allBlogPosts.map(entry => ({
+    params: {
+      slug: entry.slug,
+      tags: entry.data.tags
+    }
+  }));
 }
 
-const allArticles = await getCollection('blog', ({ data }) => {
-  return data.phase === 'article';
-});
-
-const allThoughts = await getCollection('blog', ({ data }) => {
-  return data.phase === 'thought';
-});
-
-const allRabbitHoles = await getCollection('blog', ({ data }) => {
-  return data.phase === 'rabbitHole';
-});
+const allArticles = allBlogPosts.filter(({ data }) => data.phase === 'article');
+const allThoughts = allBlogPosts.filter(({ data }) => data.phase === 'thought');
+const allRabbitHoles = allBlogPosts.filter(({ data }) => data.phase === 'rabbitHole');
 
 const allPhases = Array.from(
-  new Set(allBlogPosts.map(article => article.data.phase).sort((a,b)=> 1))
+  new Set(allBlogPosts.map(article => article.data.phase))
 );
 
 const allArticleTags = Array.from(
-    new Set(
-        allBlogPosts
-            .filter(post => post.data.phase === "article") // Filter posts by phase
-            .flatMap(post => post.data.tags) // Extract tags from filtered posts
-    )
+  new Set(
+    allArticles.flatMap(post => post.data.tags)
+  )
 );
 
 const allThoughtTags = Array.from(
-    new Set(
-        allBlogPosts
-            .filter(post => post.data.phase === "thought") // Filter posts by phase
-            .flatMap(post => post.data.tags) // Extract tags from filtered posts
-    )
+  new Set(
+    allThoughts.flatMap(post => post.data.tags)
+  )
 );
 
 const allRabbitHoleTags = Array.from(
-    new Set(
-        allBlogPosts
-            .filter(post => post.data.phase === "rabbitHole") // Filter posts by phase
-            .flatMap(post => post.data.tags) // Extract tags from filtered posts
-    )
+  new Set(
+    allRabbitHoles.flatMap(post => post.data.tags)
+  )
 );
 
-const {tags} = Astro.params;
+const { tags } = Astro.params;
 
 ---
 <script src="../../scripts/card-component.ts"></script>
 
 <MainLayout pageTitle="Blog Directory">
-  
   <div class="container" x-data="{ open: false }">
-
     <h1>Welcome to Sarai's Blog </h1>
-    <p class = "intro" x-show="open" x-transition> Mosts posts begin as thoughts. These thoughts lead to rabbit holes and eventually end up as articles. Yet, some thoughts stay thoughts. Here, you can filter all my posts by their phase of life 🌸</p>
-    <!--Display all phases. Based on what phase it is...the icon will be the icon for that phase...-->
+    <p class="intro" x-show="open" x-transition>Most posts begin as thoughts. These thoughts lead to rabbit holes and eventually end up as articles. Yet, some thoughts stay thoughts. Here, you can filter all my posts by their phase of life 🌸</p>
     
-    <div class = "phaseAndTagContainer">
-    <div class="phaseContainer">
-      <div class="phases">
-        {allPhases.map((phase: string) => {
-          // Determine the appropriate icon for the phase
-          let phaseIconSrc = '';
-    
-          if (phase === 'thought') {
-            phaseIconSrc = thoughtIcon.src;
-          } else if (phase === 'rabbitHole') {
-            phaseIconSrc = rabbitHoleIcon.src;
-          } else if (phase === 'article') {
-            phaseIconSrc = articleIcon.src; // Add an appropriate source for the article phase
-          }
-    
-          return (
-            <a class="phase" href="">
-              <div class="phaseIconContainer">
-                <img id = {phase} class="phaseIcon" src={phaseIconSrc} alt={`${phase} icon`} />
-              </div>
-            </a>
-          );
-        })}
-        <div id = "infoIcon" x-on:click="open = ! open"  x-on:click="open = ! open">i</div>
+    <!-- Display all phases -->
+    <div class="phaseAndTagContainer">
+      <div class="phaseContainer">
+        <div class="phases">
+          {allPhases.map((phase: string) => {
+            let phaseIconSrc = '';
+
+            if (phase === 'thought') {
+              phaseIconSrc = thoughtIcon.src;
+            } else if (phase === 'rabbitHole') {
+              phaseIconSrc = rabbitHoleIcon.src;
+            } else if (phase === 'article') {
+              phaseIconSrc = articleIcon.src;
+            }
+
+            return (
+              <a class="phase" href="">
+                <div class="phaseIconContainer">
+                  <img id={phase} class="phaseIcon" src={phaseIconSrc} alt={`${phase} icon`} />
+                </div>
+              </a>
+            );
+          })}
+          <div id="infoIcon" x-on:click="open = ! open" x-on:click="open = ! open">i</div>
+        </div>
+      </div>
+
+      <!-- Display all tags -->
+      <div class="tagContainer">
+        <p>Tags:</p>
+        <div class="boxy">
+          <a id="all">all</a>
+          <div id="allArticleTags" class="visible tags">
+            {allArticleTags.map((tag: String) => (
+              <a class="tag" id={`${tag}`} href="">{tag}</a>
+            ))}
+          </div>
+          <div id="allThoughtTags" class="hidden tags">
+            {allThoughtTags.map((tag: String) => (
+              <a class="tag" id={`${tag}`} href="">{tag}</a>
+            ))}
+          </div>
+          <div id="allRabbitHoleTags" class="hidden tags">
+            {allRabbitHoleTags.map((tag: String) => (
+              <a class="tag" id={`${tag}`} href="">{tag}</a>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
 
-    <!--Display all tags. All tags available to be filtered with for each phase are
-    alredy rendered but all are hidden except for the posts that 
-    are phase articles
-    -->
-    <div class = "tagContainer">
-      <p>Tags:</p> 
-    
-      <div class = "boxy">
-        <a id = "all">all</a>
-
-        <div id = "allArticleTags" class = "visible tags">
-          {allArticleTags.map((tag:String) => (
-              <a class = "tag" id = {`${tag}`} href = "">{tag}</a>
-          ))}
-        </div>
-    
-        <div id = "allThoughtTags" class = "hidden tags">
-            {allThoughtTags.map((tag:String) => (
-                <a class = "tag" id = {`${tag}`} href = "">{tag}</a>
-            ))}
-        </div>
-    
-        <div id = "allRabbitHoleTags" class = "hidden tags">
-            {allRabbitHoleTags.map((tag:String) => (
-                <a class = "tag" id = {`${tag}`} href = "">{tag}</a>
-            ))}
-        </div>
-
-      </div>
-   
-
-    </div>
-   </div>
-    
-    <!-- All posts filtered by phase (by Thought, by rabbitholes, by articles)
-     are already rendered but they are all hidden but the article posts.
-     Depending on what phase is clicked, the posts displayed will be
-    those posts that are of that phase. 
-    -->
-
-    <!--This is where allPosts are displayed and where the phase artciles are displayed by default AND where the new filterd posts based on which phase AND tags are selected will be displayed -->
-    <div id = "allPosts" class = "posts visible">
-        {allArticles.map(article => (
-              <card-component date = {formatDate(article.data.pubDate)} title = {article.data.title} slug = {article.slug}></card-component>
-        ))}
-    </div> 
-    <div id = "allThoughts" class = "posts hidden">
-      {allThoughts.map(article => (
-              <card-component date = {formatDate(article.data.pubDate)} title = {article.data.title} slug = {article.slug} ></card-component>
-
+    <!-- Display posts based on phase -->
+    <div id="allPosts" class="posts visible">
+      {allArticles.map(article => (
+        <card-component date={formatDate(article.data.pubDate)} title={article.data.title} slug={article.slug}></card-component>
       ))}
     </div>
-    <div id = "allRabbitHoles" class = "posts hidden">
-    {allRabbitHoles.map(article => (
-              <card-component date = {formatDate(article.data.pubDate)} title = {article.data.title} slug = {article.slug} ></card-component>
-
-    ))}
+    <div id="allThoughts" class="posts hidden">
+      {allThoughts.map(article => (
+        <card-component date={formatDate(article.data.pubDate)} title={article.data.title} slug={article.slug}></card-component>
+      ))}
     </div>
-    <div id = "allArticles" class = "posts hidden">
+    <div id="allRabbitHoles" class="posts hidden">
+      {allRabbitHoles.map(article => (
+        <card-component date={formatDate(article.data.pubDate)} title={article.data.title} slug={article.slug}></card-component>
+      ))}
+    </div>
+    <div id="allArticles" class="posts hidden">
       {allArticles.map(article => (
-              <card-component date = {formatDate(article.data.pubDate)} title = {article.data.title} slug = {article.slug}> </card-component>
-
+        <card-component date={formatDate(article.data.pubDate)} title={article.data.title} slug={article.slug}></card-component>
       ))}
     </div>
   </div>
-
 </MainLayout>
 
 <style>
  
-
  h1{
    margin-bottom: 10px;
  }
@@ -417,7 +383,6 @@ function allTagClicked(){
   const allRabbitHoles = document.getElementById("allRabbitHoles");
   const allThoughts = document.getElementById("allThoughts");
   
-  
   // To filter by phase and tag, I need the phase. 
   // The phase that was selected should have the class .selected.
   //Since tags also selcted have that same class we need to specify that it is a selected phaseIcon that we need.
@@ -620,5 +585,7 @@ function updatePostsDisplay(posts) {
     });
   }
 }
+
+
 
 </script>
