@@ -1,0 +1,81 @@
+---
+layout: '@layouts/Blog.astro'
+title: "Quote Component in AstroJS"
+pubDate: 2024-08-10T00:00:00Z
+author: 'Sarai Marte'
+tags: ['webdev', 'astrojs']
+phase: 'article'
+slug: quote-component-in-astrojs
+---
+
+import Quote from '@components/Quote.astro';
+import DropDown from '@components/DropDown.astro';
+import { Prism } from '@astrojs/prism';
+
+<Quote author = "Sarai Marte"> This is my quote component!</Quote>
+<DropDown title = "Full Code">
+
+For Quote.astro
+
+<Prism lang="jsx" code={`
+---
+const {author} = Astro.props;
+---
+
+<div class = "quoteBox">
+    <div class = "iconContainer">
+     <p class = "quoteIcon">❝</p>
+    </div>
+    <div class = "quote">
+        <slot></slot>
+        <p class = "author">{author}</p>
+    </div>
+</div>
+
+<style>
+  .quoteBox{
+    min-height:min-content;
+    display: flex;
+    align-items: center;
+    height:max-content;
+    border-left: 3px solid blue;
+    gap:1em;
+  }
+
+  .iconContainer{
+    width:100%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height:100%;
+    width:min-content;
+  }
+  
+  .quoteIcon{
+    color:blue;
+    font-size:4rem;
+    padding-left:10px;
+    position: relative;
+    bottom:10px;
+    height:100%;
+    width:100%;
+  }
+
+  .author{
+     height:100%;
+     width:100%;
+   }
+</style>
+
+`} />
+
+We would call the component in an mdx/md file like so,
+
+<Prism lang="javascript" code={`
+<Quote author = "Sarai Marte"> This is my quote component!</Quote>
+`}/>
+
+</DropDown>
+
+
+
