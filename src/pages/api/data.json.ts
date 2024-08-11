@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../../utils';
 
 export const GET: APIRoute = async (): Promise<Response> => {
   // Fetch all blog posts
@@ -14,7 +15,8 @@ export const GET: APIRoute = async (): Promise<Response> => {
   // Map the sorted collection to include both data and slug
   const blogData = sortedBlogArticles.map(article => ({
     ...article.data, // Spread the post data
-    slug: article.slug // Add the slug
+    slug: article.slug, // Add the slug
+    pubDate: formatDate(new Date(article.data.pubDate)) // Format pubDate
   }));
 
   return new Response(JSON.stringify(blogData), {
