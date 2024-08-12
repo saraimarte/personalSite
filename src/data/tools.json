@@ -1,0 +1,178 @@
+[
+  {
+      "icon": "/toolImages/3d_tool1.jpg",
+      "name": "3D Modeler Pro",
+      "description": "Advanced tools for 3D modeling and rendering.",
+      "link": "https://example.com/3d-modeler-pro",
+      "category": "3d",
+      "tag": "modeling"
+  },
+  {
+      "icon": "/toolImages/3d_tool2.jpg",
+      "name": "RenderMaster",
+      "description": "High-quality rendering tools for 3D designs.",
+      "link": "https://example.com/render-master",
+      "category": "3d",
+      "tag": "rendering"
+  },
+  {
+      "icon": "/toolImages/design_tool1.jpg",
+      "name": "Design Suite",
+      "description": "Comprehensive design tools for professionals.",
+      "link": "https://example.com/design-suite",
+      "category": "Design",
+      "tag": "graphic design"
+  },
+  {
+      "icon": "/toolImages/design_tool2.jpg",
+      "name": "Creative Studio",
+      "description": "Creative tools for graphic and web design.",
+      "link": "https://example.com/creative-studio",
+      "category": "Design",
+      "tag": "web design"
+  },
+  {
+      "icon": "/toolImages/webdev_tool1.jpg",
+      "name": "WebDev Pro",
+      "description": "Tools for advanced web development and programming.",
+      "link": "https://example.com/webdev-pro",
+      "category": "Webdev",
+      "tag": "frontend"
+  },
+  {
+      "icon": "/toolImages/webdev_tool2.jpg",
+      "name": "CodeMaster",
+      "description": "Complete toolkit for web development.",
+      "link": "https://example.com/code-master",
+      "category": "Webdev",
+      "tag": "backend"
+  },
+  {
+      "icon": "/toolImages/image_tool1.jpg",
+      "name": "Image Editor X",
+      "description": "Professional image editing and manipulation tools.",
+      "link": "https://example.com/image-editor-x",
+      "category": "Image",
+      "tag": "photo editing"
+  },
+  {
+      "icon": "/toolImages/image_tool2.jpg",
+      "name": "PhotoPro",
+      "description": "Advanced photo editing tools for photographers.",
+      "link": "https://example.com/photo-pro",
+      "category": "Image",
+      "tag": "retouching"
+  },
+  {
+      "icon": "/toolImages/video_tool1.jpg",
+      "name": "Video Editor Plus",
+      "description": "Top-notch video editing tools for creators.",
+      "link": "https://example.com/video-editor-plus",
+      "category": "Video",
+      "tag": "editing"
+  },
+  {
+      "icon": "/toolImages/video_tool2.jpg",
+      "name": "FilmMaker",
+      "description": "Complete suite for video production and editing.",
+      "link": "https://example.com/filmmaker",
+      "category": "Video",
+      "tag": "production"
+  },
+  {
+      "icon": "/toolImages/study_tool1.jpg",
+      "name": "StudyHelper",
+      "description": "Tools to assist with academic study and research.",
+      "link": "https://example.com/study-helper",
+      "category": "Study",
+      "tag": "research"
+  },
+  {
+      "icon": "/toolImages/study_tool2.jpg",
+      "name": "EduSuite",
+      "description": "Educational tools for students and educators.",
+      "link": "https://example.com/edu-suite",
+      "category": "Study",
+      "tag": "learning"
+  },
+  {
+      "icon": "/toolImages/3d_tool3.jpg",
+      "name": "3D Creator",
+      "description": "Creative tools for 3D asset creation.",
+      "link": "https://example.com/3d-creator",
+      "category": "3d",
+      "tag": "assets"
+  },
+  {
+      "icon": "/toolImages/3d_tool4.jpg",
+      "name": "3D Sculptor",
+      "description": "Sculpting tools for intricate 3D designs.",
+      "link": "https://example.com/3d-sculptor",
+      "category": "3d",
+      "tag": "sculpting"
+  },
+  {
+      "icon": "/toolImages/design_tool3.jpg",
+      "name": "Design Hub",
+      "description": "Innovative tools for design and prototyping.",
+      "link": "https://example.com/design-hub",
+      "category": "Design",
+      "tag": "prototyping"
+  },
+  {
+      "icon": "/toolImages/design_tool4.jpg",
+      "name": "DesignForge",
+      "description": "Powerful design tools for professionals.",
+      "link": "https://example.com/design-forge",
+      "category": "Design",
+      "tag": "digital art"
+  },
+  {
+      "icon": "/toolImages/webdev_tool3.jpg",
+      "name": "DevTools X",
+      "description": "Enhanced tools for web development and debugging.",
+      "link": "https://example.com/devtools-x",
+      "category": "Webdev",
+      "tag": "debugging"
+  },
+  {
+      "icon": "/toolImages/webdev_tool4.jpg",
+      "name": "WebMaster",
+      "description": "Complete toolkit for mastering web development.",
+      "link": "https://example.com/webmaster",
+      "category": "Webdev",
+      "tag": "fullstack"
+  },
+  {
+      "icon": "/toolImages/image_tool3.jpg",
+      "name": "GraphicPro",
+      "description": "Advanced graphic design and image editing tools.",
+      "link": "https://example.com/graphic-pro",
+      "category": "Image",
+      "tag": "design"
+  },
+  {
+      "icon": "/toolImages/image_tool4.jpg",
+      "name": "PhotoMagic",
+      "description": "Magic tools for photo enhancement and effects.",
+      "link": "https://example.com/photo-magic",
+      "category": "Image",
+      "tag": "enhancement"
+  },
+  {
+      "icon": "/toolImages/video_tool3.jpg",
+      "name": "EditMaster",
+      "description": "Professional video editing tools for creators.",
+      "link": "https://example.com/edit-master",
+      "category": "Video",
+      "tag": "post-production"
+  },
+  {
+      "icon": "/toolImages/video_tool4.jpg",
+      "name": "ClipForge",
+      "description": "Tools for video clipping and editing.",
+      "link": "https://example.com/clip-forge",
+      "category": "Video",
+      "tag": "clipping"
+  }
+]
