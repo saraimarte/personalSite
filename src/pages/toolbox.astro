@@ -2,5 +2,57 @@
 import MainLayout from '@layouts/MainLayout.astro';
 ---
 <MainLayout pageTitle = "Home">
-	Welcome to the toolbox.
+	<div class = "container">
+		<div class = "noise">
+		</div>
+
+		<div class = "card">Card</div>
+
+	</div>
 </MainLayout>
+
+<style>
+
+
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: linear-gradient(35deg,
+      hsl(320deg 60% 92%) 0%,
+      hsl(330deg 100% 93%) 24%,
+      hsl(339deg 100% 92%) 36%,
+      hsl(354deg 100% 92%) 43%,
+      hsl(13deg 100% 89%) 48%,
+      hsl(26deg 100% 85%) 52%,
+      hsl(36deg 100% 81%) 56%,
+      hsl(44deg 100% 77%) 61%,
+      hsl(50deg 100% 74%) 67%,
+      hsl(55deg 100% 72%) 90%);
+}
+
+.noise {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background-image: url("../../public/postImages/noise2.svg");
+	opacity: 0.1;
+}
+
+
+.card{
+	height:3em;
+	width:3em;
+	border-radius:50%;
+	background-color: rgb(255, 247, 199);
+	opacity: 1;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	}
+
+</style>
