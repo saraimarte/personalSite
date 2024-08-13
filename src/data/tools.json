@@ -1,6 +1,6 @@
 [
   {
-      "icon": "/toolImages/3d_tool1.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "3D Modeler Pro",
       "description": "Advanced tools for 3D modeling and rendering.",
       "link": "https://example.com/3d-modeler-pro",
@@ -8,7 +8,7 @@
       "tag": "modeling"
   },
   {
-      "icon": "/toolImages/3d_tool2.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "RenderMaster",
       "description": "High-quality rendering tools for 3D designs.",
       "link": "https://example.com/render-master",
@@ -16,7 +16,7 @@
       "tag": "rendering"
   },
   {
-      "icon": "/toolImages/design_tool1.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "Design Suite",
       "description": "Comprehensive design tools for professionals.",
       "link": "https://example.com/design-suite",
@@ -24,7 +24,7 @@
       "tag": "graphic design"
   },
   {
-      "icon": "/toolImages/design_tool2.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "Creative Studio",
       "description": "Creative tools for graphic and web design.",
       "link": "https://example.com/creative-studio",
@@ -32,7 +32,7 @@
       "tag": "web design"
   },
   {
-      "icon": "/toolImages/webdev_tool1.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "WebDev Pro",
       "description": "Tools for advanced web development and programming.",
       "link": "https://example.com/webdev-pro",
@@ -40,7 +40,7 @@
       "tag": "frontend"
   },
   {
-      "icon": "/toolImages/webdev_tool2.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "CodeMaster",
       "description": "Complete toolkit for web development.",
       "link": "https://example.com/code-master",
@@ -48,7 +48,7 @@
       "tag": "backend"
   },
   {
-      "icon": "/toolImages/image_tool1.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "Image Editor X",
       "description": "Professional image editing and manipulation tools.",
       "link": "https://example.com/image-editor-x",
@@ -56,7 +56,7 @@
       "tag": "photo editing"
   },
   {
-      "icon": "/toolImages/image_tool2.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "PhotoPro",
       "description": "Advanced photo editing tools for photographers.",
       "link": "https://example.com/photo-pro",
@@ -64,7 +64,7 @@
       "tag": "retouching"
   },
   {
-      "icon": "/toolImages/video_tool1.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "Video Editor Plus",
       "description": "Top-notch video editing tools for creators.",
       "link": "https://example.com/video-editor-plus",
@@ -72,7 +72,7 @@
       "tag": "editing"
   },
   {
-      "icon": "/toolImages/video_tool2.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "FilmMaker",
       "description": "Complete suite for video production and editing.",
       "link": "https://example.com/filmmaker",
@@ -80,7 +80,7 @@
       "tag": "production"
   },
   {
-      "icon": "/toolImages/study_tool1.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "StudyHelper",
       "description": "Tools to assist with academic study and research.",
       "link": "https://example.com/study-helper",
@@ -88,7 +88,7 @@
       "tag": "research"
   },
   {
-      "icon": "/toolImages/study_tool2.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "EduSuite",
       "description": "Educational tools for students and educators.",
       "link": "https://example.com/edu-suite",
@@ -96,7 +96,7 @@
       "tag": "learning"
   },
   {
-      "icon": "/toolImages/3d_tool3.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "3D Creator",
       "description": "Creative tools for 3D asset creation.",
       "link": "https://example.com/3d-creator",
@@ -104,7 +104,7 @@
       "tag": "assets"
   },
   {
-      "icon": "/toolImages/3d_tool4.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "3D Sculptor",
       "description": "Sculpting tools for intricate 3D designs.",
       "link": "https://example.com/3d-sculptor",
@@ -112,7 +112,7 @@
       "tag": "sculpting"
   },
   {
-      "icon": "/toolImages/design_tool3.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "Design Hub",
       "description": "Innovative tools for design and prototyping.",
       "link": "https://example.com/design-hub",
@@ -120,7 +120,7 @@
       "tag": "prototyping"
   },
   {
-      "icon": "/toolImages/design_tool4.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "DesignForge",
       "description": "Powerful design tools for professionals.",
       "link": "https://example.com/design-forge",
@@ -128,7 +128,7 @@
       "tag": "digital art"
   },
   {
-      "icon": "/toolImages/webdev_tool3.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "DevTools X",
       "description": "Enhanced tools for web development and debugging.",
       "link": "https://example.com/devtools-x",
@@ -136,7 +136,7 @@
       "tag": "debugging"
   },
   {
-      "icon": "/toolImages/webdev_tool4.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "WebMaster",
       "description": "Complete toolkit for mastering web development.",
       "link": "https://example.com/webmaster",
@@ -144,7 +144,7 @@
       "tag": "fullstack"
   },
   {
-      "icon": "/toolImages/image_tool3.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "GraphicPro",
       "description": "Advanced graphic design and image editing tools.",
       "link": "https://example.com/graphic-pro",
@@ -152,7 +152,7 @@
       "tag": "design"
   },
   {
-      "icon": "/toolImages/image_tool4.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "PhotoMagic",
       "description": "Magic tools for photo enhancement and effects.",
       "link": "https://example.com/photo-magic",
@@ -160,7 +160,7 @@
       "tag": "enhancement"
   },
   {
-      "icon": "/toolImages/video_tool3.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "EditMaster",
       "description": "Professional video editing tools for creators.",
       "link": "https://example.com/edit-master",
@@ -168,7 +168,7 @@
       "tag": "post-production"
   },
   {
-      "icon": "/toolImages/video_tool4.jpg",
+      "icon": "/toolImages/baked.jpg",
       "name": "ClipForge",
       "description": "Tools for video clipping and editing.",
       "link": "https://example.com/clip-forge",

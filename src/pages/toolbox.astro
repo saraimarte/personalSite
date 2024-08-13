@@ -53,19 +53,29 @@ import tools from '../data/tools.json';
 			<div class = "tools">
 			
 				<h1>3D Tools</h1>
-				<div class = "tags">
-					{tools.map((tool) => (
-						
-					<div id = {tool.tag} class = "tag">{tool.tag}</div>
 
-					))}
-				</div>
-				<div id = "toolDisplay">
+				<div id = "all" class = "tag clickedOn">all</div>
 
-					<!-- 
-					{tools.map((tool) => (
 
-						<a href = {tool.link}  class = {`toolCard ${tool.tag}`}>
+				<div class="tags">
+					{tools
+					  .filter((tool) => tool.category === "3d")
+					  .map((tool) => (
+						<div id = {tool.tag} class = "tag">
+						  {tool.tag}
+						</div>
+					  ))}
+				  </div>
+
+
+				  <div id = "toolDisplay" >
+
+					{tools
+
+						.filter((tool) => tool.category === "3d")
+						.map((tool) => (
+
+						<a href = {tool.link} class = {`toolCard ${tool.tag}`}>
 							
 							<div class = "toolIcon">
 								<img src = {tool.icon}/>
@@ -78,15 +88,12 @@ import tools from '../data/tools.json';
 		
 						</a>
 						
-						))}
-						-->
+					))}
+				
 					</div>
-
 				</div>
 				
 			
-
-
 	</div>
 </MainLayout>
 
@@ -96,10 +103,12 @@ import tools from '../data/tools.json';
 
 <style>
 
+
 img{
 	height:2em;
 	width:2em;
 }
+
 * {
 	font-family: "Mate", serif;
 	font-weight: 400;
@@ -135,9 +144,9 @@ img{
 }
 .tools{
 	background-color: #F0F8FF;
-	min-height:45em;
+    height:45em;
 	width:45em;
-    height: max-content;
+	overflow-y:scroll;
 	padding:2em;
 	z-index:2;
 	border-radius: 20px;
@@ -227,7 +236,6 @@ img{
   align-items: center;
   cursor: pointer;
   position: absolute;
-  inset-y: 0;
   right: 0;
   padding-right: 0.75rem; /* Equivalent to pr-3 */
 }
@@ -302,196 +310,102 @@ img{
 </style>
 
 <script src="../scripts/toolcard-component.ts"></script>
+<script src="../scripts/tagcomp-component.ts"></script>
 
 
 <script define:vars= {{tools}}>
-	
-	const toolCard = document.getElementsByClassName("toolCard");
-		
-	document.querySelectorAll('.menu-item').forEach(category => {
-		category.addEventListener('click', onCategoryClick);
-	});
 
-	document.querySelectorAll('.tag').forEach(tag => {
-		tag.addEventListener('click', onTagClick);
-	});
+	document.addEventListener('DOMContentLoaded', () => {
+    // Attach event listeners to category menu items
+    document.querySelector('.dropdown').addEventListener('click', (event) => {
+        if (event.target.closest('.menu-item')) {
+            onCategoryClick(event);
+        }
+    });
 
+    // Use event delegation for tag clicks
+    document.querySelector('.tags').addEventListener('click', (event) => {
+        if (event.target.classList.contains('tag')) {
+            onTagClick(event);
+        }
+    });
 
-	function onCategoryClick(event){
-	
-		event.preventDefault();
+    function onCategoryClick(event) {
+        event.preventDefault();
 
-		// Make the thing (element) we clicked the target 
-		const target = event.currentTarget;
+        const target = event.target.closest('.menu-item');
+        const categoryName = target.id;
 
-		//Get all categories
-		const categories = document.querySelectorAll(".menu-item");		
-			//Everytime I click on a category, reset all of them to the og bg color that way we don't have more than 1 category looking like it's selected.
-			categories.forEach(category => {
-			  category.classList.remove("clickedOn");
-		})
+        document.querySelectorAll('.menu-item').forEach(category => {
+            category.classList.remove('clickedOn');
+        });
+        target.classList.add('clickedOn');
 
-		target.classList.add("clickedOn");
+        displayTags(categoryName);
+        const filteredTools = filterToolsByCategory(categoryName);
+        displayTools(filteredTools);
+    }
 
-		//Get the target's / element's id which is the name of the category 
-		const categoryName = target.id;
-		console.log(`Clicked on ${categoryName}`);
+    function onTagClick(event) {
+        event.preventDefault();
 
-	
-		//Find the category that may have been already selected and remove the selected class
-		categories.forEach(element => {
-			element.classList.remove("selectedCategory");
-		});
-		
-		//Have the program know that the category that HAS been selected...has been selected
-		target.classList.add("selectedCategory");
-		console.log("Added selected class to the category. Proof: ")
-		console.log(target);
-	
-		const filteredTools = filterToolsByCategory(categoryName);
-		displayTools(filteredTools);
+        const target = event.target;
+        const tagName = target.innerHTML;
 
-	}
+        document.querySelectorAll('.tag').forEach(tag => {
+            tag.classList.remove('clickedOn');
+        });
+        target.classList.add('clickedOn');
 
+        const selectedCategory = document.querySelector('.selectedCategory');
+        if (selectedCategory && tagName) {
+            const selectedCategoryName = selectedCategory.id;
+            const filteredTools = filterToolsByCategoryAndTag(selectedCategoryName, tagName);
+            displayTools(filteredTools);
+        } else {
+            console.warn('Category has not been selected');
+        }
+    }
 
-	function onTagClick(event){
-		
-		event.preventDefault();
+    function displayTags(categoryName) {
+        console.warn(`displayTags is running. The Category name is ${categoryName}`);
+        
+        const tagsContainer = document.querySelector('.tags');
+        tagsContainer.innerHTML = '';
 
-		// Make the thing (element) we clicked the target 
-		const target = event.currentTarget;
+        const filteredTools = tools.filter(tool => tool.category === categoryName);
+        filteredTools.forEach(tool => {
+            const myElement = document.createElement('tagcomp-component');
+            myElement.setAttribute('tag', tool.tag);
+            tagsContainer.appendChild(myElement);
+        });
+    }
 
-		//Get all categories
-		const tags = document.querySelectorAll(".tag");		
-	
-		//Everytime I click on a category, reset all of them to the og bg color that way we don't have more than 1 category looking like it's selected.
-		tags.forEach(tag => {
-			tag.classList.remove("clickedOn");
-		})
+    function displayTools(filteredTools) {
+        const toolDisplay = document.getElementById('toolDisplay');
+        toolDisplay.innerHTML = '';
 
-		target.classList.add("clickedOn");
-             
+        filteredTools.forEach(tool => {
+            const myElement = document.createElement('toolcard-component');
+            myElement.setAttribute('icon', tool.icon);
+            myElement.setAttribute('name', tool.name);
+            myElement.setAttribute('description', tool.description);
+            myElement.setAttribute('category', tool.category);
+            myElement.setAttribute('tag', tool.tag);
+            myElement.setAttribute('link', tool.link);
+            toolDisplay.appendChild(myElement);
+        });
+    }
 
-		//Get the target's / element's id which is the name of the tag 
-		const tagName = target.innerHTML;
+    function filterToolsByCategoryAndTag(category, tag) {
+        return tools.filter(tool => tool.category === category && tool.tag === tag);
+    }
 
-		console.log(`Clicked on ${tagName}`);
+    function filterToolsByCategory(category) {
+        return tools.filter(tool => tool.category === category);
+    }
+});
 
-		//Check if there has been a category selected 
-		const selectedCategory = document.querySelector(".selectedCategory");
-
-		const selectedCategoryName = selectedCategory.id;
-
-		//if there is a selected category 
-		if(selectedCategoryName && tagName){
-			console.log(`Selected Category: ${selectedCategoryName}`);
-			console.log(`Selected Tag: ${tagName}`);
-
-			//filter the tools by that selected category AND the tag that was clicked on
-			const filteredTools = filterToolsByCategoryAndTag(selectedCategoryName, tagName);
-			//Display those tools
-			displayTools(filteredTools);
-		} else {
-			console.warn("Category has not been selected")
-		}
-	}
-
-	function displayTools(filteredTools){
-
-		//const selectedCategory = document.querySelector(".selectedCategory");
-		const toolDisplay = document.getElementById("toolDisplay");
-		//const filteredTools = tools.filter(tool => tool.category == {selectedCategory});
-		toolDisplay.innerHTML = '';
-		//const selectedTag = document.querySelector(".selectedTag");
-
-		console.log('These are the filtered tools:');
-		console.log({filteredTools});
-
-
-		filteredTools.forEach(tool => {
-			console.log('Processing tool:', tool);  // Debug log
-			if (tool && typeof tool === 'object') {
-				const myElement = document.createElement('toolcard-component');
-
-				// Correctly access and set attributes
-				if (tool.icon) { //.pubDate and not .data.pubDate because the data being used is the JSON data which already returns tools.data so when we say tools that's really data. 
-				console.log('Setting icon attribute:', tool.icon);  // Debug log
-				myElement.setAttribute('icon', String(tool.icon));
-				} else {
-				console.warn('icon is missing or invalid:', tool.pubDate);
-				}
-
-				if (tool.name) {
-				console.log('Setting name attribute:', tool.name);  // Debug log
-				myElement.setAttribute('name', String(tool.name));
-				} else {
-				console.warn('name is missing or invalid:', tool.name);
-				}
-
-				if (tool.description) {
-				console.log('Setting description attribute:', tool.description);  // Debug log
-				myElement.setAttribute('description', String(tool.description));
-				} else {
-				console.warn('description is missing or invalid:', tool.description);
-				}
-
-				if (tool.category) {
-				console.log('Setting category attribute:', tool.category);  // Debug log
-				myElement.setAttribute('category', String(tool.category));
-				} else {
-				console.warn('category is missing or invalid:', tool.category);
-				}
-
-				if (tool.tag) {
-				console.log('Setting tag attribute:', tool.tag);  // Debug log
-				myElement.setAttribute('tag', String(tool.tag));
-				} else {
-				console.warn('tag is missing or invalid:', tool.tag);
-				}
-
-				if (tool.link) {
-				console.log('Setting link attribute:', tool.link);  // Debug log
-				myElement.setAttribute('link', String(tool.link));
-				} else {
-				console.warn('link is missing or invalid:', tool.link);
-				}
-
-				toolDisplay.appendChild(myElement);
-			} else {
-				console.warn('Invalid tool structure:', tool);
-			}
-
-		})
-				
-	}
-
-// Function to filter tools by category and tag
-// Function to filter tools by exact category and tag
-
-function filterToolsByCategoryAndTag(category, tag) {
-
-  console.log('Filtering by category:', typeof(category), 'and tag:', typeof(tag));
-  return tools.filter(tool => {
-    console.log('Checking tool:', tool);
-
-	console.log( tool.category === category && tool.tag === tag);
-    return tool.category === category && tool.tag === tag;
-  });
-}
-
-function filterToolsByCategory(category) {
-  console.log('Filtering by category:', typeof(category));
-  return tools.filter(tool => {
-    console.log('Checking tool:', tool);
-    console.log(tool.category === category);
-    return tool.category === category;
-  });
-}
-
-
-// Example usage
-//const filteredTools = filterToolsByCategoryAndTag('3d', 'image to 3d');
-//console.log(filteredTools);
 
 
 </script>

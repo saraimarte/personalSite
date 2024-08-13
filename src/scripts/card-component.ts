@@ -13,7 +13,7 @@ class Card extends HTMLElement {
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    console.log(`Attribute ${name} changed from ${oldValue} to ${newValue}`);
+   // console.log(`Attribute ${name} changed from ${oldValue} to ${newValue}`);
     if (oldValue !== newValue) {
       switch(name) {
         case 'date':
@@ -31,16 +31,16 @@ class Card extends HTMLElement {
   }
 
   connectedCallback(): void {
-    console.log('Header component connected');
+    ///console.log('Header component connected');
     this._date = this.getAttribute('date');
     this._title = this.getAttribute('title');
     this._slug = this.getAttribute('slug');
-    console.log('Initial attributes:', { date: this._date, title: this._title, slug: this._slug });
+    //console.log('Initial attributes:', { date: this._date, title: this._title, slug: this._slug });
     this.render();
   }
 
   render(): void {
-    console.log('Rendering with:', { date: this._date, title: this._title, slug: this._slug });
+    //console.log('Rendering with:', { date: this._date, title: this._title, slug: this._slug });
     const headerHTML = `
       <style>
         .card{

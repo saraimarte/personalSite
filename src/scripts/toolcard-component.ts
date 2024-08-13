@@ -16,7 +16,7 @@ class ToolCard extends HTMLElement {
     }
   
     attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-      console.log(`Attribute ${name} changed from ${oldValue} to ${newValue}`);
+      //console.log(`Attribute ${name} changed from ${oldValue} to ${newValue}`);
       if (oldValue !== newValue) {
         switch(name) {
           case 'icon':
@@ -43,7 +43,7 @@ class ToolCard extends HTMLElement {
     }
   
     connectedCallback(): void {
-      console.log('Header component connected');
+      //console.log('Header component connected');
       this._icon = this.getAttribute('icon');
       this._name = this.getAttribute('name');
       this._description = this.getAttribute('description');
@@ -75,14 +75,15 @@ class ToolCard extends HTMLElement {
         }
         </style>
 
-   
+       
       <a href="${this._link}" class="toolCard ${this._tag}">
         <div class="toolIcon">
           <img src="${this._icon}" alt="${this._name} icon"/>
         </div>
         <p class="toolName">${this._name}</p>
         <p class="toolDescription">${this._description}</p>
-		</a>
+	  	</a>
+
       `;
       
       if (this.shadowRoot) {

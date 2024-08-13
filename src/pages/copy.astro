@@ -1,0 +1,556 @@
+---
+import MainLayout from '@layouts/MainLayout.astro';
+import img1 from '@assets/cube.svg';
+import img2 from '@assets/webdev.svg';
+import img3 from '@assets/paintbrush.svg';
+import img4 from '@assets/photo.svg';
+import img5 from '@assets/video.svg';
+import img6 from '@assets/school.svg';
+
+import tools from '../data/tools.json';
+---
+<MainLayout pageTitle = "Home">
+
+	<div class = "container">
+		<div class = "noise">
+		</div>
+
+		<div class="content">
+
+			<div x-data="{ open: false }" class="dropdown">
+			  <button @click="open = ! open" class="button">
+				<p>Filter Tools</p>
+			  </button>
+			  <div x-cloak x-show="open" x-transition @click.away="open = false" class="menu">
+				<div class="menu-item" id="3d">
+					<img src={img1.src} alt="3D Tools"/>
+					<p>3D</p>
+				  </div>
+				  <div class="menu-item" id="Webdev">
+					<img src={img2.src} alt="Web Development Tools"/>
+					<p>Webdev</p>
+				  </div>
+				  <div class="menu-item" id="Design">
+					<img src={img3.src} alt="Design Tools"/>
+					<p>Design</p>
+				  </div>
+				  <div class="menu-item" id="Image">
+					<img src={img4.src} alt="Image Tools"/>
+					<p>Image</p>
+				  </div>
+				  <div class="menu-item" id="Video">
+					<img src={img5.src} alt="Video Tools"/>
+					<p>Video</p>
+				  </div>
+				  <div class="menu-item" id="Study">
+					<img src={img6.src} alt="Study Tools"/>
+					<p>Study</p>
+				  </div>
+				  
+			  </div>
+			</div>
+
+			<div class = "tools">
+			
+				<h1>3D Tools</h1>
+
+				<div id = "all" class = "tag clickedOn">all</div>
+
+				<div class="tags">
+
+					{tools
+					  .filter((tool) => tool.category === "3d")
+					  .map((tool) => (
+						<div id = {tool.tag} class = "tag">
+						  {tool.tag}
+						</div>
+					  ))}
+
+				  </div>
+
+
+				<div id = "toolDisplay" >
+
+					{tools
+
+						.filter((tool) => tool.category === "3d")
+						.map((tool) => (
+
+						<a href = {tool.link} class = {`toolCard ${tool.tag}`}>
+							
+							<div class = "toolIcon">
+								<img src = {tool.icon}/>
+							</div>
+		
+							<p class = "toolName">{tool.name}</p>
+		
+							<p class = "toolDescription">{tool.description}</p>
+		
+		
+						</a>
+						
+					))}
+				
+					</div>
+
+				</div>
+				
+			
+
+
+	</div>
+</MainLayout>
+
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Mate:ital@0;1&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+</style>
+
+<style>
+
+
+img{
+	height:2em;
+	width:2em;
+}
+
+* {
+	font-family: "Mate", serif;
+	font-weight: 400;
+	font-style: normal;
+
+}
+.content{
+	height:100%;
+	width:100%;
+	display: flex;
+	gap:1em;
+	justify-content: center;
+	align-items:center;
+	flex-wrap:wrap;
+}
+.tags{
+	height:min-content;
+	width:100%;
+	display: flex;
+	align-items: center;
+	flex-wrap:wrap;
+	gap:1em;
+}
+.tag{
+	height:min-content;
+	width:max-content;
+	padding: 0.5em 1em;
+	text-align: center;
+	border-radius:20px;
+	border:1px solid  rgb(233, 233, 233);
+	user-select: none;
+
+}
+.tools{
+	background-color: #F0F8FF;
+    height:45em;
+	width:45em;
+	overflow-y:scroll;
+	padding:2em;
+	z-index:2;
+	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	gap:1em;
+	box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+}
+
+#toolDisplay{
+	display: flex;
+	flex-direction: column;
+	gap:1em;
+	height:min-content;
+	width:100%;
+}
+
+.toolCard{
+	width:100%;
+	height:10%;
+	border-radius:20px;
+	display:flex;
+	justify-content: center;
+	align-items:center;
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+	gap:1em;
+	text-decoration: none;
+	color:black;
+	padding:20px;
+}
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: linear-gradient(35deg,
+      hsl(320deg 60% 92%) 0%,
+      hsl(330deg 100% 93%) 24%,
+      hsl(339deg 100% 92%) 36%,
+      hsl(354deg 100% 92%) 43%,
+      hsl(13deg 100% 89%) 48%,
+      hsl(26deg 100% 85%) 52%,
+      hsl(36deg 100% 81%) 56%,
+      hsl(44deg 100% 77%) 61%,
+      hsl(50deg 100% 74%) 67%,
+      hsl(55deg 100% 72%) 90%);
+}
+
+.noise {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background-image: url("../../public/toolImages/noise2.svg");
+	opacity: 0.1;
+}
+
+
+/* Dropdown styles */
+.dropdown {
+  display: inline-flex; /* Equivalent to inline-flex */
+  position: relative; /* Equivalent to relative */
+  height:700px;
+}
+
+/* Button styles */
+.button {
+  border: 1px solid #F0F8FF; /* Equivalent to border border-gray-200 */
+  border-radius: 0.5rem; /* Equivalent to rounded-lg */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Equivalent to shadow-sm */
+  position: relative;
+  border-radius:50%;
+  width:6em;
+  height: 6em;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+  user-select:none;
+  background-color: #F0F8FF; /* Equivalent to bg-white */
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+}
+
+/* Icon styles */
+.icon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: absolute;
+  inset-y: 0;
+  right: 0;
+  padding-right: 0.75rem; /* Equivalent to pr-3 */
+}
+
+.icon-svg {
+  width: 1rem; /* Equivalent to w-4 */
+  height: 1rem; /* Equivalent to h-4 */
+}
+/* Menu styles */
+.menu {
+  width: 100%; /* Equivalent to w-full */
+  position: absolute;
+  top: 5rem; /* Equivalent to top-12 */
+  left: 0;
+  padding: 0.5rem; /* Equivalent to p-2 */
+  border-radius: 0.5rem; /* Equivalent to rounded-lg */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Equivalent to shadow */
+  display: flex;
+  flex-direction: column;
+  gap:1em;
+  justify-content: center;
+  align-items: center;
+
+}
+
+/* Menu item styles */
+.menu-item {
+  width:5rem;
+  height:5rem;
+  border-radius:50%;
+  cursor: pointer;
+  text-align: center;
+  background-color: #F0F8FF; /* Equivalent to bg-white */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size:0.9em;
+  user-select:none;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+
+}
+
+.menu-item:hover {
+	background-image: linear-gradient(35deg,
+      hsl(320deg 60% 92%) 0%,
+      hsl(330deg 100% 93%) 24%,
+      hsl(339deg 100% 92%) 36%,
+      hsl(354deg 100% 92%) 43%,
+      hsl(13deg 100% 89%) 48%,
+      hsl(26deg 100% 85%) 52%,
+      hsl(36deg 100% 81%) 56%,
+      hsl(44deg 100% 77%) 61%,
+      hsl(50deg 100% 74%) 67%,
+      hsl(55deg 100% 72%) 90%);
+	}
+
+.clickedOn{
+	background-image: linear-gradient(35deg,
+      hsl(320deg 60% 92%) 0%,
+      hsl(330deg 100% 93%) 24%,
+      hsl(339deg 100% 92%) 36%,
+      hsl(354deg 100% 92%) 43%,
+      hsl(13deg 100% 89%) 48%,
+      hsl(26deg 100% 85%) 52%,
+      hsl(36deg 100% 81%) 56%,
+      hsl(44deg 100% 77%) 61%,
+      hsl(50deg 100% 74%) 67%,
+      hsl(55deg 100% 72%) 90%);
+}
+
+</style>
+
+<script src="../scripts/tagcomp-component.ts"></script>
+
+
+<script define:vars= {{tools}}>
+			
+	document.querySelectorAll('.menu-item').forEach(category => {
+		category.addEventListener('click', onCategoryClick);
+	});
+
+	document.querySelectorAll('.tag').forEach(tag => {
+		tag.addEventListener('click', onTagClick);
+	});
+
+	function onCategoryClick(event){
+	
+		console.warn(`onCategoryClick running`);
+
+		event.preventDefault();
+
+		// Make the thing (element) we clicked the target 
+		const target = event.currentTarget;
+
+		//Get all categories
+		const categories = document.querySelectorAll(".menu-item");
+				
+		//Everytime I click on a category, reset all of them to the og bg color that way we don't have more than 1 category looking like it's selected.
+		categories.forEach(category => {
+			  category.classList.remove("clickedOn");
+		})
+
+		target.classList.add("clickedOn");
+
+		//Get the target's / element's id which is the name of the category 
+		const categoryName = target.id;
+		console.log(`Clicked on ${categoryName}`);
+
+		displayTags(categoryName);
+		console.warn(`displayTags running`);
+
+		//Find the category that may have been already selected and remove the selected class
+		categories.forEach(element => {
+			element.classList.remove("selectedCategory");
+		});
+		
+		//Have the program know that the category that HAS been selected...has been selected
+		target.classList.add("selectedCategory");
+		console.log("Added selected class to the category. Proof: ")
+		console.log(target);
+	
+		const filteredTools = filterToolsByCategory(categoryName);
+		console.warn(`displayTags running`);
+
+		displayTools(filteredTools);
+
+	}
+
+	function onTagClick(event){
+		
+		event.preventDefault();
+
+		// Make the thing (element) we clicked the target 
+		const target = event.currentTarget;
+
+		//Get all tags
+		const tags = document.querySelectorAll(".tag");		
+	
+		//Everytime I click on a tag, reset all of them to the og bg color that way we don't have more than 1 tag looking like it's selected.
+		tags.forEach(tag => {
+			tag.classList.remove("clickedOn");
+		})
+
+		target.classList.add("clickedOn");
+
+		//Get the target's / element's id which is the name of the tag 
+		const tagName = target.innerHTML;
+
+		console.log(`Clicked on ${tagName}`);
+
+		//Check if there has been a category selected 
+		const selectedCategory = document.querySelector(".selectedCategory");
+
+		const selectedCategoryName = selectedCategory.id;
+
+		//if there is a selected category 
+		if(selectedCategoryName && tagName){
+			console.log(`Selected Category: ${selectedCategoryName}`);
+			console.log(`Selected Tag: ${tagName}`);
+
+			//filter the tools by that selected category AND the tag that was clicked on
+			const filteredTools = filterToolsByCategoryAndTag(selectedCategoryName, tagName);
+			//Display those tools
+			displayTools(filteredTools);
+		} else {
+			console.warn("Category has not been selected")
+		}
+	}
+
+	function displayTags(categoryName) {
+		console.warn(`displayTags is running. The Category name is ${categoryName}`);
+		
+		// Get the tags container
+		const tagsContainer = document.querySelector(".tags");
+		// Clear the existing content
+		tagsContainer.innerHTML = '';
+
+		// Filter tools based on the categoryName
+		const filteredTools = tools.filter((tool) => tool.category === categoryName);
+
+		console.warn(`Here are the tags for the ${categoryName} category: `)
+		console.warn(filteredTools);
+
+		// Create and append tag elements
+		filteredTools.forEach((tool) => {
+			console.log('Processing tool:', tool);  // Debug log
+			if (tool && typeof tool === 'object') {
+				
+				const myElement = document.createElement('tagcomp-component');
+
+				// Correctly access and set attributes
+	
+				if (tool.tag) {
+				//console.log('Setting tag attribute:', tool.tag);  // Debug log
+				myElement.setAttribute('tag', tool.tag);
+				} else {
+				console.warn('tag is missing or invalid:', tool.tag);
+				}
+
+				tagsContainer.appendChild(myElement);
+                //console.warn("COMPONENT ADDED");
+
+			} else {
+				console.warn('Invalid tool structure:', tool);
+			}
+		});
+	}
+
+	function displayTools(filteredTools){
+		console.log("Now, working on displaying the filtrered tools by the category selected...");
+
+		//const selectedCategory = document.querySelector(".selectedCategory");
+		const toolDisplay = document.getElementById("toolDisplay");
+		//const filteredTools = tools.filter(tool => tool.category == {selectedCategory});
+		toolDisplay.innerHTML = '';
+		//const selectedTag = document.querySelector(".selectedTag");
+
+		console.log('These are the filtered tools:');
+		console.log(filteredTools);
+
+
+		filteredTools.forEach(tool => {
+			//console.log('Processing tool:', tool);  // Debug log
+			if (tool && typeof tool === 'object') {
+
+				const myElement = document.createElement('toolcard-component');
+
+				// Correctly access and set attributes
+				if (tool.icon) { 
+				//console.log('Setting icon attribute:', tool.icon);  // Debug log
+				myElement.setAttribute('icon', String(tool.icon));
+				} else {
+				console.warn('icon is missing or invalid:', tool.icon);
+				}
+
+				if (tool.name) {
+				//console.log('Setting name attribute:', tool.name);  // Debug log
+				myElement.setAttribute('name', String(tool.name));
+				} else {
+				console.warn('name is missing or invalid:', tool.name);
+				}
+
+				if (tool.description) {
+				//console.log('Setting description attribute:', tool.description);  // Debug log
+				myElement.setAttribute('description', String(tool.description));
+				} else {
+				console.warn('description is missing or invalid:', tool.description);
+				}
+
+				if (tool.category) {
+				//console.log('Setting category attribute:', tool.category);  // Debug log
+				myElement.setAttribute('category', String(tool.category));
+				} else {
+				console.warn('category is missing or invalid:', tool.category);
+				}
+
+				if (tool.tag) {
+				//console.log('Setting tag attribute:', tool.tag);  // Debug log
+				myElement.setAttribute('tag', String(tool.tag));
+				} else {
+				console.warn('tag is missing or invalid:', tool.tag);
+				}
+
+				if (tool.link) {
+				//console.log('Setting link attribute:', tool.link);  // Debug log
+				myElement.setAttribute('link', String(tool.link));
+				} else {
+				console.warn('link is missing or invalid:', tool.link);
+				}
+
+				toolDisplay.appendChild(myElement);
+				console.warn("Tool added");
+
+			} else {
+				console.warn('Invalid tool structure:', tool);
+			}
+
+		})
+				
+	}
+
+// Function to filter tools by category and tag
+// Function to filter tools by exact category and tag
+
+function filterToolsByCategoryAndTag(category, tag) {
+
+  console.log('Filtering by category:', typeof(category), 'and tag:', typeof(tag));
+  return tools.filter(tool => {
+    console.log('Checking tool:', tool);
+
+	console.log( tool.category === category && tool.tag === tag);
+    return tool.category === category && tool.tag === tag;
+  });
+}
+
+function filterToolsByCategory(category) {
+  console.log('Filtering by category:', category);
+  return tools.filter(tool => {
+    console.log('Checking tool:', tool);
+    console.log(tool.category === category);
+    return tool.category === category;
+  });
+}
+
+
+// Example usage
+//const filteredTools = filterToolsByCategoryAndTag('3d', 'image to 3d');
+//console.log(filteredTools);
+
+
+</script>
