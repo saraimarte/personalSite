@@ -51,8 +51,6 @@ pre[class*='language-'] {
 	padding: 1.5em 1em;
 	margin: 1em 0;
 	height:max-content; /*removed overflow auto to get rid of scrolling. I want all my code to show fully so the height of each code block should be the height of it's content.*/
-	
-
 }
 
 :not(pre) > code[class*='language-'] {

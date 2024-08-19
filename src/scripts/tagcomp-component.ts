@@ -4,6 +4,7 @@ class tagcomp extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.render();
   }
 
   static get observedAttributes(): string[] {
@@ -63,10 +64,7 @@ class tagcomp extends HTMLElement {
     }
   }
 
-  // New method to get the tag element
-  getTagElement(): Element | null {
-    return this.shadowRoot ? this.shadowRoot.querySelector('.tag') : null;
-  }
+  
 }
 
 customElements.define('tagcomp-component', tagcomp);

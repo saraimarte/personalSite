@@ -1,41 +1,258 @@
 ---
 layout: '@layouts/Blog.astro'
-title: "From rocks to clouds"
-pubDate: 2024-08-05T00:00:00Z
+title: "Web Components"
+pubDate: 2024-08-15T00:00:00Z
 author: 'Sarai Marte'
-tags: ['computers']
+tags: ['webdev']
 phase: 'rabbitHole'
-slug: the-best-laptops-for-developers-in-2025
+slug: web-components
 ---
 
-In the ever-evolving landscape of technology, developers require laptops that can keep up with their demands for coding, debugging, and testing. As we step into 2024, the search for the perfect laptop for developers continues. Let's explore some of the top contenders for the title of "Best Laptops for Developers" this year.
+import { Prism } from '@astrojs/prism';
+import DropDown from '@components/DropDown.astro';
 
-## 1. MacBook Pro (M2X Chip)
+import Card from '@components/Card.astro';
+import Quote from '@components/Quote.astro';
 
-Apple has consistently delivered high-performance laptops for developers, and the MacBook Pro with the M2X chip is no exception. With its blazing-fast processor, ample RAM, and stunning Retina display, it's a dream machine for coding. The improved battery life ensures you can code for hours without interruption. Plus, macOS offers a Unix-based environment, perfect for software development.
+import img1 from '../../../public/postImages/img5.png';
+import img2 from '../../../public/postImages/img7.png';
+import img3 from '../../../public/postImages/img6.png';
+import img4 from '../../../public/postImages/img8.png';
+import img5 from '../../../public/postImages/img9.png';
 
-## 2. Dell XPS 17
+*This is a rabbit hole, aka a sea of ongoing half-baked notes on web components.*
 
-The Dell XPS 17 combines power and portability. Its large, high-resolution display makes multitasking a breeze, and the latest Intel or AMD processors ensure smooth development work. With a premium build quality, comfortable keyboard, and a variety of connectivity options, it's a solid choice for developers.
+# How to Create a Simple Web Component
 
-## 3. Lenovo ThinkPad X1 Carbon
+<a href = "https://replit.com/@smartebio/webcomponent">Web Component with ShadowDOM repl.it</a> 
 
-Lenovo's ThinkPad series is renowned for its durability and performance. The ThinkPad X1 Carbon is no different. With a sleek design, a fantastic keyboard, and a long-lasting battery, it's an excellent choice for developers who need a reliable companion. It's available with both Intel and AMD processors to suit your preference.
+<a href = "https://replit.com/@smartebio/webcomponent2">Web Component without ShadowDOM repl.it</a>
 
-## 4. Razer Blade 15
+First, create the file for the web component.
 
-For developers who are also gamers or multimedia enthusiasts, the Razer Blade 15 is a top pick. It boasts powerful Nvidia graphics, a fast refresh rate display, and robust performance for coding and gaming alike. Its RGB keyboard adds a touch of style to your workspace.
+The file naming convention is to seperate all words with dashes.
 
-## 5. System76 Oryx Pro
+Let's say I want to create a component that displays a red heading that reads "Hello World".
 
-System76 specializes in Linux laptops, and the Oryx Pro is tailored for developers. Running on Pop!\_OS, it offers a Linux-based environment with great compatibility for software development tools. The laptop is customizable, allowing you to choose the CPU, RAM, and storage options that suit your needs.
+I would name the component "hello-world.js".
 
-## 6. ASUS ROG Zephyrus G14
+<DropDown title = "hello-world.js (with ShadowDOM)">
 
-If you're a developer who dabbles in game development or graphics-intensive tasks, the ASUS ROG Zephyrus G14 is worth considering. It packs a powerful AMD Ryzen processor and an Nvidia RTX GPU into a compact form factor. It's portable, yet it can handle demanding development tasks and gaming with ease.
+<Prism lang="javascript" code={`
+class HelloWorld extends HTMLElement {
+  constructor() {
+    // this makes sure that the HTMLElement stuff actually is initiated 
+    super();
+    
+    //this makes sure that the component won't be affected
+    // by any external styles or scripts outside of this file
+    this.attachShadow({ mode: 'open' });
 
-## 7. HP Spectre x360
+    //this displays the component
+    this.render();
+  }
 
-The HP Spectre x360 combines style and substance. It's a 2-in-1 laptop with a sleek design, a vivid touchscreen, and robust internals. It's perfect for developers who need flexibility in their work setup. With its long battery life and comfortable keyboard, you can code on the go or in tablet mode.
+  render() {
+    const headerHTML = \`
+      <style>
+        .red {
+          color:red;
+        }
+        
+      </style>
 
-In conclusion, the best laptop for developers in 2024 depends on your specific needs and preferences. Whether you prioritize power, portability, or a Linux-based environment, there's a laptop on this list to cater to your requirements. Take the time to assess your needs and budget, and you'll find the perfect coding companion to kickstart your productive year as a developer.
+      <h1 class = "red" id = "helloWorld" >Hello World</h1>
+      
+    \`;
+    if (this.shadowRoot) {
+      this.shadowRoot.innerHTML = headerHTML;
+    }
+  }
+}
+
+//This registers the HelloWorld class as a custom element with the tag name 'hello-world'/.
+customElements.define('hello-world', HelloWorld);
+
+`} />
+</DropDown>
+
+Web components are custom elements *with* a shadow dom but we can technically make them without. 
+
+This way, it's easier to access and work with them in your scripts but remember that you're sacrificing the benefits of encapsulation. 
+
+<DropDown title = "hello-world.js (without ShadowDOM)">
+
+<Prism lang="javascript" code={`
+class HelloWorld extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = \`
+      <style>
+        .red {
+          color: red;
+        }
+      </style>
+      <h1 class = "red" id = "helloWorld">Hello World</h1>
+    \`;
+  }
+}
+
+customElements.define('hello-world', HelloWorld);
+
+`} />
+</DropDown>
+
+Now, in your html file import the component like so, 
+
+<Prism lang="html" code={`  <script src="hello-world.js"></script>`} />
+
+Now, you can use it as an HTML element like so,
+
+<Prism lang="html" code={`<body>
+
+    <hello-world> </hello-world>
+
+</body>
+`} />
+
+and you will now see the web component on your page, 
+
+<Card img = {img1} alt = "Displays hello world component in red on the screen"/>
+
+<DropDown title = "index.html">
+
+<Prism lang="html" code={
+`<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-wsidth">
+  <title>Web Component Example</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+  <!-- 2. Add the component to the page -->
+  <hello-world> </hello-world>
+
+  <!-- 1. Import the web component -->
+  <script src="hello-world.js"></script>   
+
+  <!--Import the js script -->
+  <script src="script.js"></script>
+
+</body>
+
+</html>
+
+`} />
+
+</DropDown>
+
+# How to access the web component using JavaScript.
+
+Now, the difference in adding the shadowDOM or not is shown when we try to access the 'web component' within a script tag once it's been added to the page. 
+
+I put web component in quotes because the misconception is that we try to access the web component when really we are trying to access the element inside the web component. 
+
+## Selecting h1 with ShadowDOM
+
+Recall: querySelector selects the first element in the DOM that meets the condition. 
+
+If we try the following, 
+<Prism lang="javascript" code={
+`  const h1 = document.querySelector("#helloWorld");
+  console.log(h1);
+`} />
+
+we get 'null' in the console because the element h1 with an id of helloWorld can't be found meaning it does not exist in the DOM. 
+
+But didn't we add the component that **is** an h1 element with an id of helloWorld? 
+
+No, we added a web component that **contains** an h1 element with an id of HelloWorld. 
+
+Here is what the web component looks like with the Shadow DOM, 
+
+<Card img = {img3} alt = "Web component added to the html with a shadowDOM"/>
+
+You can see that the actual element h1 is nested inside the web component.
+
+**Hence, think of a web component as a container that contains the actual element you want to display on the screen.**
+
+In other words, we just have to keep on digging so you would do something like this, 
+
+<Prism lang="javascript" code={`const h1 = document.querySelector("hello-world").shadowRoot.querySelector("#helloWorld");`} />
+
+First, we select the web component (the container) 'hello-world'. 
+
+<Prism lang="javascript" code={`const h1 = document.querySelector("hello-world");`} />
+
+Then we go inside it's shadowRoot and inside the shadowRoot we search for the first element we find with id of 'helloWorld', 
+
+<Prism lang="javascript" code={`const h1 = document.querySelector("hello-world").shadowRoot.querySelector("#helloWorld");`} />
+
+and boom! the h1 element is returned to you in the console like so, 
+
+<Prism lang="html" code={`<h1 class="red" id="helloWorld">Hello World</h1>`} />
+
+## Selecting h1 without ShadowDOM
+
+Selecting the element without a shadowRoot is easier because there is less digging. 
+
+<Card img = {img2} alt = "Web component added to the html without a shadowDOM"/>
+
+Simply, remove the shadowRoot selection. 
+
+<Prism lang="javascript" code={`const h1 = document.querySelector("hello-world").querySelector("#helloWorld");`} />
+
+and you will be able to access your h1 element, 
+
+<Prism lang="html" code={`<h1 class="red" id="helloWorld">Hello World</h1>`} />
+
+# Changing the web component via Javascript 
+
+Now, that we learned how to access the 'web component', let's explore what we can do with it after it's added to the HTML. 
+
+## Changing the styles 
+
+Let's say we want to change the heading from red to green.
+
+We can just go into the hello-HelloWorld.js file and manually change the color styles but how can we do it via javascript?
+
+Well, we can simply access the color styles like so,
+
+<Prism lang="javascript" code={`h1.style.color = "green";`} />
+
+<Card img = {img4} alt = "Displays hello world in green"/>
+
+That works but we can also have a class called green in our style sheet and apply that class...or can we?
+
+If we add a green class in our style.css, 
+
+<Prism lang="css" code={
+`.green{
+  color:green;
+}`} />
+
+and in our script.js add that class to the h1 element, 
+
+<Prism lang="javascript" code={`h1.classList.add("green");`} />
+
+you will notice that the color did not change to green like we told it to.
+
+The reason why is because that class 'green' is *not* in the styles of the web component file.
+
+**Rule: In order for you to dynamically add a class later on, that class already needs to be stored in the web component file inside the style sheet.**
+
+Delete everything in your style sheet and add the green class to 'hello-world.js'.
+
+<Card img = {img5} alt = "H1 element turns green after adding to it's classList a green class that refers to the class inside the web component file and not the style.css"/>
+
+Notice, how now the h1 is green!
+
+Even though we told it to be red in the web component file, we later added a green class in the script.js file.
+
+The important part is **that green class we added in script.js refers to the class we placed inside the style tags in the web component file and *not* any class in the style sheet.** Why? Because styles are encapsulated in web components. No styles go in and no styles inside the web component affect any elements outside (<a href = "https://nolanlawson.com/2021/01/03/options-for-styling-web-components/">with some exceptions.</a>)
+
+So when we had that green class in the style sheet and it would not turn green it was because the web component could not read from any styles outside it's little world.

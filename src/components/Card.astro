@@ -5,6 +5,7 @@ const { img, alt } = Astro.props;
 <div class="card">
   <div class="content">
     {img && <img src={img.src} alt={alt} />}
+    {img && <p>{alt}</p>}
     <slot></slot>
   </div>
 </div>
@@ -44,7 +45,6 @@ const { img, alt } = Astro.props;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
     overflow: hidden;
     z-index:1; /* so that tweets are clickable*/
   }
