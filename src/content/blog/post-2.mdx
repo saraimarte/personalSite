@@ -1,28 +1,30 @@
 ---
 layout: '@layouts/Blog.astro'
-title: "Web Components"
+title: "Javascript Web Components"
 pubDate: 2024-08-15T00:00:00Z
 author: 'Sarai Marte'
 tags: ['webdev']
-phase: 'rabbitHole'
+phase: 'article'
 slug: web-components
 ---
 
 import { Prism } from '@astrojs/prism';
-import DropDown from '@components/DropDown.astro';
 
+import DropDown from '@components/DropDown.astro';
 import Card from '@components/Card.astro';
 import Quote from '@components/Quote.astro';
+import Divider from '@components/Divider.astro';
 
 import img1 from '../../../public/postImages/img5.png';
 import img2 from '../../../public/postImages/img7.png';
 import img3 from '../../../public/postImages/img6.png';
 import img4 from '../../../public/postImages/img8.png';
 import img5 from '../../../public/postImages/img9.png';
+import img6 from '../../../public/postImages/img10.png';
+import img7 from '../../../public/postImages/img11.png';
+import img12 from '../../../public/postImages/img12.png';
 
-*This is a rabbit hole, aka a sea of ongoing half-baked notes on web components.*
-
-# How to Create a Simple Web Component
+# How to create a simple web component
 
 <a href = "https://replit.com/@smartebio/webcomponent">Web Component with ShadowDOM repl.it</a> 
 
@@ -210,15 +212,30 @@ and you will be able to access your h1 element,
 
 <Prism lang="html" code={`<h1 class="red" id="helloWorld">Hello World</h1>`} />
 
-# Changing the web component via Javascript 
+# Dynamically adding web components to the DOM 
+
+<Prism lang="javascript" code={
+
+`//Dynamically add the hello-world component to the DOM
+
+//Get the body
+const body = document.querySelector("body");
+
+//Create the hello-world component as an object in js
+const myElement = document.createElement('hello-world');
+
+//Add the component to the body
+body.appendChild(myElement);`} />
+
+<Card img = {img6} alt = "Shows another hello-world component being added to the DOM dynamically. "/>
 
 Now, that we learned how to access the 'web component', let's explore what we can do with it after it's added to the HTML. 
 
-## Changing the styles 
+# Changing the styles of the web component dynamically (via javascript)
 
 Let's say we want to change the heading from red to green.
 
-We can just go into the hello-HelloWorld.js file and manually change the color styles but how can we do it via javascript?
+We can just go into the hello-world.js file and manually change the color styles but how can we do it via javascript?
 
 Well, we can simply access the color styles like so,
 
@@ -256,3 +273,201 @@ Even though we told it to be red in the web component file, we later added a gre
 The important part is **that green class we added in script.js refers to the class we placed inside the style tags in the web component file and *not* any class in the style sheet.** Why? Because styles are encapsulated in web components. No styles go in and no styles inside the web component affect any elements outside (<a href = "https://nolanlawson.com/2021/01/03/options-for-styling-web-components/">with some exceptions.</a>)
 
 So when we had that green class in the style sheet and it would not turn green it was because the web component could not read from any styles outside it's little world.
+
+<Divider></Divider>
+
+Now, all of this was for a simple web component. What if you want a web component that takes in an attribute like your name and says "Hello, [Your Name]"?
+
+How do we pass in attributes to the component and how do we dynamically add it to the page?
+
+# How to create a web component that takes in attributes
+
+<a href = "https://replit.com/@smartebio/webComponentAttributes#hello-comp.js">Repl.it</a> 
+
+<DropDown title = "hello-comp.js">
+
+<Prism lang="javascript" code={
+`// Define a new custom element class named 'HelloComp' that extends HTMLElement
+class HelloComp extends HTMLElement {
+
+
+  // This constructor 'constructs' the component
+  //This runs everytime the component is called
+  constructor() {
+    super(); // Call the constructor of the parent class (HTMLElement)
+    // Attach a shadow DOM to the custom element with open mode
+    this.attachShadow({ mode: 'open' });
+    // Call the render method to display the initial content
+    this.render();
+  }
+
+  // Define which attributes to observe for changes
+  static get observedAttributes() {
+    return ['name', 'age']; // Watch 'name' and 'age' attributes
+  }
+
+  // Callback function that is called when an observed attribute changes
+  attributeChangedCallback(name, oldValue, newValue) {
+    // Only proceed if the attribute value has changed
+    if (oldValue !== newValue) {
+      // Update internal properties based on the attribute name
+      switch(name) {
+        case 'name':
+          this._name = newValue; // Store new name value
+          break;
+        case 'age':
+          this._age = newValue; // Store new age value
+          break;
+      }
+      // Re-render the element to reflect the updated attributes
+      this.render();
+    }
+  }
+
+  // Callback function that is called when the element is added to the DOM
+  connectedCallback() {
+    // Initialize internal properties with current attribute values
+    this._name = this.getAttribute('name');
+    this._age = this.getAttribute('age');
+    // Render the element for the first time
+    this.render();
+  }
+
+  // Method to render the HTML content of the element
+  render() {
+    // Define the HTML template with styles and content
+    const headerHTML = \`
+      <style>
+        .red {
+          color: red; // Style for text color
+        }
+      </style>
+
+      <h1 class="red" id="helloWorld">Hello \${this._name}. Wow, you're \${this._age}!</h1>
+    \`;
+    // Update the shadow DOM with the new HTML content
+    if (this.shadowRoot) {
+      this.shadowRoot.innerHTML = headerHTML;
+    }
+  }
+}
+
+// Register the custom element with the browser
+customElements.define('hello-comp', HelloComp);`} />
+
+</DropDown>
+
+Then, in your html you can import the component and use it like so, 
+
+<DropDown title = "index.html">
+
+<Prism lang="html" code={
+`<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+  <!-- Import script.js file -->
+  <script src="script.js"></script>
+
+  <!-- 1. Import component -->
+  <script src="hello-comp.js"></script>
+  
+  <!-- 2. Add component with it's attributes-->
+  <hello-comp name = "Sarai" age = "20"></hello-comp>
+
+</body>
+
+</html>`}/>
+</DropDown>
+
+and that returns, 
+
+<Card img = {img7} alt = "Displays the hello component on screen with attributes passed in."/>
+
+What if you want to add the attributes dynamically? Depending on what the user inputs in your site?
+
+# Dynamically adding web components with attributes to the DOM
+
+Well, let's create a form that takes in a user's name and age and returns a message. 
+
+<DropDown title = "index.html">
+<Prism lang="html" code={
+`<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <script src="hello-comp.js"></script>
+
+  <form name="myForm" action="" method="GET">
+    <label for="nameBox">Name:</label>
+    <input type="text" name="nameBox" value="" id="nameBox"/>
+
+    <br/>
+
+    <label for="ageBox">Age:</label>
+    <input type="text" name="ageBox" value="" id="ageBox"/>
+
+    <br/>
+
+    <button type="submit" onClick="displayMessage(event, this.form)" >Submit</button>
+  </form>
+
+  <div class = "message"></div>
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>
+`}/>
+
+</DropDown>
+<DropDown title = "script.js">
+<Prism lang="javascript" code={
+`function displayMessage(event, form) {
+
+  //This is so the page doesn't reset everytime we click on submit
+  event.preventDefault()
+
+  //Get the name from the form
+  const name = form.nameBox.value;
+  //Get the age from the form
+  const age = form.ageBox.value;
+
+  //Create the component
+  const component = document.createElement("hello-comp");
+
+  //Pass in the attributes name and age that we got above into that component
+  component.setAttribute("name", name);
+  component.setAttribute("age", age);
+
+  //Get the container where the message will appear
+  const messageContainer = document.querySelector(".message");
+  
+  //Erase the previous message
+  messageContainer.textContent = "";
+  //Add the new message
+  messageContainer.appendChild(component);
+}`}/>
+</DropDown>
+
+and you will see, 
+
+<Card img = {img12} alt = "Displays 'Hello Sarai. Wow, you're 20!' after submitting 'Sarai' for name and '20' for age. "/>
+
+and that's all I have for now! See ya.

@@ -95,219 +95,263 @@ import tools from '../data/tools.json';
 	</div>
 </MainLayout>
 
-
 <script src="../scripts/toolcard-component.ts"></script>
 <script src="../scripts/tagcomp-component.ts"></script>
 <script src="../scripts/all-component.ts"></script>
 
 <style>
-	@import url('https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Mate:ital@0;1&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
-</style>
-
-<style>
-
-
-img{
-	height:2em;
-	width:2em;
-}
+@import url('https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Mate:ital@0;1&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 * {
-	font-family: "Mate", serif;
-	font-weight: 400;
-	font-style: normal;
-
-}
-.content{
-	height:100%;
-	width:100%;
-	display: flex;
-	gap:1em;
-	justify-content: center;
-	align-items:center;
-	flex-wrap:wrap;
-}
-.tags{
-	height:min-content;
-	width:100%;
-	display: flex;
-	align-items: center;
-	flex-wrap:wrap;
-	gap:1em;
-}
-.tag{
-	height:min-content;
-	width:max-content;
-	padding: 0.5em 1em;
-	text-align: center;
-	border-radius:20px;
-	border:1px solid  rgb(233, 233, 233);
-	user-select: none;
-
-}
-.tools{
-	background-color: #F0F8FF;
-    height:45em;
-	width:45em;
-	overflow-y:scroll;
-	padding:2em;
-	z-index:2;
-	border-radius: 20px;
-	display: flex;
-	flex-direction: column;
-	gap:1em;
-	box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+    font-family: "Mate", serif;
+    font-weight: 400;
+    font-style: normal;
+    box-sizing: border-box;
 }
 
-#toolDisplay{
-	display: flex;
-	flex-direction: column;
-	gap:1em;
-	height:100%;
-	width:100%;
+img {
+    height: 2em;
+    width: 2em;
 }
 
-.toolCard{
-	width:100%;
-	height:10%;
-	border-radius:20px;
-	display:flex;
-	justify-content: center;
-	align-items:center;
-	box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
-	gap:1em;
-	text-decoration: none;
-	color:black;
+.content {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
+
+.tags {
+    height: min-content;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+.tag {
+    height: min-content;
+    width: max-content;
+    padding: 0.5em 1em;
+    text-align: center;
+    border-radius: 20px;
+    border: 1px solid rgb(233, 233, 233);
+    user-select: none;
+}
+
+.tools {
+    background-color: #F0F8FF;
+    height: 45em;
+    width: 45em;
+    max-width: 100%;
+    overflow-y: scroll;
+    padding: 2em;
+    z-index: 2;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+}
+
+#toolDisplay {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    height: 100%;
+    width: 100%;
+}
+
+.toolCard {
+    width: 100%;
+    height: 10%;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+    gap: 1em;
+    text-decoration: none;
+    color: black;
+}
+
 .container {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-image: linear-gradient(35deg,
-      hsl(320deg 60% 92%) 0%,
-      hsl(330deg 100% 93%) 24%,
-      hsl(339deg 100% 92%) 36%,
-      hsl(354deg 100% 92%) 43%,
-      hsl(13deg 100% 89%) 48%,
-      hsl(26deg 100% 85%) 52%,
-      hsl(36deg 100% 81%) 56%,
-      hsl(44deg 100% 77%) 61%,
-      hsl(50deg 100% 74%) 67%,
-      hsl(55deg 100% 72%) 90%);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(35deg,
+        hsl(320deg 60% 92%) 0%,
+        hsl(330deg 100% 93%) 24%,
+        hsl(339deg 100% 92%) 36%,
+        hsl(354deg 100% 92%) 43%,
+        hsl(13deg 100% 89%) 48%,
+        hsl(26deg 100% 85%) 52%,
+        hsl(36deg 100% 81%) 56%,
+        hsl(44deg 100% 77%) 61%,
+        hsl(50deg 100% 74%) 67%,
+        hsl(55deg 100% 72%) 90%);
+    overflow: hidden;
 }
 
 .noise {
-	position: absolute;
-	height: 100%;
-	width: 100%;
-	background-image: url("../../public/toolImages/noise2.svg");
-	opacity: 0.1;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image: url("../../public/toolImages/noise2.svg");
+    opacity: 0.1;
 }
 
-
-/* Dropdown styles */
 .dropdown {
-  display: inline-flex; /* Equivalent to inline-flex */
-  position: relative; /* Equivalent to relative */
-  height:700px;
+    display: flex;
+    position: relative;
+    height: 700px;
 }
 
-/* Button styles */
 .button {
-  border: 1px solid #F0F8FF; /* Equivalent to border border-gray-200 */
-  border-radius: 0.5rem; /* Equivalent to rounded-lg */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Equivalent to shadow-sm */
-  position: relative;
-  border-radius:50%;
-  width:6em;
-  height: 6em;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items:center;
-  user-select:none;
-  background-color: #F0F8FF; /* Equivalent to bg-white */
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+    border: 1px solid #F0F8FF;
+    border-radius: 50%;
+    width: 6em;
+    height: 6em;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    background-color: #F0F8FF;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
 }
 
-/* Icon styles */
-.icon {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  position: absolute;
-  right: 0;
-  padding-right: 0.75rem; /* Equivalent to pr-3 */
-}
-
-.icon-svg {
-  width: 1rem; /* Equivalent to w-4 */
-  height: 1rem; /* Equivalent to h-4 */
-}
-/* Menu styles */
 .menu {
-  width: 100%; /* Equivalent to w-full */
-  position: absolute;
-  top: 5rem; /* Equivalent to top-12 */
-  left: 0;
-  padding: 0.5rem; /* Equivalent to p-2 */
-  border-radius: 0.5rem; /* Equivalent to rounded-lg */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Equivalent to shadow */
-  display: flex;
-  flex-direction: column;
-  gap:1em;
-  justify-content: center;
-  align-items: center;
-
+    width: 100%;
+    position: absolute;
+    top: 5rem;
+    left: 0;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Menu item styles */
 .menu-item {
-  width:5rem;
-  height:5rem;
-  border-radius:50%;
-  cursor: pointer;
-  text-align: center;
-  background-color: #F0F8FF; /* Equivalent to bg-white */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size:0.9em;
-  user-select:none;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
-
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    text-align: center;
+    background-color: #F0F8FF;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9em;
+    user-select: none;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
 }
 
-.menu-item:hover {
-	background-image: linear-gradient(35deg,
-      hsl(320deg 60% 92%) 0%,
-      hsl(330deg 100% 93%) 24%,
-      hsl(339deg 100% 92%) 36%,
-      hsl(354deg 100% 92%) 43%,
-      hsl(13deg 100% 89%) 48%,
-      hsl(26deg 100% 85%) 52%,
-      hsl(36deg 100% 81%) 56%,
-      hsl(44deg 100% 77%) 61%,
-      hsl(50deg 100% 74%) 67%,
-      hsl(55deg 100% 72%) 90%);
-	}
+.menu-item:hover, .clickedOn {
+    background-image: linear-gradient(35deg,
+        hsl(320deg 60% 92%) 0%,
+        hsl(330deg 100% 93%) 24%,
+        hsl(339deg 100% 92%) 36%,
+        hsl(354deg 100% 92%) 43%,
+        hsl(13deg 100% 89%) 48%,
+        hsl(26deg 100% 85%) 52%,
+        hsl(36deg 100% 81%) 56%,
+        hsl(44deg 100% 77%) 61%,
+        hsl(50deg 100% 74%) 67%,
+        hsl(55deg 100% 72%) 90%);
+}
+@media (max-width: 768px) {
 
-.clickedOn{
-	background-image: linear-gradient(35deg,
-      hsl(320deg 60% 92%) 0%,
-      hsl(330deg 100% 93%) 24%,
-      hsl(339deg 100% 92%) 36%,
-      hsl(354deg 100% 92%) 43%,
-      hsl(13deg 100% 89%) 48%,
-      hsl(26deg 100% 85%) 52%,
-      hsl(36deg 100% 81%) 56%,
-      hsl(44deg 100% 77%) 61%,
-      hsl(50deg 100% 74%) 67%,
-      hsl(55deg 100% 72%) 90%);
+    .content {
+        flex-direction: column;
+        padding: 1em;
+        gap:0;
+        justify-content: start;
+        align-items:  start;
+    }
+
+    .dropdown {
+        height: auto;
+        align-self: flex-start;
+        margin-bottom: 1em;
+        width: 100%;
+        gap:0.5em;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .dropdown {
+        height: auto;
+        margin-bottom: 1em;
+        width: 100%;
+        gap:0.5em;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+    }
+
+    
+    .menu {
+        flex-direction: row;
+        justify-content: flex-start;
+        width: 80%;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 1em 0;
+        position: initial;
+        gap:0;
+        padding:0;
+
+    }
+
+    .menu-item {
+        flex: 0 0 auto;
+        margin-right: 0.5em;
+    }
+
+    .tools {
+        width: 100%;
+        height: auto;
+        max-height: 80vh;
+        font-size: 0.9em;
+    }
+
+    .toolCard {
+        flex-direction: column;
+        height: auto;
+        padding: 0.8em;
+    }
+
+    .tag {
+        font-size: 0.4em;
+        padding: 0.3em 0.6em;
+    }
+
+    #toolDisplay {
+        gap: 0.8em;
+    }
+
+    .toolName {
+        font-size: 1em;
+        margin-bottom: 0.3em;
+    }
+
+    .toolDescription {
+        font-size: 0.5em;
+    }
+
 }
 
 </style>

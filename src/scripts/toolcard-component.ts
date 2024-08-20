@@ -56,32 +56,55 @@ class ToolCard extends HTMLElement {
     render(): void {
       const headerHTML = `
         <style>
+
+        .top{
+          display:flex;
+          flex-direction:row;
+          justify-content: center;
+          align-items:center;
+          gap:1em;
+        }
         .toolCard{
-            border:5px solid red;
-            width:100%;
+            width:97%;
             height:min-content;
             border-radius:20px;
             display:flex;
-            justify-content: center;
-            align-items:center;
+            flex-direction:column;
+            justify-content: start;
+            align-items:start;
             box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
-            gap:1em;
             text-decoration: none;
             color:black;
+            padding:20px;
+            margin-bottom:10px;
         }
         img{
-          width:20px;
-          height:20px;
+          border-radius:5px;
+          width:50px;
+          height:50px;
         }
+
+        @media (max-width: 768px) {
+          .toolCard{
+              width:87%;
+            
+          }
+        }
+
+
         </style>
 
        
       <a href="${this._link}" class="toolCard ${this._tag}">
-        <div class="toolIcon">
-          <img src="${this._icon}" alt="${this._name} icon"/>
+        <div class = "top">
+          <div class="toolIcon">
+            <img src="${this._icon}" alt="${this._name} icon"/>
+          </div>
+          <p class="toolName">${this._name}</p>
         </div>
-        <p class="toolName">${this._name}</p>
+       
         <p class="toolDescription">${this._description}</p>
+
 	  	</a>
 
       `;
