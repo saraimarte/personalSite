@@ -20,7 +20,11 @@ I learned about <a href = "https://prismjs.com/">Prisma</a> and that it is built
 
 # Setup 
 
-**1.** This is how your astro.config.mjs should look like:
+**1.** Run the following in the terminal.
+
+<Prism lang="javascript" code={`npm i @astrojs/prism`} />
+
+**2.** This is how your astro.config.mjs should look like:
 
 <Prism lang="javascript" code={`import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
@@ -33,13 +37,13 @@ export default defineConfig({
 });
 `} />
 
-**2.** Go to the <a href = "https://github.com/PrismJS/prism-themes/tree/master">Prism Themes Collection</a>, pick one that you like, download it and place it in your public folder. I chose the prism-holi-theme.
+**3.** Go to the <a href = "https://github.com/PrismJS/prism-themes/tree/master">Prism Themes Collection</a>, pick one that you like, download it and place it in your public folder. I chose the prism-holi-theme.
 
-**3.** Place the following code in your `<head></head>` tag (make sure you replace 'prism-holi-theme' with the name of *your* theme.)
+**4.** Place the following code in your `<head></head>` tag (make sure you replace 'prism-holi-theme' with the name of *your* theme.)
 
-<Prism lang="html" code={`<link rel = "stylesheet" href = "prism-holi-theme.css"/>`} />
+<Prism lang="html" code={`<link rel = "stylesheet" href = "/prism-holi-theme.css"/>`} />
 
-**4.** In any mdx file, paste the following code after the frontmatter.
+**5.** In any mdx file, paste the following code after the frontmatter.
 
 <Prism lang="javascript" code={`import { Prism } from '@astrojs/prism';`} />
 
@@ -96,8 +100,6 @@ to fix that I made one more change in the theme file: I changed white-space from
 <Card img = {img2} alt = "overflow solution"/>
 
 <DropDown title = "Full Theme Code">
-
-
 
 <Prism lang="css" code={`
   /**
