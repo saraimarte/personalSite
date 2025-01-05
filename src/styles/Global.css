@@ -38,3 +38,8 @@ iframe {
     height: 200px;
 }
 }
+
+pre, code{
+    margin:0;
+    padding:0;
+}

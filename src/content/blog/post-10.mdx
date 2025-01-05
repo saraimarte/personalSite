@@ -1,0 +1,133 @@
+---
+layout: '@layouts/Blog.astro'
+title: "How to Upload a 3D Model with Textures in ThreeJS"
+pubDate: 2025-01-04T00:00:00Z
+author: 'Sarai Marte'
+tags: ['webdev', 'threejs']
+phase: 'article'
+slug: how-to-upload-3D-model-with-textures-in-threejs
+---
+
+import Code from '@components/Code.astro';
+import Card from '@components/Card.astro';
+import DropDown from '@components/DropDown.astro';
+import File from '@components/File.astro';
+
+import img1 from '../../../public/img17.png';
+import img2 from '../../../public/img18.png';
+import img3 from '../../../public/img19.png';
+
+<DropDown title = "Boilerplate Code">
+
+<Code lang = "javascript" fileName = "example.js" code = {
+`import * as THREE from 'three'
+
+//ANCHOR - Cursor
+window.addEventListener('mousemove', (event) => {
+    console.log(event.clientX)
+})
+
+//ANCHOR - Canvas
+const canvas = document.querySelector('canvas.webgl')
+
+//ANCHOR - Sizes
+const sizes = {
+    width: 800,
+    height: 600
+}
+
+//ANCHOR - Scene
+const scene = new THREE.Scene()
+
+//ANCHOR - Object
+const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1, 5, 5, 5),
+    new THREE.MeshBasicMaterial({ color: 0xff0000 })
+)
+scene.add(mesh)
+
+//ANCHOR - Camera
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
+camera.position.x = 2
+camera.position.y = 2
+camera.position.z = 2
+scene.add(camera)
+
+//ANCHOR - Renderer
+const renderer = new THREE.WebGLRenderer({
+    canvas: canvas
+})
+renderer.setSize(sizes.width, sizes.height)
+
+//ANCHOR - Animate
+const clock = new THREE.Clock()
+
+const tick = () =>
+{
+    const elapsedTime = clock.getElapsedTime()
+
+    // Update objects
+    mesh.rotation.z = elapsedTime;
+
+    // Render
+    renderer.render(scene, camera)
+
+    // Call tick again on the next frame
+    window.requestAnimationFrame(tick)
+}
+
+tick()` }/>
+
+</DropDown>
+
+**1.** Import the GLTFLoader.
+
+This is a tool (really, a class) that helps you load 3D models in the gltf format. 
+
+<Code lang = "javascript" fileName = "example.js" code = {
+`import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';`
+ }/>
+
+**2.** Create a new instance of it.
+
+<Code lang = "javascript" fileName = "example.js" code = {
+`const gltfLoader = new GLTFLoader();`}/>
+
+**3.** Download the model and it's material/texture then add them to the public folder.
+
+<File title = "Model.glb" link = "https://rutgersconnect-my.sharepoint.com/:u:/g/personal/smm651_scarletmail_rutgers_edu/EXaX-bc2vzhImZPknfLpyDYBEhck-25ueSdohl80TrhbSw?e=HApxKL"/>
+
+<File title = "Material.png" link = "https://rutgersconnect-my.sharepoint.com/:i:/g/personal/smm651_scarletmail_rutgers_edu/EUL103L-cw9FsDU3OAYXUrIBRSYMAuEjzuoIwxd51QDY_Q?e=IT8yRU"/>
+
+<Card img = {img3} alt = "3D Model of an Apocalyptic Damaged Car"/>
+
+<Card img = {img1} alt  = "Texture Material for the Model (Think of it as wrapping paper)"/>
+
+**4.** Load the model 
+
+<Code lang = "javascript" fileName = "example.js" code = {
+`gltfLoader.load('/model.glb', (gltf) => {
+    gltf.scene.traverse((child) => {
+        child.material = bakedMaterial;
+    });
+    scene.add(gltf.scene);
+});`}/>
+
+
+**5.** Apply Textures ( Add this code above the previous )
+
+<Code lang = "javascript" fileName = "example.js" code = {
+`const textureLoader = new THREE.TextureLoader();
+
+const bakedTexture = textureLoader.load('material.png', 
+    () => console.log("Texture loaded successfully"),
+    undefined,
+    (error) => console.error("Error loading texture:", error)
+);
+
+bakedTexture.flipY = false;
+bakedTexture.colorSpace = THREE.SRGBColorSpace;
+const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture });`}/>
+
+<Card img = {img2} alt = "Result"/>
+

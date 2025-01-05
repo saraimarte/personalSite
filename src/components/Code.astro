@@ -1,0 +1,39 @@
+---
+import { Prism } from '@astrojs/prism';
+const {lang, code, fileName} = Astro.props;
+---
+
+<div class = "CodeBlock">
+<p>{fileName}</p>
+<div class = "Code">
+    <Prism class = "hello" lang= {lang} code={code} />
+</div>
+</div>
+
+<style>
+    .CodeBlock{
+        display: grid;
+        margin:0;
+        padding:0;
+        position: relative;
+        min-height:min-content;
+        margin:10px 0 0 0 ;
+    }
+
+    .Code{
+        position:relative;
+        bottom:30px;
+ 
+    }
+    p{
+        background: #030314;
+        color: rgb(189, 189, 189);
+        padding:5px 10px;
+        border-radius: 5px;
+        font-size:0.8rem;
+        width:max-content;
+        position: relative;
+        bottom:0px;
+        z-index:2;
+    }
+</style>

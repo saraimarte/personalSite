@@ -1,0 +1,24 @@
+---
+layout: '@layouts/Blog.astro'
+title: "Git Guide"
+pubDate: 2025-01-02T00:00:00Z
+author: 'Sarai Marte'
+tags: ['tech']
+phase: 'rabbitHole'
+slug: git-guide
+---
+
+import Code from '@components/Code.astro';
+
+# 1|How to clone a specific branch from a git repository
+
+First, create a folder anywhere. Open the folder in VSCode.   
+
+Using VSCode's terminal, the command is as follows, 
+
+<Code lang="git" fileName="Command" code={`git clone -b branchName repoURL`} />
+
+For example, if I want to clone the lesson-01 branch from a repo who's url is https://github.com/saraimarte/Repository.git then the command would be 
+
+<Code lang="git" fileName="Command" code={`git clone -b lesson-01 https://github.com/saraimarte/Repository.git`} />
+

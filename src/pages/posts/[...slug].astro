@@ -26,12 +26,14 @@ const {Content} = await entry.render();
 
 <MainLayout>
 
-    <div class = "container">
+    <div class = "container">   
+        <br/>
+
         <BackBtn link = "/posts"></BackBtn>
         <h1 class = "title">{entry.data.title}</h1>
         <h2 class = "date">{formatDate(entry.data.pubDate)}</h2>
         <Tag tags = {entry.data.tags}></Tag>
-
+       
         <Content>
         </Content>
 
