@@ -1,0 +1,76 @@
+---
+layout: '@layouts/Blog.astro'
+title: "How to Set up a Server Using Express"
+pubDate: 2025-01-05T00:00:00Z
+author: 'Sarai Marte'
+tags: ['webdev', 'servers', 'express']
+phase: 'article'
+draft: false 
+slug: how-to-set-up-a-server-using-express
+---
+
+import Code from '@components/Code.astro';
+import Card from '@components/Card.astro';
+import DropDown from '@components/DropDown.astro';
+import File from '@components/File.astro';
+
+import img1 from '../../../public/img20.png';
+import img2 from '../../../public/img21.png';
+
+
+**1.** First, create a folder anywhere in your files. I called mine **folder**. Open the folder in VSCode. In this folder, create a new folder called **project**. 
+
+Go into that folder in the terminal by writing,  
+
+<Code lang = "" fileName = "Terminal" code = {`cd ./project`}/>
+
+**2.** Then, create a file in the project folder, call it **package.json**. Write the following inside, 
+
+<Code lang = "" fileName = "Terminal" code = {
+`{
+    "name": "project",
+    "version": "0.0.1",
+    "description": "My first socket.io app",
+    "dependencies": {
+        
+    }
+}`}/>
+
+**3.** In the terminal, install express which is just NodeJS but faster end easier to write.  
+
+<Code lang = "" fileName = "Terminal" code = {`npm install express --save`}/>
+
+This will automatically update your **package.json** file to have express as a dependency. 
+
+**4.** Create another file called **app.js** inside the **project** folder. This is where all the server code will be written. You can also call it **server.js**.
+
+<Code lang = "javascript" fileName = "app.js" code = { 
+
+`// 1.Create the server 
+const app = require('express')();
+const http = require('http').Server(app);
+
+//2. Tell the server what to do when client goes to http://localhost:3000/
+//We want it to send back "Welcome, you're on the Home Page"
+
+app.get('/', function(req, res){
+    res.send("<H1> Welcome, you're on the Home Page </H1>"); 
+});
+
+//3. Tell it to listen to http://localhost:3000
+http.listen(3000, function(){
+    console.log("Connected"); 
+    console.log("Listening on port 3000");
+});`
+
+}/>
+
+**5.** In the terminal, go into the project folder by **cd ./project**. 
+
+**6.** Start up the server by running **node app.js**.
+
+<Card img = {img1}/>
+
+**7.** Now, open your browser and go to http://localhost:3000/ and you should see "Welcome, you're on the Home Page."
+
+<Card img = {img2}/>

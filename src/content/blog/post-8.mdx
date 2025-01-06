@@ -1,0 +1,29 @@
+---
+layout: '@layouts/Blog.astro'
+title: "Things I Wished Existed"
+pubDate: 2025-01-04T00:00:00Z
+author: 'Sarai Marte'
+tags: ['webdev']
+phase: 'thought'
+draft: false 
+slug: things-i-wished-existed
+---
+
+import Code from '@components/Code.astro';
+import Card from '@components/Card.astro';
+import img1 from '../../../public/img10.png';
+
+
+# In CSS
+
+# 1
+Problem: My code component (red box) for some reason is taking into account a lot of white space at the bottom into it's height but that's annoying because it's pushing everything that comes after it like the practice questions further to the bottom which without the red border looks like I pressed enter a few too many times. 
+
+<Card img = {img1} alt = "Displays hello world component in red on the screen"/>
+
+So, I wish I could make the height of the red box what it thinks it should be but minus a little like so, 
+
+<Code lang="git" fileName="Command" code={`height:calc(min-content - 10px);`} />
+
+Unfortunately that is not a thing lol.
+

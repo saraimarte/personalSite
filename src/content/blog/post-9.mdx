@@ -1,0 +1,231 @@
+---
+layout: '@layouts/Blog.astro'
+title: "How to set up ThreeJS in AstroJS"
+pubDate: 2025-01-04T00:00:00Z
+author: 'Sarai Marte'
+tags: ['webdev', 'threejs', 'astrojs']
+phase: 'article'
+draft: false 
+slug: how-to-set-up-threejs-in-astrojs
+---
+
+import Code from '@components/Code.astro';
+import Card from '@components/Card.astro';
+import DropDown from '@components/DropDown.astro';
+
+import img1 from '../../../public/img11.png';
+import img2 from '../../../public/img12.png';
+import img3 from '../../../public/img13.png';
+import img4 from '../../../public/img14.png';
+import img5 from '../../../public/img15.png';
+import img6 from '../../../public/img16.png';
+
+**1.** In the terminal **npm create astro@latest** to create a new astro project and cd into the project folder by doing **cd ./project** in the terminal   
+
+<Card img = {img3}/>
+
+**2.** In the terminal **npm install vite** to install vite- the build tool  
+**3.** In the terminal **npm install three** to install threejs   
+**4.** Create a **scripts** folder inside the src folder 
+
+<Card img = {img2}/>
+
+**5.** Create **example.js** inside the **scripts** folder and add the following code below.
+
+<Card img = {img4}/>
+
+<DropDown title = "Code">
+
+<Code lang = "javascript" fileName = "example.js" code = {
+
+`import * as THREE from 'three'
+
+//ANCHOR - Cursor
+window.addEventListener('mousemove', (event) => {
+    console.log(event.clientX)
+})
+
+//ANCHOR - Canvas
+const canvas = document.querySelector('canvas.webgl')
+
+//ANCHOR - Sizes
+const sizes = {
+    width: 800,
+    height: 600
+}
+
+//ANCHOR - Scene
+const scene = new THREE.Scene()
+
+//ANCHOR - Object
+const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1, 5, 5, 5),
+    new THREE.MeshBasicMaterial({ color: 0xff0000 })
+)
+scene.add(mesh)
+
+//ANCHOR - Camera
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
+camera.position.x = 2
+camera.position.y = 2
+camera.position.z = 2
+camera.lookAt(mesh.position)
+scene.add(camera)
+
+//ANCHOR - Renderer
+const renderer = new THREE.WebGLRenderer({
+    canvas: canvas
+})
+renderer.setSize(sizes.width, sizes.height)
+
+//ANCHOR - Animate
+const clock = new THREE.Clock()
+
+const tick = () =>
+{
+    const elapsedTime = clock.getElapsedTime()
+
+    // Update objects
+    mesh.rotation.z = elapsedTime;
+
+    // Render
+    renderer.render(scene, camera)
+
+    // Call tick again on the next frame
+    window.requestAnimationFrame(tick)
+}
+
+tick()`
+}/>
+
+</DropDown>
+
+If you want to be able to move the cube yourself then the only new things you have to do are the following, 
+
+<DropDown title = "Code">
+
+**1.** Import Orbit Controls at the top of the file 
+
+<Code lang = "javascript" fileName = "example.js" code = {
+`import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';`
+}/>
+OrbitControls is part of the Three.js examples folder (not the core library). It’s a helper class that makes it easy to orbit (rotate), zoom, and pan the camera around a target scene/object using mouse or touch gestures.
+
+In other words, it gives you a way to move the camera just by dragging or scrolling, rather than manually adjusting the camera’s position and rotation in your code.
+
+**2.** Create the controls and pass in camera and canvas. 
+
+<Code lang = "javascript" fileName = "example.js" code = {
+`const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;  // This adds smooth movement`
+}/>
+
+**3.** Update the controls within the animation loop.
+
+<Code lang = "javascript" fileName = "example.js" code = {
+`controls.update();`
+}/>
+
+Here is the full code, 
+
+<Code lang = "javascript" fileName = "example.js" code = {
+
+`import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
+//ANCHOR - Cursor
+window.addEventListener('mousemove', (event) => {
+    console.log(event.clientX)
+})
+
+//ANCHOR - Canvas
+const canvas = document.querySelector('canvas.webgl')
+
+//ANCHOR - Sizes
+const sizes = {
+    width: 800,
+    height: 600
+}
+
+//ANCHOR - Scene
+const scene = new THREE.Scene()
+
+//ANCHOR - Object
+const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1, 5, 5, 5),
+    new THREE.MeshBasicMaterial({ color: 0xff0000 })
+)
+scene.add(mesh)
+
+//ANCHOR - Camera
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
+camera.position.x = 2
+camera.position.y = 2
+camera.position.z = 2
+camera.lookAt(mesh.position)
+scene.add(camera)
+
+// OrbitControls
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+
+//ANCHOR - Renderer
+const renderer = new THREE.WebGLRenderer({
+    canvas: canvas
+})
+renderer.setSize(sizes.width, sizes.height)
+
+//ANCHOR - Animate
+const clock = new THREE.Clock()
+
+const tick = () =>
+{
+    controls.update();
+
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+}
+
+tick()`}/>
+
+
+</DropDown>
+
+**6.**  Go to **pages > index.astro** and add the following code below.
+
+<Card img = {img1}/>
+
+<DropDown title = "Code">
+<Code lang = "javascript" fileName = "index.astro" code = {
+
+`---
+
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>example</title>
+	</head>
+	<body>
+		<h1>soon to be threejs and astro site!</h1>
+		<canvas class="webgl"></canvas>
+		<script>
+			import '../scripts/example.js'
+		</script>
+	</body>
+</html>`
+}/>
+</DropDown>
+
+If you run **npm run dev** in the terminal (make sure you **cd ./project**) and click on the localhost link in light blue like so,
+
+<Card img = {img6}/>
+
+then the following is what you should see: 
+
+<Card img = {img5}/>

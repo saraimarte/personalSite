@@ -26,12 +26,19 @@ const {Content} = await entry.render();
 
 <MainLayout>
 
-    <div class = "container">
-        <BackBtn link = "/posts"></BackBtn>
-        <h1 class = "title">{entry.data.title}</h1>
-        <h2 class = "date">{formatDate(entry.data.pubDate)}</h2>
-        <Tag tags = {entry.data.tags}></Tag>
+    <div class = "container">   
+        <br/>
 
+        <BackBtn link = "/posts"></BackBtn>
+         <h1 class = "title">{entry.data.title}</h1>
+
+        <div class = "dateTagsContainer">
+            <p class = "date">{formatDate(entry.data.pubDate)}</p>
+            <Tag tags = {entry.data.tags}></Tag>
+        </div>
+   
+
+       
         <Content>
         </Content>
 
@@ -44,7 +51,7 @@ const {Content} = await entry.render();
         height:100%;
         width:50%;
         margin:auto;
-        padding:20px;
+        padding:20px ;
         background-color: #F2F3F4;
         display:flex;
         flex-direction: column;
@@ -71,12 +78,11 @@ const {Content} = await entry.render();
         font-size: 1.4rem;
         overflow: hidden;
         width: 90%;
-        min-height: 2rem;
+        min-height:fit-content;
     }
 
     .date {
         margin: 10px 5px;
-        font-size: 1.2rem;
     }
     @media (max-width: 600px) {
         .title {
@@ -91,5 +97,19 @@ const {Content} = await entry.render();
         }
     }
 
+    .dateTagsContainer{
+        display: flex;
+        align-items: center;
+        position: relative;
+        right:6px;
+    }
 
+    h1{
+        position: relative;
+        right:6px;
+    }
+
+    [x-cloak] {
+    display: none !important;
+}
 </style>

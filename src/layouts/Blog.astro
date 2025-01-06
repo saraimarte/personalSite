@@ -1,6 +1,7 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 ---
+
 <MainLayout>
     <slot></slot>
     <br/>
@@ -9,19 +10,23 @@ import MainLayout from '../layouts/MainLayout.astro';
 <style is:inline>
     * {
         font-family: "IBM Plex Mono", monospace;
-        line-height: 1.5;
+        line-height: 1.7;
 	    letter-spacing: .2px;
  
     }
     p{
-        margin: 10px 0;
         font-size: 1rem;
     }
+
+    h1, h2, h3, h4, h5, h6{
+        margin:10px 0;
+
+    }
     h1{
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
     h2{
-        font-size: 1.3rem;
+        font-size: 1.2rem;
     }
 
     a{

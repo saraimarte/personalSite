@@ -49,7 +49,7 @@ pre[class*='language-'] {
 	border: 1px solid #2a4555;
 	border-radius: 5px;
 	padding: 1.5em 1em;
-	margin: 1em 0;
+	margin: 1em 0 0 0;
 	height:max-content; /*removed overflow auto to get rid of scrolling. I want all my code to show fully so the height of each code block should be the height of it's content.*/
 }
 
@@ -119,3 +119,4 @@ pre[class*='language-'] {
 .token.variable {
 	color: #d6e7ff;
 }
+
