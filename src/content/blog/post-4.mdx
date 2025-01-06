@@ -5,10 +5,12 @@ pubDate: 2024-08-10T00:00:00Z
 author: 'Sarai Marte'
 tags: ['webdev', 'astrojs']
 phase: 'article'
+draft: false 
 slug: syntax-highlighting-with-astroJS-and-prisma
 ---
 import { Prism } from '@astrojs/prism';
 import DropDown from '@components/DropDown.astro';
+import Code from '@components/Code.astro';
 
 import Card from '@components/Card.astro';
 import img1 from '../../../public/postImages/img3.png';
@@ -22,11 +24,11 @@ I learned about <a href = "https://prismjs.com/">Prisma</a> and that it is built
 
 **1.** Run the following in the terminal.
 
-<Prism lang="javascript" code={`npm i @astrojs/prism`} />
+<Code lang="javascript" fileName = "terminal" code={`npm i @astrojs/prism`} />
 
 **2.** This is how your astro.config.mjs should look like:
 
-<Prism lang="javascript" code={`import { defineConfig } from 'astro/config';
+<Code lang="javascript" fileName = "astro.config.mjs" code={`import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 
 export default defineConfig({
@@ -41,11 +43,14 @@ export default defineConfig({
 
 **4.** Place the following code in your `<head></head>` tag (make sure you replace 'prism-holi-theme' with the name of *your* theme.)
 
-<Prism lang="html" code={`<link rel = "stylesheet" href = "/prism-holi-theme.css"/>`} />
+<Code lang="html" fileName = "index.astro" code={`<link rel = "stylesheet" href = "/prism-holi-theme.css"/>`} />
 
 **5.** In any mdx file, paste the following code after the frontmatter.
 
-<Prism lang="javascript" code={`import { Prism } from '@astrojs/prism';`} />
+<Code lang="html" fileName = "anyMdxFile.mdx" code={
+ `---
+---
+import { Prism } from '@astrojs/prism';`} />
 
 ````markdown
 <Prism lang="javascript" code={`const jsCode = "this is javascript code!"`} />

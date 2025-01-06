@@ -8,15 +8,16 @@ import rabbitHoleIcon from '@assets/rabbitHole.svg';
 import articleIcon from '@assets/article.svg';
 import Card from '@components/Card.astro';
 
-// Fetch all blog posts
-const allBlogPosts: CollectionEntry<'blog'>[] = (await getCollection('blog')).sort((a, b) => {
-  // Assuming pubDate is a Date object or a string in ISO format
-  return new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime();
-});
-
+// Fetch only blog posts that are not drafts
+const allBlogPosts: CollectionEntry<'blog'>[] = (await getCollection('blog'))
+  .filter((post) => post.data.draft === false)
+  .sort((a, b) => {
+    // Assuming pubDate is a Date object or ISO string
+    return new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime();
+  });
+  
 export async function getStaticPaths() {
   const allBlogPosts: CollectionEntry<'blog'>[] = await getCollection('blog');
-  const tags = new Set(allBlogPosts.flatMap(article => article.data.tags));
 
   return allBlogPosts.map(entry => ({
     params: {
@@ -26,16 +27,24 @@ export async function getStaticPaths() {
   }));
 }
 
-const allArticles = allBlogPosts.filter(({ data }) => data.phase === 'article');
-const allThoughts = allBlogPosts.filter(({ data }) => data.phase === 'thought');
-const allRabbitHoles = allBlogPosts.filter(({ data }) => data.phase === 'rabbitHole');
+const allArticles = allBlogPosts.filter(({ data }) => data.draft === false && data.phase === 'article');
+const allThoughts = allBlogPosts.filter(({ data }) => data.draft === false && data.phase === 'thought' );
+const allRabbitHoles = allBlogPosts.filter(({ data }) => data.draft === false && data.phase === 'rabbitHole');
 
-const allPhases = Array.from(
-  new Set(allBlogPosts.map(article => article.data.phase))
+const phaseOrder = ['thought', 'rabbitHole', 'article'];
+
+let allPhases = Array.from(
+  new Set(allBlogPosts.map((article) => article.data.phase))
 );
+
+allPhases = allPhases.sort(
+  (a, b) => phaseOrder.indexOf(a) - phaseOrder.indexOf(b)
+);
+
 
 const allArticleTags = Array.from(
   new Set(
+
     allArticles.flatMap(post => post.data.tags)
   )
 );
@@ -52,8 +61,6 @@ const allRabbitHoleTags = Array.from(
   )
 );
 
-const { tags } = Astro.params;
-
 ---
 <script src="../../scripts/card-component.ts"></script>
 
@@ -62,7 +69,7 @@ const { tags } = Astro.params;
     <br/>
 
     <h1>Welcome to Sarai's Blog </h1>
-    <p class="intro" x-show="open" x-transition>Most posts begin as thoughts. These thoughts lead to rabbit holes and eventually end up as articles. Yet, some thoughts stay thoughts. Here, you can filter all my posts by their phase of life 🌸</p>
+    <p class="intro" x-cloak x-show="open" x-transition>Most posts begin as thoughts. These thoughts lead to rabbit holes and eventually end up as articles. Yet, some thoughts stay thoughts. Here, you can filter all my posts by their phase of life 🌸</p>
     
     <!-- Display all phases -->
     <div class="phaseAndTagContainer">
@@ -291,10 +298,14 @@ const { tags } = Astro.params;
       #all{
         font-size:0.9em;
         margin-right:0.6em;
-  }
+      }
     
     }
+
     
+    [x-cloak] {
+    display: none !important;
+}
 </style>
 
 <script define:vars={{}}>
@@ -362,11 +373,12 @@ function initialize() {
 
 // Fetch JSON version of all blog posts and make it equal to window.blogPosts
 fetch('/api/data.json?')
-    .then(response => response.json())
-    .then(data => {
-      window.blogPosts = data;
-      initialize();
-    });
+  .then((response) => response.json())
+  .then((data) => {
+    // Filter out draft posts here:
+    window.blogPosts = data.filter((post) => post.draft === false);
+    initialize();
+  });
 
 //When the all tag is clicked...
 function allTagClicked(){

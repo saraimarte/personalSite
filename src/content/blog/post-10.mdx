@@ -5,6 +5,7 @@ pubDate: 2025-01-04T00:00:00Z
 author: 'Sarai Marte'
 tags: ['webdev', 'threejs']
 phase: 'article'
+draft: false 
 slug: how-to-upload-3D-model-with-textures-in-threejs
 ---
 
@@ -16,6 +17,8 @@ import File from '@components/File.astro';
 import img1 from '../../../public/img17.png';
 import img2 from '../../../public/img18.png';
 import img3 from '../../../public/img19.png';
+
+import vid1 from '../../../public/vid1.mp4';
 
 <DropDown title = "Boilerplate Code">
 
@@ -129,5 +132,93 @@ bakedTexture.flipY = false;
 bakedTexture.colorSpace = THREE.SRGBColorSpace;
 const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture });`}/>
 
-<Card img = {img2} alt = "Result"/>
+Here is the full code, 
 
+<DropDown title = "Full Code">
+
+<Code lang = "javascript" fileName = "example.js" code = {
+`import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
+//ANCHOR - Cursor
+window.addEventListener('mousemove', (event) => {
+    console.log(event.clientX)
+})
+
+//ANCHOR - Canvas
+const canvas = document.querySelector('canvas.webgl')
+
+//ANCHOR - Sizes
+const sizes = {
+    width: 800,
+    height: 600
+}
+
+//ANCHOR - Scene
+const scene = new THREE.Scene()
+
+//ANCHOR - model
+const gltfLoader = new GLTFLoader();
+
+//ANCHOR - Textures 
+
+const textureLoader = new THREE.TextureLoader();
+
+const bakedTexture = textureLoader.load('material.png', 
+    () => console.log("Texture loaded successfully"),
+    undefined,
+    (error) => console.error("Error loading texture:", error)
+);
+bakedTexture.flipY = false;
+bakedTexture.colorSpace = THREE.SRGBColorSpace;
+const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture });
+
+// Load desk model
+gltfLoader.load('/model.glb', (gltf) => {
+    gltf.scene.traverse((child) => {
+        child.material = bakedMaterial;
+    });
+    scene.add(gltf.scene);
+});
+
+
+//ANCHOR - Camera
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
+camera.position.x = 2
+camera.position.y = 2
+camera.position.z = 2
+scene.add(camera)
+
+// OrbitControls
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+
+//ANCHOR - Renderer
+const renderer = new THREE.WebGLRenderer({
+    canvas: canvas
+})
+renderer.setSize(sizes.width, sizes.height)
+
+//ANCHOR - Animate
+const clock = new THREE.Clock()
+
+const tick = () =>
+{
+    controls.update();
+
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+}
+
+tick()
+`}/>
+
+</DropDown>
+
+The Result: 
+
+<video controls>
+  <source src={vid1} type="video/mp4"/>
+</video>
