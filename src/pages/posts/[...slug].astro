@@ -36,9 +36,7 @@ const {Content} = await entry.render();
             <p class = "date">{formatDate(entry.data.pubDate)}</p>
             <Tag tags = {entry.data.tags}></Tag>
         </div>
-   
 
-       
         <Content>
         </Content>
 
@@ -83,6 +81,8 @@ const {Content} = await entry.render();
 
     .date {
         margin: 10px 5px;
+        position: relative;
+        top:3px;
     }
     @media (max-width: 600px) {
         .title {
@@ -111,5 +111,7 @@ const {Content} = await entry.render();
 
     [x-cloak] {
     display: none !important;
+
+
 }
 </style>
