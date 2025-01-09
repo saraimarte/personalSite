@@ -180,3 +180,95 @@ const blog = await getCollection("blog");
 )}
 `}/>
 
+# Dynamic Directory to Blog Posts (SSG)
+
+**1.** In the **pages** folder create a folder called **blog**. The folder name *needs* to be the same name as the collection. Since the collection is called blog so should the folder. 
+
+**2.** In it, create a file called **[slug].astro**. This file will be the template for each of the blog posts. [slug] is a placeholder for the title of the post. 
+
+```javascript
+---
+//we will need two functions, getCollection and getEntry 
+import { getCollection , getEntry } from "astro:content";
+
+// Generate static paths 
+export async function getStaticPaths() {
+  const blog = await getCollection("blog");
+
+  // Return an array of paths
+  return blog.map((post) => ({
+    params: { slug: post.slug },  //params is needed for getStaticPaths() to work
+  }));
+}
+const { slug } = Astro.params; //by default the slugs are the filenames. So for each filename that exists, it will perform the html further below.
+
+//get the blog collection 
+const blog = await getEntry("blog", slug)
+
+//because of typescript you need to make sure that blog will always be defined in the next line so make sure you check that blog exists before then
+if (!blog) {
+  throw new Error(\`Blog post with slug "${slug}" not found.\`);
+}
+
+// Get the content for each post in the blog collection 
+const { Content } = await blog.render();
+---
+```
+```html
+<h1>{blog.data.title}</h1>
+
+<!--Display the content -->
+
+<Content />`}/>
+
+```
+
+**3.** In the **index.astro** you can display links to the posts as such: 
+
+<Card img = {img1} alt = ""/>
+
+``` javascript
+---
+import { getCollection } from "astro:content";
+const blog = await getCollection("blog");
+---
+```
+
+```html
+<h1> My Blog </h1>
+{
+  blog.map((post) => (
+   <li><a href={`/blog/${post.slug}/`}>{post.data.title}</a></li> 
+  ))
+}`}/>
+```
+
+
+# Manual slugs
+
+If you want your slugs not to be the default file names then you can go into your files in your collection and manually change the slug as so, 
+
+<Code lang = "markdown" fileName = 'post-1.md' code = {
+`---
+title: first blog post
+author: Sarai Marte
+description: this is the description
+slug: this-is-the-first-blog-post
+---
+
+# Heading 1
+
+some text
+
+# Heading 2`}/>
+
+Notice that the filename is **post-1.md** and the slug is now **this-is-the-first-blog-post**.
+
+This means that the path to the first blog post will go from being 
+
+http://localhost:4321/blog/post-1/ 
+
+to 
+
+http://localhost:4321/blog/this-is-the-first-blog-post/.
+
