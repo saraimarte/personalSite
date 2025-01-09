@@ -1,0 +1,39 @@
+---
+const {c} = Astro.props;
+
+//c for checked
+---
+
+<div class = "container">
+
+<div class = `box ${c}`></div>
+<slot></slot>
+
+</div>
+
+
+<style>
+
+    .container{
+        font-size: 1rem;
+        display:flex;
+        align-items: start;
+        gap:1em;
+    }
+    .box{
+        min-width:15px;
+        min-height:15px;
+        border-radius:50%;
+        position: relative;
+        top:6px;
+    }
+
+    .t { /*t for true*/
+        background-color: green;
+    }
+
+    .f{
+        border:1px solid black;
+    }
+
+</style>
