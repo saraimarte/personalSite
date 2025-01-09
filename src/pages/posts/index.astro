@@ -6,7 +6,6 @@ import { formatDate } from '../../utils';
 import thoughtIcon from '@assets/thought.svg';
 import rabbitHoleIcon from '@assets/rabbitHole.svg';
 import articleIcon from '@assets/article.svg';
-import Card from '@components/Card.astro';
 
 // Fetch only blog posts that are not drafts
 const allBlogPosts: CollectionEntry<'blog'>[] = (await getCollection('blog'))

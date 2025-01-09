@@ -1,25 +1,28 @@
 ---
 import MainLayout from '@layouts/MainLayout.astro';
-import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
+import { getCollection , getEntry} from "astro:content";
 import Tag from '@components/Tag.astro';
 import BackBtn from '@components/BackBtn.astro';
 
 import {formatDate} from '../../utils';
 
-export async function getStaticPaths(){
-    const allBlogArticles: CollectionEntry<'blog'>[] = await getCollection('blog');
 
-    return  allBlogArticles.map(entry => ({
-        params:{
-            slug: entry.slug
-        },
-        props:{entry}
-    }));
+// Generate static paths
+export async function getStaticPaths() {
+  const allBlogArticles = await getCollection("blog");
+
+  // Return an array of paths
+  return allBlogArticles.map((post) => ({
+    params: { slug: post.slug }, 
+  }));
 }
 
+const { slug } = Astro.params;
+const blog = await getEntry("blog", slug);
+
+
 const { entry } = Astro.props;
-const {Content} = await entry.render();
+const {Content} = await blog.render();
 
 ---
 
@@ -30,11 +33,11 @@ const {Content} = await entry.render();
         <br/>
 
         <BackBtn link = "/posts"></BackBtn>
-         <h1 class = "title">{entry.data.title}</h1>
+         <h1 class = "title">{blog.data.title}</h1>
 
         <div class = "dateTagsContainer">
-            <p class = "date">{formatDate(entry.data.pubDate)}</p>
-            <Tag tags = {entry.data.tags}></Tag>
+            <p class = "date">{formatDate(blog.data.pubDate)}</p>
+            <Tag tags = {blog.data.tags}></Tag>
         </div>
 
         <Content>
@@ -109,9 +112,5 @@ const {Content} = await entry.render();
         right:6px;
     }
 
-    [x-cloak] {
-    display: none !important;
-
-
-}
+    
 </style>

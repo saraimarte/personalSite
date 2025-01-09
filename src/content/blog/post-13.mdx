@@ -1,0 +1,274 @@
+---
+layout: '@layouts/Blog.astro'
+title: "How to Set up Data and Content Collections in AstroJS"
+pubDate: 2025-01-07T00:00:00Z
+author: 'Sarai Marte'
+tags: ['webdev', 'astrojs']
+phase: 'article'
+draft: false 
+slug: how-to-set-up-data-and-content-collections-in-astrojs
+---
+
+import Code from '@components/Code.astro';
+import Card from '@components/Card.astro';
+
+import img1 from '../../../public/img22.png';
+
+# Set up data collections 
+
+**1.** Create a folder called **content** in the **src** folder. It *needs* to be called **content**.
+
+**2.** The content folder *needs* to have a file called **config.ts** (or .js) so create it.  
+
+<Code lang = "javascript" fileName = "config.ts" code = {
+`//here, you define the blueprint of your collections 
+
+//import defineCollection function from astro's content collections api
+import { defineCollection } from "astro:content";
+
+//import zod from the api 
+import { z } from "astro:content";
+
+//create a collection of students
+const students = defineCollection({
+//schema/blueprint
+    type: "data" , //only two type of data collections - data and content 
+    schema : z.object({
+        name : z.string(),
+        grade : z.enum(['1', '2', '3', '4', '5']), //assume the school is 1st to 5th grade
+        allergies : z.string().optional(),
+    }),
+    //only two types of data files json or yaml
+});
+
+//export your collection(s) 
+export const collections = {
+    students, //should also be the name of the folder you create inside the content folder
+}`}/>
+
+**3.** Inside the content folder add a new folder called **students** it should be called the same thing you exported in the **config.ts**. 
+
+**4.** In this folder you can create your student's data files now. These files can either be .json or .yaml. 
+
+I created two student files called **emma.json** and **jake.json** with the properties I defined in the **config.ts** like name, grade and allergies if applicable. 
+
+<Code lang = "json" fileName = "emma.json" code = {
+`{
+    "name": "emma",
+    "grade" : "1", 
+    "allergies": "apples"
+}`}/>
+
+<Code lang = "json" fileName = "jake.json" code = {
+`{
+    "name": "jake",
+    "grade" : "2"
+}`}/>
+
+**5.** If you go to **index.astro**, in the frontmatter you can get the student collection like so, 
+
+<Code lang = "javascript" fileName = "index.astro" code = {
+`---
+import { getCollection } from "astro:content";
+const students = await getCollection('students');
+---`}/>
+
+**6.** Now, you can display the student data however you like. Here is my HTML, 
+
+<Code lang = "html" fileName = "index.astro" code = {
+`<h1>Students</h1>
+	{
+		students.map((student) => 
+		
+		<div style = "display:flex; gap:1em;">
+			<p>NAME: {student.data.name.toUpperCase()}</p> 
+			<p>GRADE: {student.data.grade} </p>
+			<p>ALLERGIES: {student.data.allergies} </p>
+		</div>
+	)	
+}`}/>
+
+# Set up Content Collections 
+
+**The following steps (A, B) should already be done:**
+
+**A.** Create a folder called content in the src folder. 
+
+**B.** The content folder needs to have a file called config.ts (or .js) so create it.
+
+**1.** In the **config.ts** we will simply just add a new collection. This time it will be a content collection so maybe it's a collection of blog posts.
+
+We will call this collection **blog**.
+
+<Code lang = "javascript" fileName = "config.ts" code = {
+`//here, you define the blueprint of your collections 
+
+//import defineCollection function from astro's content collections api
+import { defineCollection } from "astro:content";
+
+//import zod from the api 
+import { z } from "astro:content"; 
+
+//create a collection of students
+const students = defineCollection({
+//schema/blueprint
+    type: "data" , //data collection 
+    schema : z.object({
+        name : z.string(),
+        grade : z.enum(['1', '2', '3', '4', '5']),
+        allergies : z.string().optional(),
+    }),
+});
+
+const blog = defineCollection({
+//schema/blueprint
+    type: "content" , // content collection 
+    schema : z.object({
+        title : z.string(),
+        author : z.string(),
+        description : z.string().optional(),
+    }),
+});
+
+//export your collections 
+export const collections = {
+    students,
+    blog,  //this should be the name of the folder you will create inside the content folder
+}`}/>
+
+**3.** Inside the content folder add a new folder called **blog** it should be called the same thing you exported in the **config.ts**. 
+
+**4.** In this folder you can create your blog posts data files now. These files can either be .md or .mdx. 
+
+I created two fake blog post files called **post-1.md** and **post-2.md** with the properties I defined in the **config.ts** like title, author and description.
+
+<Code lang = "markdown" fileName = "post-1.md" code = {
+`---
+title: first blog post
+author: Sarai Marte
+description: this is the description
+---
+
+# first blog post`}/>
+
+
+<Code lang = "markdown" fileName = "post-2.md" code = {
+`---
+title: second blog post
+author: Sarai Marte
+description: this is the description
+---
+
+# second blog post`}/>
+
+**5.** If you go to **index.astro**, in the frontmatter you can get the blog collection like so, 
+
+<Code lang = "javascript" fileName = "index.astro" code = {
+`---
+import { getCollection } from "astro:content";
+const blog = await getCollection("blog");
+---`}/>
+
+**6.** Now, you can display the blog data however you like. Here is my HTML, 
+
+<Code lang = "html" fileName = "index.astro" code = {
+`<h1> My Blog </h1>
+
+{blog.map((post) => 
+<li>{post.data.title}</li>
+<li>{post.data.author}</li>
+)}
+`}/>
+
+# Dynamic Directory to Blog Posts (SSG)
+
+**1.** In the **pages** folder create a folder called **blog**. The folder name *needs* to be the same name as the collection. Since the collection is called blog so should the folder. 
+
+**2.** In it, create a file called **[slug].astro**. This file will be the template for each of the blog posts. [slug] is a placeholder for the title of the post. 
+
+```javascript
+---
+//we will need two functions, getCollection and getEntry 
+import { getCollection , getEntry } from "astro:content";
+
+// Generate static paths 
+export async function getStaticPaths() {
+  const blog = await getCollection("blog");
+
+  // Return an array of paths
+  return blog.map((post) => ({
+    params: { slug: post.slug },  //params is needed for getStaticPaths() to work
+  }));
+}
+const { slug } = Astro.params; //by default the slugs are the filenames. So for each filename that exists, it will perform the html further below.
+
+//get the blog collection 
+const blog = await getEntry("blog", slug)
+
+//because of typescript you need to make sure that blog will always be defined in the next line so make sure you check that blog exists before then
+if (!blog) {
+  throw new Error(\`Blog post with slug "${slug}" not found.\`);
+}
+
+// Get the content for each post in the blog collection 
+const { Content } = await blog.render();
+---
+```
+```html
+<h1>{blog.data.title}</h1>
+
+<!--Display the content -->
+
+<Content />`}/>
+
+```
+
+**3.** In the **index.astro** you can display links to the posts as such: 
+
+<Card img = {img1} alt = ""/>
+
+``` javascript
+---
+import { getCollection } from "astro:content";
+const blog = await getCollection("blog");
+---
+```
+
+```html
+<h1> My Blog </h1>
+{
+  blog.map((post) => (
+   <li><a href={`/blog/${post.slug}/`}>{post.data.title}</a></li> 
+  ))
+}`}/>
+```
+
+
+# Manual slugs
+
+If you want your slugs not to be the default file names then you can go into your files in your collection and manually change the slug as so, 
+
+<Code lang = "markdown" fileName = 'post-1.md' code = {
+`---
+title: first blog post
+author: Sarai Marte
+description: this is the description
+slug: this-is-the-first-blog-post
+---
+
+# Heading 1
+
+some text
+
+# Heading 2`}/>
+
+Notice that the filename is **post-1.md** and the slug is now **this-is-the-first-blog-post**.
+
+This means that the path to the first blog post will go from being 
+
+http://localhost:4321/blog/post-1/ 
+
+to 
+
+http://localhost:4321/blog/this-is-the-first-blog-post/.
+
