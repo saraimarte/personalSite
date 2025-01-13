@@ -44,3 +44,16 @@ pre, code{
     margin:0;
     padding:0;
 }
+
+a{
+    /*so that the anchor tags won't overflow the width of containers */
+    word-wrap:break-word;
+}
+
+.wrapperW {
+    display:flex;
+    gap:1em;
+    flex-wrap: wrap;
+    border:2px solid red;
+   
+}
