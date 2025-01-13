@@ -1,6 +1,6 @@
 ---
 layout: '@layouts/Blog.astro'
-title: "Git Guide"
+title: "Git Guide Snippets"
 pubDate: 2025-01-02T00:00:00Z
 author: 'Sarai Marte'
 tags: ['tech']
@@ -10,16 +10,65 @@ slug: git-guide
 ---
 
 import Code from '@components/Code.astro';
+import Section from '@components/Section.astro';
 
-# 1|How to clone a specific branch from a git repository
 
-First, create a folder anywhere. Open the folder in VSCode.   
+<Section t = '1 | How to clone a specific branch from a git repository'>
 
-Using VSCode's terminal, the command is as follows, 
+First, create a folder anywhere in your files. Open the folder in VSCode.   
+
+Using VSCode's terminal (CTRL + J in Windows), enter the following command, 
 
 <Code lang="git" fileName="Command" code={`git clone -b branchName repoURL`} />
 
 For example, if I want to clone the lesson-01 branch from a repo who's url is https://github.com/saraimarte/Repository.git then the command would be 
 
 <Code lang="git" fileName="Command" code={`git clone -b lesson-01 https://github.com/saraimarte/Repository.git`} />
+
+</Section>
+
+
+<Section t = '2 | How to create a branch'>
+
+<Code lang="git" fileName="Command" code={`git branch name_of_the_branch`} />
+
+For example, if you want to create a branch called 'version2' then you would enter, 
+
+<Code lang="git" fileName="Command" code={`git branch version2`} />
+
+This command only *creates* the branch. 
+
+To actually switch to working in the branch you need to follow snippet 3. 
+
+</Section>
+
+<Section t = '3 | How to switch to working in a branch'>
+
+<Code lang="git" fileName="Command" code={`git checkout name_of_the_branch`} />
+
+If you have a branch called 'version2' and want to switch to working on it then the command would be, 
+
+<Code lang="git" fileName="Command" code={`git checkout version 2`} />
+
+</Section>
+
+<Section t = '4 | How to create and switch to a branch at the same time'>
+
+<Code lang="git" fileName="Command" code={`git checkout -b name_of_branch`} />
+
+For example, if you want to create a branch called 'version2' and immediately switch to it to start working on it then this is the command, 
+
+<Code lang="git" fileName="Command" code={`git checkout -b version2`} />
+
+What does the **-b** mean? Branch. 
+
+You have to use -b instead of branch if you want to create and switch to a branch at the same time. That is the syntax git accepts. 
+
+</Section>
+
+
+
+
+
+
 
