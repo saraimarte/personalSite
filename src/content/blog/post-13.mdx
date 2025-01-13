@@ -207,7 +207,7 @@ const blog = await getEntry("blog", slug)
 
 //because of typescript you need to make sure that blog will always be defined in the next line so make sure you check that blog exists before then
 if (!blog) {
-  throw new Error(\`Blog post with slug "${slug}" not found.\`);
+  throw new Error(`Blog post with slug "${slug}" not found.`);
 }
 
 // Get the content for each post in the blog collection 
@@ -240,7 +240,7 @@ const blog = await getCollection("blog");
   blog.map((post) => (
    <li><a href={`/blog/${post.slug}/`}>{post.data.title}</a></li> 
   ))
-}`}/>
+}
 ```
 
 
