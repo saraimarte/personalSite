@@ -1,0 +1,65 @@
+---
+layout: '@layouts/Blog.astro'
+title: "Terminal Snippets"
+pubDate: 2025-01-18T00:00:00Z
+author: 'Sarai Marte'
+tags: ['all' , 'tech']
+phase: 'article'
+draft: false 
+slug: terminal-snippets
+---
+
+import Code from '@components/Code.astro';
+import Section from '@components/Section.astro';
+
+# Vocabulary 
+
+**1.** Directory = Folder
+
+
+# Snippets 
+
+<Section t = "1 | Create a folder">
+
+<Code lang = "" fileName = "Command" code = {`mkdir name_of_directory`}/>
+
+**mkdir** means "make directory."
+
+Recall, 'directory' is just a fancy way of saying 'folder.'
+
+If you want to create a folder called folder1 then, 
+
+<Code lang = "" fileName = "Command" code = {`mkdir folder1`}/>
+
+</Section>
+
+<Section t = "2 | Go inside a folder">
+
+<Code lang = "" fileName = "Command" code = {` cd ./name_of_directory`}/>
+
+**cd** stands for "change directory" which is just a fancy way of saying "change folder."
+
+If you want to go inside a folder called folder1 (assuming it exists) then, 
+
+<Code lang = "" fileName = "Command" code = {` cd ./folder1`}/>
+
+What if you are not sure that folder exists? 
+
+Well, you can create it (see snippet 1) or you can ask the terminal to give you the list of folders inside the one you are in now (see the next snippet 3.) 
+
+</Section>
+
+
+<Section t = "3 | See all folders inside a folder">
+
+<Code lang = "" fileName = "Command" code = {`dir`}/>
+
+</Section>
+
+
+<Section t = "4 | How to back out of the current folder and into the previous">
+
+<Code lang = "" fileName = "Command" code = {`cd ..`}/>
+
+</Section>
+
