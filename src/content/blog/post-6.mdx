@@ -3,7 +3,7 @@ layout: '@layouts/Blog.astro'
 title: "Git Guide Snippets"
 pubDate: 2025-01-02T00:00:00Z
 author: 'Sarai Marte'
-tags: ['tech']
+tags: ['all', 'tech']
 phase: 'rabbitHole'
 draft: false 
 slug: git-guide
@@ -11,7 +11,6 @@ slug: git-guide
 
 import Code from '@components/Code.astro';
 import Section from '@components/Section.astro';
-
 
 <Section t = '1 | How to clone a specific branch from a git repository'>
 
@@ -46,7 +45,7 @@ To actually switch to working in the branch you need to follow snippet 3.
 
 <Code lang="git" fileName="Command" code={`git checkout name_of_the_branch`} />
 
-If you have a branch called 'version2' and want to switch to working on it then the command would be, 
+If you have a branch called 'version2' and want to switch to working on it then you want to *checkout* that branch (take a look at it), so the command would be, 
 
 <Code lang="git" fileName="Command" code={`git checkout version 2`} />
 
@@ -63,6 +62,48 @@ For example, if you want to create a branch called 'version2' and immediately sw
 What does the **-b** mean? Branch. 
 
 You have to use -b instead of branch if you want to create and switch to a branch at the same time. That is the syntax git accepts. 
+
+</Section>
+
+
+<Section t = '5 | How to see your commit history'>
+
+The following let's you see all the commits you have made in the current branch that you are in. 
+
+<Code lang="git" fileName="Command" code={`git log`} />
+
+If you want to see the commit history for a specific branch you can run the following, 
+
+<Code lang="git" fileName="Command" code={`git log name_of_branch`} />
+
+If you don't like the format that the commits are given to you, you can get the last n commits in one line from a specific branch like so, 
+
+<Code lang="git" fileName="Command" code={`git log -n --oneline name_of_branch`} />
+
+For example, if I want the last 2 commits for a branch called 'version2' then, 
+
+<Code lang="git" fileName="Command" code={`git log -2 --oneline version2`} />
+
+
+</Section>
+
+
+
+<Section t = '6 | How to undo a commit'>
+
+First, you need to get the id of the commit. Let's call it **commitID**. 
+
+To get the **commitID**, you need to look at the commit history or *logs*. To do that, see snippet 5. 
+
+Run, 
+
+<Code lang="git" fileName="Command" code={`git log -1`} /> to see the previous commit made. You will also see the **commitID**. Copy it. 
+
+Then run the following with **commitID** paste it to undo the last commit. 
+
+<Code lang="git" fileName="Command" code={`git revert commitID`} />. 
+
+
 
 </Section>
 

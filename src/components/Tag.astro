@@ -4,11 +4,17 @@ const {tags} = Astro.props;
  
 interface Props{
     tags:String[];
-}
+} 
+
+//doesn't include the all tag, the all tag is always the first one so ill just make the tags start with the 2nd tag. 
+const newTags = tags.slice(1,tags.length);
+
 ---
 
+
+
 <div class = "tags">
-    {tags.map(tag => (
+    {newTags.map(tag => (
         <p class = "tag">{tag} </p>
     ))}
 </div>

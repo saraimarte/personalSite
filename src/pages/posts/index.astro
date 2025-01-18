@@ -68,7 +68,7 @@ const allRabbitHoleTags = Array.from(
     <br/>
 
     <h1>Welcome to Sarai's Blog </h1>
-    <p class="intro" x-cloak x-show="open" x-transition>Most posts begin as thoughts. These thoughts lead to rabbit holes and eventually end up as articles. Yet, some thoughts stay thoughts. Here, you can filter all my posts by their phase of life 🌸</p>
+    <p class="intro" x-cloak x-show="open" x-transition>Most posts begin as thoughts. These thoughts lead to rabbit holes and eventually end up as articles. Yet, some thoughts stay thoughts. Here, you can filter all my posts by their 🌸 phase of life 🌸 and then by topic with the tags below.</p>
     
     <!-- Display all phases -->
     <div class="phaseAndTagContainer">
@@ -99,9 +99,7 @@ const allRabbitHoleTags = Array.from(
 
       <!-- Display all tags -->
       <div class="tagContainer">
-        <p>Tags:</p>
         <div class="boxy">
-          <a id="all">all</a>
           <div id="allArticleTags" class="visible tags">
             {allArticleTags.map((tag: String) => (
               <a class="tag" id={`${tag}`} href="">{tag}</a>
@@ -217,24 +215,14 @@ const allRabbitHoleTags = Array.from(
     flex-wrap:wrap;
     height:min-content;
     max-width:100%;
+    position: relative;
+    right:3px;
   }
 
   #allPosts{
     width:100%;
   }
-  #all{
-    color:blue;
-    margin-left:5px;
-    font-weight: bold;
-    user-select:none;
-    margin-right:1em;
-  }
-
-  #all:hover{
-    font-weight: bold;
-    color:blue;
-  }
-
+  
   .phaseContainer, .tagContainer{
     flex-wrap:wrap;
     display:flex;
@@ -290,14 +278,10 @@ const allRabbitHoleTags = Array.from(
         width:100%;
        }
 
-      .tag{
+      .tag, #tagTitle{
         font-size:0.9em;
       }
-
-      #all{
-        font-size:0.9em;
-        margin-right:0.6em;
-      }
+     
     
     }
 
@@ -398,7 +382,7 @@ function allTagClicked(){
   
   // To filter by phase and tag, I need the phase. 
   // The phase that was selected should have the class .selected.
-  //Since tags also selcted have that same class we need to specify that it is a selected phaseIcon that we need.
+  //Since tags also selected have that same class we need to specify that it is a selected phaseIcon that we need.
   const phaseSelected = document.querySelector(".selected.phaseIcon");
   const selectedPhase = phaseSelected ? phaseSelected.id : null;
 

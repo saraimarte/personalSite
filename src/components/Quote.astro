@@ -1,5 +1,5 @@
 ---
-const {author} = Astro.props;
+const {author, source} = Astro.props;
 ---
 
 <div class = "quoteBox">
@@ -8,7 +8,7 @@ const {author} = Astro.props;
     </div>
     <div class = "quote">
         <slot></slot>
-        <p class = "author">{author}</p>
+        <a href = {source} class = "author">{author}</a>
     </div>
 </div>
 

@@ -1,0 +1,98 @@
+---
+layout: '@layouts/Blog.astro'
+title: "Javascript Notes"
+pubDate: 2025-01-14T00:00:00Z
+author: 'Sarai Marte'
+tags: ['all']
+phase: 'rabbitHole'
+draft: false 
+slug: javascript-notes
+---
+
+import Code from '@components/Code.astro';
+import Section from '@components/Section.astro';
+
+The following snippets use the array of blog posts below. Each entry contains the id and title of the blog post. 
+
+``` javascript
+const posts = [
+    {id: 1, title : "post1"}, //0th index //1st entry
+    {id: 2, title : "post2"}, //1st index //2nd entry
+    {id: 3, title : "post3"}, //2nd index //3rd entry
+];
+```
+
+<Section t = "How to return the first n amounts of entries in an array">
+
+If you want to see the first 2 entries in an array then you would slice the array from the first index to the 2nd index.
+
+<Code lang = "javascript"  fileName = "javascript"  code = {`posts.slice(0, 2);`}/>
+
+Here, 0th index refers to the first entry and the 2nd index refers to the 3rd entry.
+
+So the code snippet reads, "cut up the array from the 1st entry to the 3rd entry but don't include the 3rd entry." 
+
+<Code lang = "javascript"  fileName = "output"  code = {`//  {id: 1, title : "post1"}, {id: 2, title : "post2"}`}/>
+
+</Section>
+
+<Section t = "How to return the first entry from an array that meets a certain condition">
+
+If you want to see the entry that has id of 2 then you would go through the array so that the *first* entry that meets that condition will be returned. 
+
+<Code lang = "javascript"  fileName = "javascript"  code = {`posts.find((post) => post.id === 2);`}/>
+
+So the code snippet reads, "for every post in the posts array, return the first post you see whose id is 2." 
+
+<Code lang = "javascript"  fileName = "output"  code = {`// {id: 2, title : "post2"}`}/>
+
+</Section>
+
+<Section t = "How to return all the entries from an array that meet a certain condition">
+
+Given the following array of objects, 
+
+``` javascript
+const posts = [
+    {id: 2, title : "post2"}, //0th index 
+    {id: 1, title : "post1"}, //1st index 
+    {id: 3, title : "post3"}, //2nd index 
+    {id: 2, title : "post4"}, //3rd index 
+
+];
+```
+
+If you want to see *all* the entries that have an id of 2 then you would filter through the array so that *all* those posts that meet the condition are returned. 
+
+<Code lang = "javascript"  fileName = "javascript"  code = {`posts.filter((post) => post.id === 2);`}/>
+
+So the code snippet reads, "for every post in the posts array, return the first post you see whose id is 2." 
+
+<Code lang = "javascript"  fileName = "output"  code = {`// {id: 2, title : "post2"} , {id: 2, title : "post4"} `}/>
+
+</Section>
+
+<Section t = "How to sort through an array of objects">
+
+Given the following array, 
+
+``` javascript
+const posts = [
+    {id: 2, title : "post2"}, //0th index 
+    {id: 1, title : "post1"}, //1st index 
+    {id: 3, title : "post3"}, //2nd index 
+];
+```
+
+If you want to sort the entries by id, 
+
+<Code lang = "javascript"  fileName = "javascript"  code = {`posts.sort((postA, postB) => postA.id - postB-id);`}/>
+
+So the code snippet reads, "for every  **post a** and **post b** in the posts array, if the value of the id of **post a** minus the value of the id of **post b** is negative that means id of **b** was bigger and so **post a** comes before **post b**. If positive, then the id of post **a** was bigger so **post a** comes before **post b**. If 0 then the order remains the same." 
+
+Most people just write **a** and **b** like so, 
+
+<Code lang = "javascript"  fileName = "javascript"  code = {`posts.sort((a, b) => a.id - b-id);`}/>
+
+</Section>
+

@@ -1,0 +1,79 @@
+---
+layout: '@layouts/Blog.astro'
+title: "Express Notes"
+pubDate: 2025-01-14T00:00:00Z
+author: 'Sarai Marte'
+tags: ['all' , 'express']
+phase: 'rabbitHole'
+draft: false 
+slug: express-notes
+---
+
+import Code from '@components/Code.astro';
+import Section from '@components/Section.astro';
+import Quote from '@components/Quote.astro';
+
+<Section t = "Two ways to import into files">
+
+There are two ways to import into files. 
+
+(1) **Common JS.** Can only be used in backend (with NodeJS, ExpressJS, etc.) - not on the frontend.   
+
+<Code lang = "javascript"  fileName = "Code"  code = {
+    
+`const something = require('somewhere'); 
+
+const express = require('express') //example;`}/>
+
+(2) **ES6 Modules.** Can be used on both the frontend and backend.
+<Code lang = "javascript"  fileName = "Code"  code = {
+`import something from 'somewhere';
+
+import express from 'express'; //example`}/>
+
+ 
+To choose which type of importing, go to **package.json** and change **type** to be either **module** for ES6 Modules or **common** for CommonJS. 
+
+If you don't see a **type** you can just create it. Right now it's using ES6 Modules where "type" : "**module**".
+
+<Code lang = "javascript"  fileName = "package.json"  code = 
+{`{
+  "name": "project",
+  "type": "module", 
+  "version": "0.0.1",
+  "scripts": {
+  },
+  "dependencies": {
+  }
+}`}/> 
+
+</Section>
+
+<Section t = "Params vs Queries">
+
+Think of params as what you use to get to your destination and queries as to what you use to filter and modify once your destination.  
+
+</Section>
+
+<Section t = "Types of Requests">
+
+We have four main types of requests that a client and a server can make: GET, POST, PUT, DELETE (there are others.) 
+
+Let's look at the requests from a client perspective (you on your computer), 
+
+**1. GET** (the client wants to get a page or a blog post)  
+**2. POST** (the client wants to create a blog post)  
+**3. PUT**  (the client wants to put something / update in a blog post)  
+**4. DELETE** (the client wants to delete a blog post)  
+
+</Section>
+
+<Section t = "Middleware">
+
+<Quote author = "Traversy Media" source = "https://youtu.be/CnH3kAXSrmU?t=1117">
+Middleware is just a function that runs between the incoming request and outgoing response.
+</Quote>
+
+Middleware are functions that run on the data that is passed before it hits another middleware function or the route handler. 
+
+</Section>

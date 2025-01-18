@@ -3,7 +3,7 @@ layout: '@layouts/Blog.astro'
 title: "Dev Log"
 pubDate: 2025-01-08T00:00:00Z
 author: 'Sarai Marte'
-tags: ['webdev']
+tags: ['all']
 phase: 'rabbitHole'
 draft: false 
 slug: dev-log
@@ -25,12 +25,17 @@ import img4 from '../../../public/img26.png';
 
 <CB c = "f"> Rewrite the code used to filter posts by phase.</CB>
 
-<Card img = {img2}/>
-
 <CB c = "f"> Fix the code component so that backticks don't break it. Using \ does not work. Using ```lang instead of the code component is a solution but not the one i'm looking for. </CB>
 
 <CB c = "f"> Fix the re-organizing of content on load of a post. The problem is the title container's height. The content is adjusting to the length of the title.</CB>
-<CB c = "t"> Fix the overflowing of anchor tags in containers. </CB>
+
+<CB c = "t"> Rewrite the code for the all tag so it's not separate from the rest of the tags. Update: 1/14/25 I just realized I could simply have all the posts have a tag of 'all' for now. But that caused another problem where if you clicked on a post the 'all' tag would show up so I went to the tags component and cut it up so it would start with the 2nd tag since the all tag is the first one added anyway. </CB>
+
+<Card img = {img2}/>
+
+<CB c = "t"> Fix the overflowing of anchor tags in containers. Update: Just did word wrap break in CSS. </CB>
+
 <Card img = {img3}/>
+
 <CB c = "t"> Fix the code component so that it doesn't have excess space at the bottom. Update: It was literally a css line I had to change but didn't see in the original theme file lol. </CB>
 
