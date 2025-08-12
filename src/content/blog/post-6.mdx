@@ -88,7 +88,6 @@ For example, if I want the last 2 commits for a branch called 'version2' then,
 </Section>
 
 
-
 <Section t = '6 | How to undo a commit'>
 
 First, you need to get the id of the commit. Let's call it **commitID**. 
@@ -108,8 +107,25 @@ Then run the following with **commitID** paste it to undo the last commit.
 </Section>
 
 
+<Section t = '7 | How to commit'>
+
+Add everything you added. 
+
+<Code lang="git" fileName="Command" code={`git add .`} />. 
+
+Add a commit Message.
+
+<Code lang="git" fileName="Command" code={`git commit -m "Message"`} />. 
+
+Push changes to the repo.
+
+<Code lang="git" fileName="Command" code={`git push"`} />.  
 
 
 
+</Section>
 
+git reset --hard HEAD how to disregard all local changes to go back to your last commit state. 
 
+App. everytime you want to create a branch before committing you have to  --allow-unrelated-histories?
+https://stackoverflow.com/questions/37937984/git-refusing-to-merge-unrelated-histories-on-rebase

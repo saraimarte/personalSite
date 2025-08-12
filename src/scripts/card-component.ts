@@ -2,18 +2,17 @@ class Card extends HTMLElement {
   private _date: string | null = null;
   private _title: string | null = null;
   private _slug: string | null = null;
-
+  
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
   }
-
+  
   static get observedAttributes(): string[] {
     return ['date', 'title', 'slug'];
   }
-
+  
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-   // console.log(`Attribute ${name} changed from ${oldValue} to ${newValue}`);
     if (oldValue !== newValue) {
       switch(name) {
         case 'date':
@@ -29,18 +28,40 @@ class Card extends HTMLElement {
       this.render();
     }
   }
-
+  
   connectedCallback(): void {
-    ///console.log('Header component connected');
     this._date = this.getAttribute('date');
     this._title = this.getAttribute('title');
     this._slug = this.getAttribute('slug');
-    //console.log('Initial attributes:', { date: this._date, title: this._title, slug: this._slug });
     this.render();
   }
 
+  private playClickSound(): void {
+    // Create a fresh audio element each time (same as back button)
+    const clickSound = new Audio('https://audio.jukehost.co.uk/lEvEFHUvNTZxQ6PTEagKi9B60t48m25K');
+    clickSound.volume = 0.5; // Adjust volume as needed
+    
+    clickSound.play().catch(error => {
+      console.log('Card audio play failed:', error);
+    });
+  }
+
+  private handleCardClick = (e: Event): void => {
+    e.preventDefault(); // Prevent immediate navigation
+    
+    const cardLink = this.shadowRoot?.querySelector('.card') as HTMLAnchorElement;
+    if (cardLink) {
+      // Play sound
+      this.playClickSound();
+      
+      // Navigate after a short delay to let sound play
+      setTimeout(() => {
+        window.location.href = cardLink.href;
+      }, 150); // Same delay as back button
+    }
+  };
+  
   render(): void {
-    //console.log('Rendering with:', { date: this._date, title: this._title, slug: this._slug });
     const headerHTML = `
       <style>
         .card{
@@ -55,29 +76,36 @@ class Card extends HTMLElement {
           font-size:0.8em;
           text-decoration:none;
           font-family: "IBM Plex Mono", monospace;
-    }
-    
-    .card:hover{
-        background-color:blue;
-        color:white;
-    }
-   
-    @media (max-width: 768px) {
-        .card{
-            flex-wrap:wrap;
-            gap:1em;
-            font-size:0.8em;
+          cursor: pointer;
         }
-    }
+       
+        .card:hover{
+            background-color:blue;
+            color:white;
+        }
+       
+        @media (max-width: 768px) {
+            .card{
+                flex-wrap:wrap;
+                gap:1em;
+                font-size:0.8em;
+            }
+        }
       </style>
       <a class="post card" href="/posts/${this._slug || '#'}">
         <p class="date">${this._date || 'No date'}</p>
         <p>${this._title || 'No title'}</p>
       </a>
     `;
-    
+   
     if (this.shadowRoot) {
       this.shadowRoot.innerHTML = headerHTML;
+      
+      // Add click event listener after rendering
+      const cardElement = this.shadowRoot.querySelector('.card');
+      if (cardElement) {
+        cardElement.addEventListener('click', this.handleCardClick);
+      }
     }
   }
 }

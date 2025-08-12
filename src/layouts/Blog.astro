@@ -16,6 +16,7 @@ import MainLayout from '../layouts/MainLayout.astro';
     p{
         font-size: 1rem;
         margin-top: 5px;
+        
     }
 
     h1, h2, h3, h4, h5, h6{
@@ -36,43 +37,30 @@ import MainLayout from '../layouts/MainLayout.astro';
 
 
 </style>
+<!--Title Animation and Sound:-->
 
 <script>
-    let audioContext: AudioContext | undefined;
-    let audioBuffer: AudioBuffer | undefined;
-    let sourceNode: AudioBufferSourceNode | undefined;
-
+    // Initialize immediately when DOM is ready
     document.addEventListener('DOMContentLoaded', () => {
-        audioContext = new AudioContext(); // Initialize AudioContext directly
-
         let isDecrypting = false;
-
-        async function loadAudio(): Promise<void> {
-            const audioUrl = 'https://audio.jukehost.co.uk/EqW6fci0a87uV7WFDGz3mTC3u0CDBONk';
-            try {
-                const response = await fetch(audioUrl);
-                const arrayBuffer = await response.arrayBuffer();
-                if (audioContext) {
-                    audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-                }
-            } catch (error) {
-                console.error('Error loading or decoding audio:', error);
-            }
-        }
+        let currentAudio: HTMLAudioElement | undefined;
 
         function playAudio(): void {
-            if (audioContext && audioBuffer) {
-                sourceNode = audioContext.createBufferSource();
-                sourceNode.buffer = audioBuffer;
-                sourceNode.connect(audioContext.destination);
-                sourceNode.loop = true;
-                sourceNode.start();
-            }
+            // Create a fresh audio element each time
+            currentAudio = new Audio('https://audio.jukehost.co.uk/EqW6fci0a87uV7WFDGz3mTC3u0CDBONk');
+            currentAudio.loop = true;
+            currentAudio.volume = 0.3; // Adjust volume as needed
+            
+            currentAudio.play().catch(error => {
+                console.log('Audio play failed:', error);
+            });
         }
 
         function stopAudio(): void {
-            if (sourceNode) {
-                sourceNode.stop();
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                currentAudio = undefined;
             }
         }
 
@@ -81,16 +69,48 @@ import MainLayout from '../layouts/MainLayout.astro';
             return chars.charAt(Math.floor(Math.random() * chars.length));
         }
 
+        // Function to measure and preserve natural text wrapping
+        function preserveNaturalLayout(element: HTMLElement, originalText: string): void {
+            // Temporarily set the original text to measure natural layout
+            const originalContent = element.textContent;
+            element.textContent = originalText;
+            
+            // Force a layout calculation
+            const finalHeight = element.scrollHeight;
+            const finalWidth = element.offsetWidth;
+            
+            // Set minimum dimensions to prevent jumping
+            element.style.minHeight = finalHeight + 'px';
+            element.style.width = finalWidth + 'px';
+            
+            // Restore the original content
+            element.textContent = originalContent;
+        }
+
         async function decryptText(element: Element, originalText: string): Promise<void> {
             if (isDecrypting) return;
             isDecrypting = true;
 
-            await loadAudio();
-            let currentText = Array(originalText.length).fill('').map(getRandomChar).join('');
             if (element instanceof HTMLElement) {
+                // Preserve the natural text layout
+                preserveNaturalLayout(element, originalText);
+                
+                // Start with the original text to get proper wrapping, then scramble it
+                element.textContent = originalText;
+                
+                // Force layout calculation to ensure proper wrapping
+                element.offsetHeight;
+                
+                // Now scramble it while preserving the layout structure
+                let currentText = originalText.split('').map(char => {
+                    if (char === ' ' || char === '\n') return char; // Preserve whitespace
+                    return getRandomChar();
+                }).join('');
+                
                 element.textContent = currentText;
             }
 
+            // Start audio immediately - no async loading needed
             playAudio();
 
             let index = 0;
@@ -98,38 +118,63 @@ import MainLayout from '../layouts/MainLayout.astro';
                 if (index >= originalText.length) {
                     clearInterval(interval);
                     stopAudio();
+                    
+                    // Clean up size constraints
+                    if (element instanceof HTMLElement) {
+                        element.style.minHeight = '';
+                        element.style.width = '';
+                    }
+                    
                     isDecrypting = false;
                     return;
                 }
 
-                currentText = currentText.split('').map((_, i) => {
-                    if (i < index) return originalText[i];
-                    if (i === index) return originalText[i];
-                    return getRandomChar();
-                }).join('');
+                const currentTextArray = (element as HTMLElement).textContent?.split('') || [];
+                
+                // Reveal characters progressively while maintaining layout
+                for (let i = 0; i <= index; i++) {
+                    currentTextArray[i] = originalText[i];
+                }
+                
+                // Scramble remaining characters (except whitespace)
+                for (let i = index + 1; i < originalText.length; i++) {
+                    if (originalText[i] === ' ' || originalText[i] === '\n') {
+                        currentTextArray[i] = originalText[i];
+                    } else {
+                        currentTextArray[i] = getRandomChar();
+                    }
+                }
 
                 if (element instanceof HTMLElement) {
-                    element.textContent = currentText;
+                    element.textContent = currentTextArray.join('');
                 }
+
                 index++;
-            }, 15); // Adjust speed here (lower number = faster)
+            }, 15);
         }
 
+        // Start animation immediately when DOM is ready
         function handlePageLoad(): void {
-            const h1 = document.querySelector('h1');
-            if (h1) {
-                const originalText = h1.textContent || '';
-                decryptText(h1, originalText);
-            }
+            // Use requestAnimationFrame to ensure DOM is fully rendered
+            requestAnimationFrame(() => {
+                const h1 = document.querySelector('h1');
+                if (h1) {
+                    const originalText = h1.textContent || '';
+                    decryptText(h1, originalText);
+                }
+            });
         }
 
-        window.addEventListener('DOMContentLoaded', handlePageLoad);
+        // Start immediately
+        handlePageLoad();
 
+        // Clean up when leaving page
         function cleanUp(): void {
             stopAudio();
             isDecrypting = false;
         }
 
         window.addEventListener('pagehide', cleanUp);
+        window.addEventListener('beforeunload', cleanUp);
     });
 </script>

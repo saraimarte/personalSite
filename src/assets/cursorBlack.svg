@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Cute, short, hand-drawn style cursor with black outline -->
+  <g fill="none" stroke="#000000" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Shorter arrow, slightly rounded tips for cuteness -->
+    <path d="M150 130
+             L260 210
+             Q270 218 260 226
+             L220 236
+             Q212 238 216 246
+             L250 310
+             Q256 322 246 328
+             L210 348
+             Q200 354 194 344
+             L160 280
+             Q156 272 148 276
+             L122 290
+             Q110 296 106 284
+             Z"/>
+  </g>
+</svg>

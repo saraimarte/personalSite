@@ -1,9 +1,7 @@
 ---
 const { link } = Astro.props;
 ---
-
 <a class="backBtn" href={link}>Back</a>
-<audio id="click-sound" src="https://audio.jukehost.co.uk/lEvEFHUvNTZxQ6PTEagKi9B60t48m25K"></audio>
 
 <style>
     .backBtn {
@@ -13,7 +11,8 @@ const { link } = Astro.props;
         text-align: center;
         color: #4D5E6A;
         font-size: 1rem;
-
+        /* Keep your original styling - no padding changes */
+        display: inline-block;
     }
     .backBtn:hover {
         background-color: blue;
@@ -24,13 +23,27 @@ const { link } = Astro.props;
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const backButton = document.querySelector('.backBtn') as HTMLAnchorElement;
-        const clickSound = document.getElementById('click-sound') as HTMLAudioElement;
-
-        if (backButton && clickSound) {
-            backButton.addEventListener('click', () => {
-                clickSound.play();
+        
+        if (backButton) {
+            backButton.addEventListener('click', (e) => {
+                // Prevent default navigation
+                e.preventDefault();
+                
+                // Create a fresh audio element each time
+                const clickSound = new Audio('https://audio.jukehost.co.uk/lEvEFHUvNTZxQ6PTEagKi9B60t48m25K');
+                clickSound.volume = 0.5; // Adjust volume as needed
+                
+                // Play sound and navigate
+                clickSound.play().then(() => {
+                    // Navigate after a short delay to let sound play
+                    setTimeout(() => {
+                        window.location.href = backButton.href;
+                    }, 150);
+                }).catch(() => {
+                    // If sound fails, navigate immediately
+                    window.location.href = backButton.href;
+                });
             });
         }
     });
-
 </script>

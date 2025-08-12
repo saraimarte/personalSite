@@ -147,6 +147,7 @@ const allRabbitHoleTags = Array.from(
  
  h1{
    margin-bottom: 10px;
+   color:#4D5E6A;
  }
   .intro{
     position:relative;
@@ -294,20 +295,23 @@ const allRabbitHoleTags = Array.from(
 <script define:vars={{}}>
 
 const infoIcon = document.getElementById("infoIcon");
+let isActive = false; 
 
 function onInfoClick(){
-  
-  if (infoIcon.style.backgroundColor === 'red') {
-        // Remove the styles if they are currently applied
+    if (isActive) {
+        // Remove the styles - reset to original state
         infoIcon.style.backgroundColor = '';
         infoIcon.style.color = '';
         infoIcon.style.border = '';
+        infoIcon.style.fontWeight = '';
+        isActive = false;
     } else {
-        // Apply the styles if they are not currently applied
-        infoIcon.style.backgroundColor = 'red';
+        // Apply the active styles
+        infoIcon.style.backgroundColor = '#778D9C';
         infoIcon.style.color = 'white';
         infoIcon.style.fontWeight = 'bold';
         infoIcon.style.border = '1px solid black';
+        isActive = true;
     }
 }
 
