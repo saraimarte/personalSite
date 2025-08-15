@@ -15,6 +15,7 @@ import DropDown from '@components/DropDown.astro';
 import Card from '@components/Card.astro';
 import Quote from '@components/Quote.astro';
 import Divider from '@components/Divider.astro';
+import File from '@components/File.astro';
 
 import img1 from '../../../public/postImages/img5.png';
 import img2 from '../../../public/postImages/img7.png';
@@ -27,11 +28,11 @@ import img12 from '../../../public/postImages/img12.png';
 
 # How to create a simple web component
 
-<a href = "https://replit.com/@smartebio/webcomponent">Web Component with ShadowDOM repl.it</a> 
+<File title = "Web Component With ShadowDOM Repl.it Link" link = "https://replit.com/@smartebio/webcomponent"/>
 
-<a href = "https://replit.com/@smartebio/webcomponent2">Web Component without ShadowDOM repl.it</a>
+<File title = "Web Component Without ShadowDOM Repl.it Link" link = "https://replit.com/@smartebio/webcomponent2"/>
 
-First, create the file for the web component.
+**1.** First, create the file for the web component.
 
 The file naming convention is to separate all words with dashes.
 
@@ -104,11 +105,11 @@ customElements.define('hello-world', HelloWorld);
 `} />
 </DropDown>
 
-Now, in your html file import the component like so, 
+**2.** Now, in your html file import the component like so, 
 
 <Prism lang="html" code={`  <script src="hello-world.js"></script>`} />
 
-Now, you can use it as an HTML element like so,
+**3.** Now, you can use it as an HTML element like so,
 
 <Prism lang="html" code={`<body>
 
@@ -153,7 +154,7 @@ and you will now see the web component on your page,
 
 </DropDown>
 
-# How to access the web component using JavaScript.
+# How to access the web component using JavaScript (Accessing Component Dynamically)
 
 Now, the difference in adding the shadowDOM or not is shown when we try to access the 'web component' within a script tag once it's been added to the page. 
 
