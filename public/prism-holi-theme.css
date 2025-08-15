@@ -28,6 +28,11 @@
     -moz-hyphens: none;
     -ms-hyphens: none;
     hyphens: none;
+
+    /*added the lines below to make code components that are really long - responsive on mobile"*/
+    max-width: 100%;
+    box-sizing: border-box;
+
   }
 
   pre[class*='language-']::-moz-selection,
@@ -51,7 +56,11 @@
     margin: 1em 0;
     height:max-content; 
     overflow-x:auto; /*this allows for horizontal scrolling on desktop when the screen gets too small or on mobile*/
-
+    /*added the lines below to make code components that are really long - responsive on mobile"*/
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
   }
 
   :not(pre) > code[class*='language-'] {
@@ -121,3 +130,21 @@
     color: #d6e7ff;
   }
   
+  /*added the lines below to make code components that are really long - responsive on mobile"*/
+
+  @media (max-width: 768px) {
+    pre[class*='language-'] {
+        padding: 1em 0.5em;
+        font-size: 0.8rem;
+        /* Force the pre to not exceed viewport */
+        max-width: calc(100vw - 40px); /* Account for page margins */
+        overflow-x: auto;
+    }
+    
+    code[class*='language-'] {
+        font-size: 0.8rem;
+        /* Prevent long lines from forcing width */
+        word-break: break-all;
+        white-space: pre-wrap;
+    }
+}
