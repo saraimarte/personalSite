@@ -105,10 +105,9 @@ pre[class*='language-'] {
   background: #030314;
   text-shadow: none;
   font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
-  font-size: 0.9rem; /*changed to be smaller*/
+  font-size: 0.9rem;
   line-height: 1.5;
   letter-spacing: .2px;
-  /* CHANGED: Use pre instead of pre-wrap for horizontal scrolling */
   white-space: pre;
   word-spacing: normal;
   word-break: normal;
@@ -121,9 +120,6 @@ pre[class*='language-'] {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
-  /* Container constraints */
-  max-width: 100%;
-  box-sizing: border-box;
 }
 
 pre[class*='language-']::-moz-selection,
@@ -145,13 +141,10 @@ pre[class*='language-'] {
   padding: 1.5em 1em;
   margin: 1em 0;
   height: max-content;
-  /* Enable horizontal scrolling */
   overflow-x: auto;
   overflow-y: visible;
-  /* Container constraints */
+  /* SIMPLE FIX: Just add these two lines */
   max-width: 100%;
-  width: 100%;
-  box-sizing: border-box;
   min-width: 0;
 }
 
@@ -161,6 +154,16 @@ pre[class*='language-'] {
   padding: 0.2em 0.3em;
   border-radius: 0.2em;
   box-decoration-break: clone;
+}
+
+@media (max-width: 768px) {
+  pre[class*='language-'] {
+    font-size: 0.8rem;
+  }
+  
+  code[class*='language-'] {
+    font-size: 0.8rem;
+  }
 }
 
 .token.comment,
@@ -220,42 +223,5 @@ pre[class*='language-'] {
 .token.important,
 .token.variable {
   color: #d6e7ff;
-}
-
-/* Mobile responsive - maintain horizontal scrolling but smaller text */
-@media (max-width: 768px) {
-  pre[class*='language-'] {
-    padding: 1em 0.5em;
-    font-size: 0.8rem; /* Smaller font on mobile */
-    /* Ensure it doesn't exceed viewport but still scrolls horizontally */
-    max-width: calc(100vw - 40px);
-    overflow-x: auto;
-  }
-  
-  code[class*='language-'] {
-    font-size: 0.8rem; /* Smaller font on mobile */
-    /* KEEP horizontal scrolling behavior - don't break words */
-    white-space: pre;
-    word-break: normal;
-  }
-}
-
-/* Improve scrollbar appearance */
-pre[class*='language-']::-webkit-scrollbar {
-  height: 8px;
-}
-
-pre[class*='language-']::-webkit-scrollbar-track {
-  background: #1e1e1e;
-  border-radius: 4px;
-}
-
-pre[class*='language-']::-webkit-scrollbar-thumb {
-  background: #666;
-  border-radius: 4px;
-}
-
-pre[class*='language-']::-webkit-scrollbar-thumb:hover {
-  background: #888;
 }`} />
 </DropDown>

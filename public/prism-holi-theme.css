@@ -62,7 +62,6 @@ pre[class*='language-'] {
   box-decoration-break: clone;
 }
 
-/* Simple mobile adjustments - JUST font size */
 @media (max-width: 768px) {
   pre[class*='language-'] {
     font-size: 0.8rem;
