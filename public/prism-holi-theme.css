@@ -14,7 +14,7 @@ pre[class*='language-'] {
   font-size: 0.9rem;
   line-height: 1.5;
   letter-spacing: .2px;
-  white-space: pre; 
+  white-space: pre;
   word-spacing: normal;
   word-break: normal;
   word-wrap: normal;
@@ -48,6 +48,10 @@ pre[class*='language-'] {
   margin: 1em 0;
   height: max-content;
   overflow-x: auto;
+  overflow-y: visible;
+  /* SIMPLE FIX: Just add these two lines */
+  max-width: 100%;
+  min-width: 0;
 }
 
 :not(pre) > code[class*='language-'] {
@@ -56,6 +60,17 @@ pre[class*='language-'] {
   padding: 0.2em 0.3em;
   border-radius: 0.2em;
   box-decoration-break: clone;
+}
+
+/* Simple mobile adjustments - JUST font size */
+@media (max-width: 768px) {
+  pre[class*='language-'] {
+    font-size: 0.8rem;
+  }
+  
+  code[class*='language-'] {
+    font-size: 0.8rem;
+  }
 }
 
 .token.comment,
