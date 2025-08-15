@@ -88,26 +88,11 @@ which gives you an error, you would surround it by markdown ticks like so:
 
 </DropDown>
 
-# How to Make the Code Blocks Mobile Friendly
-
-Regardless of making the code blocks mobile friendly, I made some changes to the theme StyleSheet.
-
-**1.** Made the font-size smaller.
-
-**2.** Deleted the overflow:auto and replaced it with height:max-content so all the code will be visible and there would be no need for scrolling.  
-
-After doing this, you will notice that on mobile, the code is overflowing: 
-
-<Card img = {img1} alt = "overflow problem"/>
-
-to fix that I made one more change in the theme file: I changed white-space from pre to pre-wrap and voila- no more overflow:
-
-<Card img = {img2} alt = "overflow solution"/>
 
 <DropDown title = "Full Theme Code">
 
 <Prism lang="css" code={`
-  /**
+/**
   * MIT License
   * Copyright (c) 2021 Ayush Saini
   * Holi Theme for prism.js
@@ -158,8 +143,8 @@ to fix that I made one more change in the theme file: I changed white-space from
     border-radius: 5px;
     padding: 1.5em 1em;
     margin: 1em 0;
-    height:max-content; /*removed overflow auto to get rid of scrolling. I want all my code to show fully so the height of each code block should be the height of it's content.*/
-    
+    height:max-content; 
+    overflow-x:auto; /*this allows for horizontal scrolling on desktop when the screen gets too small or on mobile*/
 
   }
 
@@ -228,6 +213,5 @@ to fix that I made one more change in the theme file: I changed white-space from
   .token.important,
   .token.variable {
     color: #d6e7ff;
-  }
-  `} />
+  }`} />
 </DropDown>

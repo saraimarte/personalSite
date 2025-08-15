@@ -1,28 +1,51 @@
 ---
 const {title} = Astro.props;
 ---
-
 <details>
-    <summary>{title}</summary >
+    <summary>{title}</summary>
+    <div class="dropdown-content">
         <slot></slot>
+    </div>
 </details>
-  
-
+ 
 <style>
-
 summary{
     user-select: none;
     color:#F2F3F4;
+    cursor: pointer;
 }
+
 details {
     border: 1px solid #2a4555;
     border-radius: 4px;
     background-color: blue;
-    padding:5px 10px;
-    color:#F2F3F4;
+    padding: 5px 10px;
+    color: #F2F3F4;
     font-size: 0.9rem;
-    margin:10px 0;
-    height:min-content;
+    margin: 10px 0;
+    height: min-content;
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
 }
-  
+
+.dropdown-content {
+    overflow-x: auto;
+    overflow-y: visible;
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 5px;
+}
+
+@media (max-width: 768px) {
+    details {
+        padding: 5px;
+        margin: 10px 0;
+    }
+    
+   .dropdown-content {
+    width: 100%;
+    box-sizing: border-box;
+}
+}
 </style>
