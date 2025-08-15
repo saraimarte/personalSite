@@ -5,31 +5,31 @@
  * @author Ayush Saini <@AyushCodes on Twitter>
  * Few Changes made by Sarai Marte
  */
-code[class*='language-'],
-pre[class*='language-'] {
-  color: #d6e7ff;
-  background: #030314;
-  text-shadow: none;
-  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
-  font-size: 0.9rem; /*changed to be smaller*/
-  line-height: 1.5;
-  letter-spacing: .2px;
-  /* CHANGED: Use pre instead of pre-wrap for horizontal scrolling */
-  white-space: pre;
-  word-spacing: normal;
-  word-break: normal;
-  word-wrap: normal;
-  text-align: left;
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
-  tab-size: 4;
-  -webkit-hyphens: none;
-  -moz-hyphens: none;
-  -ms-hyphens: none;
-  hyphens: none;
-  /* Container constraints */
-  max-width: 100%;
-  box-sizing: border-box;
+
+/* FORCE IMMEDIATE APPLICATION - Higher specificity */
+pre[class*='language-'],
+code[class*='language-'] {
+  color: #d6e7ff !important;
+  background: #030314 !important;
+  text-shadow: none !important;
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace !important;
+  font-size: 0.9rem !important; /* Force the correct size immediately */
+  line-height: 1.5 !important;
+  letter-spacing: .2px !important;
+  white-space: pre !important;
+  word-spacing: normal !important;
+  word-break: normal !important;
+  word-wrap: normal !important;
+  text-align: left !important;
+  -moz-tab-size: 4 !important;
+  -o-tab-size: 4 !important;
+  tab-size: 4 !important;
+  -webkit-hyphens: none !important;
+  -moz-hyphens: none !important;
+  -ms-hyphens: none !important;
+  hyphens: none !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 pre[class*='language-']::-moz-selection,
@@ -40,44 +40,46 @@ pre[class*='language-']::selection,
 pre[class*='language-'] ::selection,
 code[class*='language-']::selection,
 code[class*='language-'] ::selection {
-  color: inherit;
-  background: #1d3b54;
-  text-shadow: none;
+  color: inherit !important;
+  background: #1d3b54 !important;
+  text-shadow: none !important;
 }
 
 pre[class*='language-'] {
-  border: 1px solid #2a4555;
-  border-radius: 5px;
-  padding: 1.5em 1em;
-  margin: 1em 0;
-  height: max-content;
-  /* Enable horizontal scrolling */
-  overflow-x: auto;
-  overflow-y: visible;
-  /* Container constraints */
-  max-width: 100%;
-  width: 100%;
-  box-sizing: border-box;
-  min-width: 0;
+  border: 1px solid #2a4555 !important;
+  border-radius: 5px !important;
+  padding: 1.5em 1em !important;
+  margin: 1em 0 !important;
+  height: max-content !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  /* Force immediate rendering */
+  will-change: auto !important;
+  contain: layout style paint !important;
 }
 
 :not(pre) > code[class*='language-'] {
-  color: #f0f6f6;
-  background: #2a4555;
-  padding: 0.2em 0.3em;
-  border-radius: 0.2em;
-  box-decoration-break: clone;
+  color: #f0f6f6 !important;
+  background: #2a4555 !important;
+  padding: 0.2em 0.3em !important;
+  border-radius: 0.2em !important;
+  box-decoration-break: clone !important;
 }
 
+/* Token colors with !important */
 .token.comment,
 .token.prolog,
 .token.doctype,
 .token.cdata {
-  color: #446e69;
+  color: #446e69 !important;
 }
 
 .token.punctuation {
-  color: #d6b007;
+  color: #d6b007 !important;
 }
 
 .token.property,
@@ -87,19 +89,19 @@ pre[class*='language-'] {
 .token.constant,
 .token.symbol,
 .token.deleted {
-  color: #d6e7ff;
+  color: #d6e7ff !important;
 }
 
 .token.selector,
 .token.attr-name,
 .token.builtin,
 .token.inserted {
-  color: #e60067;
+  color: #e60067 !important;
 }
 
 .token.string,
 .token.char {
-  color: #49c6ec;
+  color: #49c6ec !important;
 }
 
 .token.operator,
@@ -107,60 +109,58 @@ pre[class*='language-'] {
 .token.url,
 .language-css .token.string,
 .style .token.string {
-  color: #ec8e01;
-  background: transparent;
+  color: #ec8e01 !important;
+  background: transparent !important;
 }
 
 .token.atrule,
 .token.attr-value,
 .token.keyword {
-  color: #0fe468;
+  color: #0fe468 !important;
 }
 
 .token.function,
 .token.class-name {
-  color: #78f3e9;
+  color: #78f3e9 !important;
 }
 
 .token.regex,
 .token.important,
 .token.variable {
-  color: #d6e7ff;
+  color: #d6e7ff !important;
 }
 
-/* Mobile responsive - maintain horizontal scrolling but smaller text */
+/* Mobile with forced application */
 @media (max-width: 768px) {
   pre[class*='language-'] {
-    padding: 1em 0.5em;
-    font-size: 0.8rem; /* Smaller font on mobile */
-    /* Ensure it doesn't exceed viewport but still scrolls horizontally */
-    max-width: calc(100vw - 40px);
-    overflow-x: auto;
+    padding: 1em 0.5em !important;
+    font-size: 0.8rem !important; /* Force smaller size on mobile */
+    max-width: calc(100vw - 40px) !important;
+    overflow-x: auto !important;
   }
   
   code[class*='language-'] {
-    font-size: 0.8rem; /* Smaller font on mobile */
-    /* KEEP horizontal scrolling behavior - don't break words */
-    white-space: pre;
-    word-break: normal;
+    font-size: 0.8rem !important; /* Force smaller size on mobile */
+    white-space: pre !important;
+    word-break: normal !important;
   }
 }
 
-/* Improve scrollbar appearance */
+/* Scrollbar styling */
 pre[class*='language-']::-webkit-scrollbar {
-  height: 8px;
+  height: 8px !important;
 }
 
 pre[class*='language-']::-webkit-scrollbar-track {
-  background: #1e1e1e;
-  border-radius: 4px;
+  background: #1e1e1e !important;
+  border-radius: 4px !important;
 }
 
 pre[class*='language-']::-webkit-scrollbar-thumb {
-  background: #666;
-  border-radius: 4px;
+  background: #666 !important;
+  border-radius: 4px !important;
 }
 
 pre[class*='language-']::-webkit-scrollbar-thumb:hover {
-  background: #888;
+  background: #888 !important;
 }

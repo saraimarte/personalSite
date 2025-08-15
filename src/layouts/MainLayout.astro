@@ -16,7 +16,59 @@ const {pageTitle} = Astro.props;
 	<body>
 
 		<slot></slot>
-		
+		<script>
+		// Force immediate style application for code blocks
+		document.addEventListener('DOMContentLoaded', () => {
+			// Force browser to recalculate styles immediately
+			const codeBlocks = document.querySelectorAll('pre[class*="language-"], code[class*="language-"]');
+			
+			codeBlocks.forEach((block) => {
+			if (block instanceof HTMLElement) {
+				// Force reflow by accessing offsetHeight
+				block.offsetHeight;
+				
+				// Ensure correct font size is applied
+				const computedStyle = window.getComputedStyle(block);
+				if (computedStyle.fontSize !== '0.9rem' && !window.matchMedia('(max-width: 768px)').matches) {
+				block.style.fontSize = '0.9rem';
+				} else if (computedStyle.fontSize !== '0.8rem' && window.matchMedia('(max-width: 768px)').matches) {
+				block.style.fontSize = '0.8rem';
+				}
+				
+				// Force repaint
+				block.style.transform = 'translateZ(0)';
+				requestAnimationFrame(() => {
+				block.style.transform = '';
+				});
+			}
+			});
+		});
+
+		// Also run after any dynamic content loads
+		const observer = new MutationObserver((mutations) => {
+			mutations.forEach((mutation) => {
+			if (mutation.type === 'childList') {
+				mutation.addedNodes.forEach((node) => {
+				if (node.nodeType === 1 && node instanceof Element) { // Element node
+					const codeBlocks = node.querySelectorAll('pre[class*="language-"], code[class*="language-"]');
+					
+					codeBlocks.forEach((block) => {
+					if (block instanceof HTMLElement) {
+						block.offsetHeight; // Force reflow
+						block.style.fontSize = window.matchMedia('(max-width: 768px)').matches ? '0.8rem' : '0.9rem';
+					}
+					});
+				}
+				});
+			}
+			});
+		});
+
+		observer.observe(document.body, {
+			childList: true,
+			subtree: true
+		});
+		</script>
 	</body>
 </html>
 <style>
