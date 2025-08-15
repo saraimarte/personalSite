@@ -2,14 +2,12 @@
 import { Prism } from '@astrojs/prism';
 const {lang, code, fileName} = Astro.props;
 ---
-
 <div class = "CodeBlock">
 <p>{fileName}</p>
 <div class = "Code">
     <Prism class = "hello" lang= {lang} code={code} />
 </div>
 </div>
-
 <style>
     .CodeBlock{
         display: grid;
@@ -22,7 +20,6 @@ const {lang, code, fileName} = Astro.props;
         bottom:20px;
         width:100%;
     }
-
     p{
         background: #030314;
         color: rgb(189, 189, 189);
